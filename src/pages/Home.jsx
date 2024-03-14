@@ -1,8 +1,12 @@
-import React from 'react';
+import React from "react";
+import PlayerView from "../components/playerView";
 
-
-const Home = ()=>{
-    return (<div>Home</div>)
-}
+const Home = () => {
+  return (
+    <>
+      <PlayerView />
+    </>
+  );
+};
 
 export default Home;
