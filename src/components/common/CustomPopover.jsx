@@ -67,13 +67,11 @@ const CustomPopover = ({
   players,
   isOpen,
   closePanel,
+  isLoading,
 }) => {
-  const ref = useRef();
-  useOutsideClick(ref, closePanel);
-
   const PopoverContent = () => {
     return (
-      <div className="w-[65vw] max-h-[50vh] overflow-auto">
+      <div className="w-[100vw] md:w-[65vw] max-h-[50vh] overflow-auto">
         <ul class="flex flex-col">
           {players.map((player) => {
             return <PopoverItems closePanel={closePanel} player={player} />;
@@ -82,8 +80,9 @@ const CustomPopover = ({
       </div>
     );
   };
+
   return (
-    <Popover ref={ref}>
+    <Popover>
       {isOpen && (
         <Popover.Panel
           ref={setPopperElement}
@@ -91,7 +90,11 @@ const CustomPopover = ({
           {...attributes.popper}
           static
         >
-          <PopoverContent />
+          {isLoading ? (
+            <div className="text-white text-center w-[100vw]">Loading....</div>
+          ) : (
+            <PopoverContent />
+          )}
         </Popover.Panel>
       )}
     </Popover>

@@ -1,15 +1,23 @@
-import React, { useState } from "react";
-import instance from "../../api/axiosclient";
-import { debounce } from "../utils/utils";
+import React, { useEffect, useRef, useState } from "react";
+import { debounce, useOutsideClick } from "../utils/utils";
 import CustomPopover from "./CustomPopover";
 import { usePopper } from "react-popper";
+import { useQuery } from "@tanstack/react-query";
+import { fetchPlayers } from "../../api/apiService";
+import { useDebounce } from "@uidotdev/usehooks";
 
 const Navbar = () => {
-  const [players, setPlayers] = useState([]);
   let [referenceElement, setReferenceElement] = useState();
   let [popperElement, setPopperElement] = useState();
   const [open, setOpen] = useState(false);
   const [searchMode, setSearchMode] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
+  const debouncedSearchTerm = useDebounce(searchValue, 1000);
+  const ref = useRef();
+  const closePanel = () => {
+    setOpen(false);
+  };
+  useOutsideClick(ref, closePanel);
   let { styles, attributes } = usePopper(referenceElement, popperElement, {
     modifiers: [
       {
@@ -20,29 +28,18 @@ const Navbar = () => {
       },
     ],
   });
-  const closePanel = () => {
-    setOpen(false);
-  };
-  const fetchPlayers = async (value) => {
-    try {
-      let searchQuery = "/search/?";
-      if (searchMode == "rating") {
-        searchQuery += `rating=${value}`;
-      } else {
-        searchQuery += `name=${value}`;
-      }
-      const response = await instance.get(searchQuery);
-      let data = response.data.data;
-      data.sort((a, b) => b["rating"] - a["rating"]);
-      setPlayers(data);
-      setOpen(true);
-    } catch (error) {
-      console.error("Error fetching users:", error);
-      throw error;
-    }
-  };
 
-  const handleSearch = debounce(fetchPlayers, 1000);
+  const { data: players = [], isLoading } = useQuery({
+    queryKey: ["fetchPlayers", debouncedSearchTerm, searchMode],
+    queryFn: () => fetchPlayers(debouncedSearchTerm, searchMode),
+    cacheTime: 1000 * 60 * 100,
+    staleTime: Infinity,
+  });
+  useEffect(() => {
+    if (players.length) {
+      setOpen(true);
+    }
+  }, [players]);
   return (
     <div>
       <header class="flex flex-wrap sm:justify-start sm:flex-nowrap z-50 w-full bg-black text-sm py-3 sm:py-0">
@@ -59,35 +56,44 @@ const Navbar = () => {
               FUTCHECK
             </a>
             {/* Input Element */}
-            <div ref={setReferenceElement} class=" relative  grow">
-              <input
-                onChange={(e) => {
-                  const { value } = e.target;
-                  if (value.length > 2 || searchMode == "rating")
-                    handleSearch(value);
-                  else if (value.length == 0) setOpen(false);
-                }}
-                onFocus={() => setOpen(true)}
-                type={searchMode == "rating" ? "number" : "text"}
-                id="hs-inline-leading-pricing-select-label"
-                name="inline-add-on"
-                class="py-3 px-4 ps-4 pe-20 block w-full shadow-sm rounded-lg  text-sm focus:z-10 disabled:opacity-50 focus:border-none disabled:pointer-events-none bg-slate-900 border-gray-700 text-gray-400 focus:ring-gray-600"
-                placeholder="Search..."
-              />
-              <div class="absolute inset-y-0 end-0 flex items-center text-gray-500 pe-px">
-                <select
-                  id="hs-inline-leading-select-currency"
-                  name="hs-inline-leading-select-currency"
-                  class="block h-full w-full border-transparent rounded-lg focus:ring-blue-600 focus:border-blue-600 bg-gray-800"
-                  value={searchMode}
+            <div ref={ref} className="grow">
+              <div ref={setReferenceElement} class=" relative  grow">
+                <input
                   onChange={(e) => {
-                    setSearchMode(e.target.value);
+                    const { value } = e.target;
+                    setSearchValue(value);
                   }}
-                >
-                  <option value={"players"}>Players</option>
-                  <option value={"version"}>Version</option>
-                  <option value={"rating"}>Rating</option>
-                </select>
+                  onFocus={() => setOpen(true)}
+                  type={searchMode == "rating" ? "number" : "text"}
+                  id="hs-inline-leading-pricing-select-label"
+                  name="inline-add-on"
+                  class="py-3 px-4 ps-4 pe-20 block w-full shadow-sm rounded-lg  text-sm focus:z-10 disabled:opacity-50 focus:border-none disabled:pointer-events-none bg-slate-900 border-gray-700 text-gray-400 focus:ring-gray-600"
+                  placeholder="Search..."
+                />
+                <div class="absolute inset-y-0 end-0 flex items-center text-gray-500 pe-px">
+                  <select
+                    id="hs-inline-leading-select-currency"
+                    name="hs-inline-leading-select-currency"
+                    class="block h-full w-full border-transparent rounded-lg focus:ring-blue-600 focus:border-blue-600 bg-gray-800"
+                    value={searchMode}
+                    onChange={(e) => {
+                      setSearchMode(e.target.value);
+                    }}
+                  >
+                    <option value={"players"}>Players</option>
+                    <option value={"version"}>Version</option>
+                    <option value={"rating"}>Rating</option>
+                  </select>
+                </div>
+                <CustomPopover
+                  styles={styles}
+                  attributes={attributes}
+                  setPopperElement={setPopperElement}
+                  players={players}
+                  isOpen={open}
+                  closePanel={closePanel}
+                  isLoading={isLoading}
+                />
               </div>
             </div>
             <div class="sm:hidden">
@@ -139,15 +145,6 @@ const Navbar = () => {
             class="hs-collapse hidden overflow-hidden transition-all duration-300 sm:block"
           >
             <div class="flex flex-col gap-y-4 gap-x-0 mt-5 sm:flex-row sm:items-center sm:justify-end sm:gap-y-0 sm:gap-x-7 sm:mt-0 sm:ps-7">
-              {/* <a
-                class="font-medium text-white sm:py-6"
-                href="#"
-                aria-current="page"
-              >
-                Players
-              </a> */}
-              {/* <a class="font-medium text-white/[.8] hover:text-white sm:py-6" href="#">SBC</a> */}
-
               <a
                 class="flex items-center gap-x-2 font-medium text-white/[.8] hover:text-white sm:border-s sm:border-white/[.3] sm:my-6 sm:ps-6"
                 href="#"
@@ -173,14 +170,6 @@ const Navbar = () => {
           </div>
         </nav>
       </header>
-      <CustomPopover
-        styles={styles}
-        attributes={attributes}
-        setPopperElement={setPopperElement}
-        players={players}
-        isOpen={open}
-        closePanel={closePanel}
-      />
     </div>
   );
 };

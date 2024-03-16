@@ -53,3 +53,13 @@ export function useOutsideClick(ref, onClickOutside) {
     };
   }, [ref]);
 }
+export const updateRarity = (data) => {
+  data.forEach((player) => {
+    if (player.rarity == 0 || player.rarity == 1)
+      player.rarity_url = player.rarity_url.replace(
+        /_(\d+).png/,
+        `_${player.level}.png`
+      );
+  });
+  return data;
+};
