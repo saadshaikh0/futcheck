@@ -3,10 +3,10 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      nodejs: 14
+      nodejs: 20
   pre_build:
     commands:
-      - npm install
+      - npm i
   build:
     commands:
       - npm run build
