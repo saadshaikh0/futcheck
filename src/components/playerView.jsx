@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import instance from "../api/axiosclient";
-import { buildPlayerUrl } from "./utils/utils";
+import { buildPlayerUrl, fillZeros } from "./utils/utils";
 import PlayerPriceBox from "./playerPriceBox";
 import FutbinImg from "../assets/futbin.png";
 import FutWizImg from "../assets/futwiz.png";
@@ -24,6 +24,11 @@ const PlayerView = () => {
     playstylePlus,
     position,
     text_color,
+    bg_color,
+    nation_url,
+    league_url,
+    league_name,
+    teamid,
   } = useSelector((state) => state.player.details);
 
   const dispatch = useDispatch();
@@ -91,7 +96,7 @@ const PlayerView = () => {
                 src={buildPlayerUrl(guid, id, base_id)}
               />
               <div
-                class={`flex flex-row absolute top-[71.6%] w-[68.8%] font-bold left-1/2 transform -translate-x-1/2 justify-between`}
+                class={`flex flex-row absolute top-[69%] w-[68.8%] font-bold left-1/2 transform -translate-x-1/2 justify-between`}
               >
                 <div class="relative">
                   <div class="font-cruyff-condensed-medium text-[0.78em] leading-none mb-[0.2em] text-center">
@@ -150,6 +155,36 @@ const PlayerView = () => {
                   {position[0]}
                 </div>
               </div>
+              {/* ALternate Positions */}
+              <div class="absolute right-[3.96%] top-[28.1%] transform -translate-y-1/2 z-2 w-[14%] text-center flex flex-col gap-[0.1em]">
+                {position.slice(1).map((pos) => (
+                  <div
+                    class={`rounded-[0.35em] font-medium border-[0.09em] border-[--color] text-[--color] w-full whitespace-nowrap font-cruyff-condensed-medium text-[0.85em] flex justify-center leading-[1] pb-[0.04em]  relative`}
+                    style={{
+                      backgroundColor: bg_color,
+                    }}
+                  >
+                    {pos}
+                  </div>
+                ))}
+              </div>
+              <div class="absolute flex justify-center items-center w-full gap-[0.4em] top-[81.8%]">
+                <img
+                  src={nation_url}
+                  class="object-contain max-h-[1.3em] max-w-[1.7em]"
+                  alt="Nation"
+                />
+                <img
+                  src={league_url}
+                  class="object-contain max-h-[1.3em] max-w-[1.7em]"
+                  alt="League"
+                />
+                <img
+                  src={`https://www.ea.com/ea-sports-fc/ultimate-team/web-app/content/24B23FDE-7835-41C2-87A2-F453DFDB2E82/2024/fut/items/images/mobile/clubs/dark/${teamid}.png`}
+                  class="object-contain max-h-[1.3em] max-w-[1.7em]"
+                  alt="Club"
+                />
+              </div>
             </div>
             {playerVersions && (
               <div className="flex justify-center gap-4 mb-5">
@@ -159,6 +194,7 @@ const PlayerView = () => {
                       className="cursor-pointer"
                       onClick={() => {
                         console.log(player);
+                        player["bg_color"] = fillZeros(player["bg_color"]);
                         dispatch(setPlayer({ ...player }));
                       }}
                     >
@@ -200,12 +236,15 @@ const PlayerView = () => {
                 price_data={futbinData}
                 url={`https://www.futbin.com/24/player/${futbin_id}`}
               />
-              <PlayerPriceBox
-                Img={FutWizImg}
-                name="Futwiz"
-                price_data={futwizData}
-                url={`https://www.futwiz.com/en/fc24/player/${futwizData.url}/${futwiz_id}`}
-              />
+              {futwiz_id && (
+                <PlayerPriceBox
+                  Img={FutWizImg}
+                  name="Futwiz"
+                  price_data={futwizData}
+                  url={`https://www.futwiz.com/en/fc24/player/${futwizData.url}/${futwiz_id}`}
+                />
+              )}
+
               <PlayerPriceBox
                 Img={FutggImg}
                 name="Futgg"

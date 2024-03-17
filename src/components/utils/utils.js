@@ -11,6 +11,24 @@ export const debounce = (func, delay) => {
     }, delay);
   };
 };
+export const fillZeros = (hexcode) => {
+  // Remove '#' if present
+  hexcode = hexcode.replace("#", "");
+
+  // Check if the length is less than 6
+  if (hexcode.length < 6) {
+    // Calculate the number of zeros to add
+    var zerosToAdd = 6 - hexcode.length;
+
+    // Add leading zeros
+    hexcode = "0".repeat(zerosToAdd) + hexcode;
+  }
+
+  // Add '#' back
+  hexcode = "#" + hexcode;
+
+  return hexcode;
+};
 
 export const buildPlayerUrl = (guId, eaId, baseId) => {
   if (!guId || baseId == eaId)
