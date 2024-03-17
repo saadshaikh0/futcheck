@@ -14,7 +14,7 @@ const Footer = () => {
         <div class="mt-3 space-x-2">
           <a
             class="inline-flex justify-center items-center size-10 text-center text-gray-500 hover:bg-gray-100 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:ring-offset-white transition dark:text-gray-500 dark:hover:text-gray-200 dark:hover:bg-gray-800"
-            href="#"
+            href="mailto:support@futcheck.com"
           >
             <svg
               class="flex-shrink-0 size-3.5"
@@ -29,7 +29,7 @@ const Footer = () => {
           </a>
           <a
             class="inline-block text-gray-500 hover:text-gray-800 dark:hover:text-gray-200"
-            href="#"
+            href="https://twitter.com/realfutcheck"
           >
             <svg
               class="flex-shrink-0 size-4"
