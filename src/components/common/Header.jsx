@@ -44,7 +44,7 @@ const Navbar = () => {
     <div>
       <header class="flex flex-wrap sm:justify-start sm:flex-nowrap z-50 w-full bg-black text-sm py-3 sm:py-0">
         <nav
-          class="relative max-w-[85rem] w-full mx-auto px-4 sm:flex sm:items-center sm:justify-between sm:px-6 lg:px-8"
+          class="relative max-w-[85rem] w-full mx-auto px-4 pt-2 sm:flex sm:items-center sm:justify-between sm:px-6 lg:px-8"
           aria-label="Global"
         >
           <div class="flex items-center   grow justify-between gap-4">
@@ -97,7 +97,7 @@ const Navbar = () => {
                 />
               </div>
             </div>
-            <div class="sm:hidden">
+            {/* <div class="sm:hidden">
               <button
                 type="button"
                 class="hs-collapse-toggle size-9 flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-white/20 text-white hover:border-white/40 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
@@ -137,11 +137,10 @@ const Navbar = () => {
                   <path d="m6 6 12 12" />
                 </svg>
               </button>
-            </div>
-            <div></div>
+            </div> */}
           </div>
 
-          <div
+          {/* <div
             id="navbar-collapse-with-animation"
             class="hs-collapse hidden overflow-hidden transition-all duration-300 sm:block"
           >
@@ -168,7 +167,7 @@ const Navbar = () => {
                 Log in
               </a>
             </div>
-          </div>
+          </div> */}
         </nav>
       </header>
     </div>

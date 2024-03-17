@@ -26,6 +26,20 @@
     -->
     <title>React App</title>
   </head>
+  <!-- Google tag (gtag.js) -->
+  <script
+    async
+    src="https://www.googletagmanager.com/gtag/js?id=G-RD6LGLC1LD"
+  ></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+
+    gtag("config", "G-RD6LGLC1LD");
+  </script>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
@@ -41,5 +55,4 @@
     -->
   </body>
   <script src="../node_modules/preline/dist/preline.js"></script>
-
 </html>

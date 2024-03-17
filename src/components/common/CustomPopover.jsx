@@ -93,7 +93,9 @@ const CustomPopover = ({
           static
         >
           {isLoading ? (
-            <div className="text-white text-center w-[100vw]">Loading....</div>
+            <div className="text-white text-center w-[100vw] md:w-full">
+              Loading....
+            </div>
           ) : (
             <PopoverContent />
           )}
