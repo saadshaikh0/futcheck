@@ -5,7 +5,7 @@ import { usePopper } from "react-popper";
 import { useQuery } from "@tanstack/react-query";
 import { fetchPlayers } from "../../api/apiService";
 import { useDebounce } from "@uidotdev/usehooks";
-
+import FutcheckLogo from "../../assets/futcheck_logo.png";
 const Navbar = () => {
   let [referenceElement, setReferenceElement] = useState();
   let [popperElement, setPopperElement] = useState();
@@ -48,13 +48,14 @@ const Navbar = () => {
           aria-label="Global"
         >
           <div class="flex items-center   grow justify-between gap-4">
-            <a
+            {/* <a
               class="flex-none text-xl font-semibold text-white"
               href="#"
               aria-label="Brand"
             >
               FUTCHECK
-            </a>
+            </a> */}
+            <img src={FutcheckLogo} width={40} />
             {/* Input Element */}
             <div ref={ref} className="grow">
               <div ref={setReferenceElement} class=" relative  grow">
