@@ -77,11 +77,12 @@ const Navbar = () => {
                     class="block h-full w-full border-transparent rounded-lg focus:ring-blue-600 focus:border-blue-600 bg-gray-800"
                     value={searchMode}
                     onChange={(e) => {
+                      setSearchValue("");
                       setSearchMode(e.target.value);
                     }}
                   >
                     <option value={"players"}>Players</option>
-                    <option value={"version"}>Version</option>
+                    {/* <option value={"version"}>Version</option> */}
                     <option value={"rating"}>Rating</option>
                   </select>
                 </div>

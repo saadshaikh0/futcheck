@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import { Popover } from "@headlessui/react";
 import { useDispatch } from "react-redux";
 import { setPlayer } from "../../redux/playerSlice";
-import { useOutsideClick } from "../utils/utils";
+import { fillZeros, useOutsideClick } from "../utils/utils";
 const PopoverItems = ({ closePanel, player }) => {
   const {
     base_id,
@@ -22,6 +22,8 @@ const PopoverItems = ({ closePanel, player }) => {
   return (
     <li
       onClick={() => {
+        player["bg_color"] = fillZeros(player["bg_color"]);
+
         dispatch(
           setPlayer({
             ...player,
