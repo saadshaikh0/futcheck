@@ -6,6 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchPlayers } from "../../api/apiService";
 import { useDebounce } from "@uidotdev/usehooks";
 import FutcheckLogo from "../../assets/futcheck_logo.png";
+import { Link } from "react-router-dom";
 const Navbar = () => {
   let [referenceElement, setReferenceElement] = useState();
   let [popperElement, setPopperElement] = useState();
@@ -55,7 +56,9 @@ const Navbar = () => {
             >
               FUTCHECK
             </a> */}
-            <img src={FutcheckLogo} width={40} />
+            <Link to="/">
+              <img src={FutcheckLogo} width={40} />
+            </Link>
             {/* Input Element */}
             <div ref={ref} className="grow">
               <div ref={setReferenceElement} class=" relative  grow">

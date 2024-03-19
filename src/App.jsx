@@ -1,11 +1,12 @@
 import React from "react";
-import Home from "./pages/Home";
 import Header from "./components/common/Header";
 import store from "./redux/store";
 import { Provider } from "react-redux";
 import Footer from "./components/common/Footer";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import HomePage from "./components/homepage";
+import PlayerViewWrapper from "./components/playerViewWrapper";
 const queryClient = new QueryClient();
 
 function App() {
@@ -13,9 +14,17 @@ function App() {
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
         <div className="App">
-          <Header />
-          <Home />
-          <Footer />
+          <Router>
+            <Header />
+            <Routes>
+              <Route exact path="/" element={<HomePage />} />
+              <Route
+                path="/player/:playerId/:playerName"
+                element={<PlayerViewWrapper />}
+              />
+            </Routes>
+            <Footer />
+          </Router>
         </div>
       </QueryClientProvider>
     </Provider>

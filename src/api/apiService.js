@@ -44,3 +44,7 @@ export const fetchLatestPlayers = async () => {
   const response = await instance.get(`/get_latest/`);
   return response.data.data;
 };
+export const fetchPlayerDetails = async (id) => {
+  const response = await instance.get(`/get_player/?id=${id}`);
+  return response.data.data;
+};

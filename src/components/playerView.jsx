@@ -33,6 +33,7 @@ const PlayerView = () => {
     teamid,
   } = player;
   const dispatch = useDispatch();
+
   const { data = {}, isLoading } = useQuery({
     queryKey: ["fetchPrices", id, futwiz_id],
     queryFn: () => fetchPrice(id, futwiz_id),
