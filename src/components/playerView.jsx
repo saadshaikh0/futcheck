@@ -9,8 +9,10 @@ import FutggImg from "../assets/futgg.jpg";
 import { setPlayer } from "../redux/playerSlice";
 import { fetchPrice, fetchVersions } from "../api/apiService";
 import { useQuery } from "@tanstack/react-query";
+import { TRAIT_MAP } from "./utils/traitsvg";
 
 const PlayerView = () => {
+  const player = useSelector((state) => state.player.details);
   const {
     id,
     base_id,
@@ -21,7 +23,7 @@ const PlayerView = () => {
     futwiz_id,
     futbin_id,
     attributes,
-    playstylePlus,
+    playstyle_plus,
     position,
     text_color,
     bg_color,
@@ -29,8 +31,7 @@ const PlayerView = () => {
     league_url,
     league_name,
     teamid,
-  } = useSelector((state) => state.player.details);
-
+  } = player;
   const dispatch = useDispatch();
   const { data = {}, isLoading } = useQuery({
     queryKey: ["fetchPrices", id, futwiz_id],
@@ -50,6 +51,24 @@ const PlayerView = () => {
     cacheTime: 1000 * 60 * 100,
     staleTime: Infinity,
   });
+  useEffect(() => {
+    // Select all path elements inside the SVG
+    const pathElements = document.querySelectorAll(
+      "#playstyle_container .svg-container path"
+    );
+    const iconPathElements = document.querySelectorAll(
+      "#playstyle_container .playstyle_icon path"
+    );
+
+    // Apply fill color to each path element
+    pathElements.forEach((path) => {
+      path.style.fill = bg_color; // Apply red fill color
+      path.style.stroke = text_color; // Apply red fill color
+    });
+    iconPathElements.forEach((path) => {
+      path.style.fill = text_color; // Apply red fill color
+    });
+  }, [bg_color, text_color]);
 
   if (!id) {
     return (
@@ -94,6 +113,11 @@ const PlayerView = () => {
                 }
                 className="absolute top-0 w-full h-full"
                 src={buildPlayerUrl(guid, id, base_id)}
+                onError={(e) => {
+                  e.target.onerror = null; // Prevent infinite loop in case backup image also fails
+                  e.target.src = buildPlayerUrl(guid, base_id, base_id);
+                  dispatch(setPlayer({ ...player, guid: null }));
+                }}
               />
               <div
                 class={`flex flex-row absolute top-[69%] w-[68.8%] font-bold left-1/2 transform -translate-x-1/2 justify-between`}
@@ -154,6 +178,35 @@ const PlayerView = () => {
                 <div class="font-cruyff-condensed-medium leading-none text-[1em] -mt-[0.07em]">
                   {position[0]}
                 </div>
+              </div>
+              <div
+                id="playstyle_container"
+                class="absolute left-[9.8%] top-[57.2%] transform -translate-y-1/2 -translate-x-1/2 z-2 text-[0.9em] text-transparent"
+              >
+                {playstyle_plus.map((playstyle) => {
+                  return (
+                    <div className="relative">
+                      <svg
+                        className="!w-[2.5em] !h-[2.5em] svg-container svg-icon svg-icon--size-sm"
+                        role="img"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 256 256"
+                      >
+                        <path
+                          d="M12.813,104.953L68.157,21.862H188.143l55.045,83.091L128,235.138Z"
+                          fill-opacity="1"
+                          stroke="#ffffff"
+                          stroke-linejoin="round"
+                          stroke-width="8"
+                          fill="#9335fe"
+                        ></path>
+                      </svg>
+                      <div className="playstyle_icon">
+                        {TRAIT_MAP[playstyle]}
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
               {/* ALternate Positions */}
               <div class="absolute right-[3.96%] top-[28.1%] transform -translate-y-1/2 z-2 w-[14%] text-center flex flex-col gap-[0.1em]">

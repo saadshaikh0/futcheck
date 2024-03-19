@@ -11,10 +11,7 @@ export const fetchPlayers = async (value, searchMode) => {
     }
     const response = await instance.get(searchQuery);
     let data = updateRarity(response.data.data);
-    data.sort((a, b) => b["rating"] - a["rating"]);
     return data;
-    // setPlayers(data);
-    // setOpen(true);
   } catch (error) {
     console.error("Error fetching users:", error);
     throw error;
@@ -41,4 +38,9 @@ export const fetchVersions = async (base_id, id) => {
   const response = await instance.get(`/versions/?id=${base_id}&eId=${id}`);
   let data = updateRarity(response.data.data);
   return data;
+};
+
+export const fetchLatestPlayers = async () => {
+  const response = await instance.get(`/get_latest/`);
+  return response.data.data;
 };
