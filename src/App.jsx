@@ -8,6 +8,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import HomePage from "./components/homepage";
 import PlayerViewWrapper from "./components/playerViewWrapper";
 import ReactGA from "react-ga4";
+import Ads from "./components/common/Ads";
 ReactGA.initialize("G-RD6LGLC1LD");
 
 const queryClient = new QueryClient();
@@ -19,6 +20,7 @@ function App() {
         <div className="App">
           <Router>
             <Header />
+            <Ads adClient="ca-pub-4560319877250034" adSlot="1044013921" />
             <Routes>
               <Route exact path="/" element={<HomePage />} />
               <Route

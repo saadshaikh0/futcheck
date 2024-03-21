@@ -7,8 +7,6 @@ import { fetchPlayers } from "../../api/apiService";
 import { useDebounce } from "@uidotdev/usehooks";
 import FutcheckLogo from "../../assets/futcheck_logo.png";
 import { Link } from "react-router-dom";
-import ReactGA from "react-ga4";
-ReactGA.initialize("G-RD6LGLC1LD");
 
 const Navbar = () => {
   let [referenceElement, setReferenceElement] = useState();
