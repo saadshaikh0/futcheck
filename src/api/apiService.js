@@ -1,8 +1,16 @@
 import { updateRarity } from "../components/utils/utils";
 import instance from "./axiosclient";
+import ReactGA from "react-ga4";
+ReactGA.initialize("G-RD6LGLC1LD");
+
 export const fetchPlayers = async (value, searchMode) => {
   if (!value || value.length == 0) return [];
   try {
+    ReactGA.event({
+      category: "Searching Player",
+      action: value,
+      label: value,
+    });
     let searchQuery = "/search/?";
     if (searchMode == "rating") {
       searchQuery += `rating=${value}`;
@@ -45,6 +53,11 @@ export const fetchLatestPlayers = async () => {
   return response.data.data;
 };
 export const fetchPlayerDetails = async (id) => {
+  ReactGA.event({
+    category: "Fetching Player details",
+    action: id,
+    label: id,
+  });
   const response = await instance.get(`/get_player/?id=${id}`);
   return response.data.data;
 };

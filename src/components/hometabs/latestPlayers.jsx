@@ -1,5 +1,5 @@
 import react from "react";
-import { buildPlayerUrl } from "../utils/utils";
+import { buildPlayerUrl, fillZeros } from "../utils/utils";
 import { useDispatch } from "react-redux";
 import { setPlayer } from "../../redux/playerSlice";
 import { Link } from "react-router-dom";
@@ -10,7 +10,10 @@ const PlayerCard = ({ player }) => {
   return (
     <Link
       to={`/player/${id}/${name.replace(/\s+/g, "-")}`}
-      onClick={() => dispatch(setPlayer({ ...player }))}
+      onClick={() => {
+        player["bg_color"] = fillZeros(player["bg_color"]);
+        dispatch(setPlayer({ ...player }));
+      }}
     >
       <div className="flex flex-col w-full" style={{ color: text_color }}>
         <div className="block relative ">

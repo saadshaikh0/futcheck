@@ -2,13 +2,10 @@ import React, { useState } from "react";
 import LatestPlayers from "./hometabs/latestPlayers";
 import { fetchLatestPlayers } from "../api/apiService";
 import { useQuery } from "@tanstack/react-query";
-import ReactGA from "react-ga";
 
 const tabs = ["Latest Players"];
 
 const HomePage = () => {
-  ReactGA.initialize("G-RD6LGLC1LD");
-  ReactGA.pageview(window.location.pathname);
   const [selectedTab, setSelectedTab] = useState("Latest Players");
 
   const { data: players = [], isLoading } = useQuery({
