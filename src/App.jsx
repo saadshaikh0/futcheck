@@ -20,7 +20,7 @@ function App() {
         <div className="App">
           <Router>
             <Header />
-            <Ads adClient="ca-pub-4560319877250034" adSlot="1044013921" />
+            {/* <Ads adClient="ca-pub-4560319877250034" adSlot="1044013921" /> */}
             <Routes>
               <Route exact path="/" element={<HomePage />} />
               <Route
