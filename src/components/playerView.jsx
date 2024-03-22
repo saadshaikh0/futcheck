@@ -10,6 +10,7 @@ import { setPlayer } from "../redux/playerSlice";
 import { fetchPrice, fetchVersions } from "../api/apiService";
 import { useQuery } from "@tanstack/react-query";
 import { TRAIT_MAP } from "./utils/traitsvg";
+import { WORK_RATE } from "./utils/constants";
 
 const PlayerView = () => {
   const player = useSelector((state) => state.player.details);
@@ -31,6 +32,11 @@ const PlayerView = () => {
     league_url,
     league_name,
     teamid,
+    weak_foot,
+    skill_moves,
+    att_wr,
+    def_wr,
+    foot,
   } = player;
   const dispatch = useDispatch();
 
@@ -98,7 +104,14 @@ const PlayerView = () => {
         </div>
         <div className="grid md:grid-cols-[1fr_2fr] mt-5">
           <div className="flex flex-col w-full md:max-w-[280px]">
-            <div style={{ color: text_color }} className="block relative ">
+            <div
+              style={{
+                color: text_color,
+                "--fill-color": bg_color,
+                "--text-color": text_color,
+              }}
+              className="block relative "
+            >
               <img src={rarity_url.replace("_s_", "_e_")} />
               <img
                 style={
@@ -221,6 +234,28 @@ const PlayerView = () => {
                     {pos}
                   </div>
                 ))}
+              </div>
+              <div class="absolute font-bold right-[3.96%] top-[58.2%] transform -translate-y-1/2 z-2 w-[12%] text-center flex flex-col gap-[0.1em]">
+                <div class="p-[0.1em]  rounded-[0.35em] bg-[--fill-color] border-[0.09em] border-[--color] text-[--color] w-full whitespace-nowrap font-cruyff-condensed-medium text-[0.73em] flex justify-center leading-[1]  relative">
+                  {skill_moves} SM
+                </div>
+                <div class="p-[0.1em] rounded-[0.35em] bg-[--fill-color] border-[0.09em] border-[--color] text-[--color] w-full whitespace-nowrap font-cruyff-condensed-medium text-[0.73em] flex justify-center leading-[1]  relative">
+                  {weak_foot} WF
+                </div>
+
+                <div class="rounded-[0.35em] p-[0.1em] bg-[--fill-color] border-[0.09em] border-[--color] text-[--color] w-full whitespace-nowrap font-cruyff-condensed-medium text-[0.73em] flex justify-center leading-[1]  relative">
+                  <div class="grid grid-cols-2 gap-[0.2em] w-full justify-between items-center px-[0.1em]">
+                    <span class="inline-block text-center">
+                      {WORK_RATE[att_wr][0]}
+                    </span>
+                    <span class="absolute top-[43%] left-1/2 transform -translate-y-1/2 -translate-x-1/2">
+                      ·
+                    </span>
+                    <span class="inline-block text-center">
+                      {WORK_RATE[def_wr][0]}
+                    </span>
+                  </div>
+                </div>
               </div>
               <div class="absolute flex justify-center items-center w-full gap-[0.4em] top-[81.8%]">
                 <img
