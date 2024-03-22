@@ -4,7 +4,7 @@ import store from "./redux/store";
 import { Provider } from "react-redux";
 import Footer from "./components/common/Footer";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { HashRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import HomePage from "./components/homepage";
 import PlayerViewWrapper from "./components/playerViewWrapper";
 import ReactGA from "react-ga4";
