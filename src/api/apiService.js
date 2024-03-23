@@ -60,6 +60,10 @@ export const fetchAllRarities = async () => {
   const response = await instance.get(`/get_promos/`);
   return response.data.data;
 };
+export const fetchPlayerByPromo = async (id) => {
+  const response = await instance.get(`/get_players_by_promo/?id=${id}`);
+  return response.data.data;
+};
 export const fetchPlayerDetails = async (id) => {
   ReactGA.event({
     category: "Fetching Player details",

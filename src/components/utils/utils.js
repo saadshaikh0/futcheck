@@ -81,3 +81,20 @@ export const updateRarity = (data) => {
   });
   return data;
 };
+export const convertToMinutes = (timeString) => {
+  const matches = timeString.match(
+    /(\d+)\s*(min|hour|mins|sec|secs|hours) ago/
+  );
+  if (matches) {
+    const value = parseInt(matches[1]);
+    const unit = matches[2];
+    if (unit.includes("hour")) {
+      return value * 3600; // Convert hours to minutes
+    } else if (unit.includes("min")) {
+      return value * 60;
+    } else {
+      return value; // Minutes
+    }
+  }
+  return 0; // Default to 0 minutes if no match
+};

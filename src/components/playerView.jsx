@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import instance from "../api/axiosclient";
-import { buildPlayerUrl, fillZeros } from "./utils/utils";
+import { buildPlayerUrl, convertToMinutes, fillZeros } from "./utils/utils";
 import PlayerPriceBox from "./playerPriceBox";
 import FutbinImg from "../assets/futbin.png";
 import FutWizImg from "../assets/futwiz.png";
@@ -11,6 +11,7 @@ import { fetchPrice, fetchVersions } from "../api/apiService";
 import { useQuery } from "@tanstack/react-query";
 import { TRAIT_MAP } from "./utils/traitsvg";
 import { WORK_RATE } from "./utils/constants";
+import CoinsImg from "../assets/coins.png";
 
 const PlayerView = () => {
   const player = useSelector((state) => state.player.details);
@@ -46,6 +47,7 @@ const PlayerView = () => {
 
     staleTime: 1000 * 60,
   });
+  const [latestPriceData, setLatestPriceData] = useState({});
   const {
     futbin: futbinData = {},
     futwiz: futwizData = {},
@@ -58,6 +60,20 @@ const PlayerView = () => {
     cacheTime: 1000 * 60 * 100,
     staleTime: Infinity,
   });
+
+  useEffect(() => {
+    if (data.futbin) {
+      let arr = [data.futbin, data.futwiz, data.futgg];
+      const sortedArray = arr.sort((a, b) => {
+        const timeA = convertToMinutes(a.updated);
+        const timeB = convertToMinutes(b.updated);
+        return timeA - timeB; // Sort in descending order
+      });
+      // console.log(sortedArray);
+      setLatestPriceData(sortedArray[0]);
+    }
+  }, [data]);
+
   useEffect(() => {
     // Select all path elements inside the SVG
     const pathElements = document.querySelectorAll(
@@ -104,6 +120,19 @@ const PlayerView = () => {
         </div>
         <div className="grid md:grid-cols-[1fr_2fr] mt-5">
           <div className="flex flex-col w-full md:max-w-[280px]">
+            <div className="mx-auto">
+              <span
+                className="flex justify-center items-center  px-3 py-1 rounded-full font-bold gap-2 border-2"
+                style={{
+                  backgroundColor: bg_color,
+                  color: text_color,
+                  borderColor: text_color,
+                }}
+              >
+                <img src={CoinsImg} className="mt-1" width={24} />
+                {latestPriceData["value"]}
+              </span>
+            </div>
             <div
               style={{
                 color: text_color,
