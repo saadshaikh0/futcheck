@@ -30,7 +30,7 @@ const PlayerView = () => {
     bg_color,
     nation_url,
     league_url,
-    league_name,
+    c_name,
     teamid,
     weak_foot,
     skill_moves,
@@ -96,7 +96,7 @@ const PlayerView = () => {
              group-[.-sticky-header]:text-2xl group-[.-sticky-header]:mt-0
              "
           >
-            {name}
+            {c_name != "None" ? c_name : name}
             <span class="text-lighter-gray font-bold hidden md:inline-block text-base ml-2">
               {rating} OVR - EA FC 24
             </span>

@@ -9,6 +9,8 @@ import HomePage from "./components/homepage";
 import PlayerViewWrapper from "./components/playerViewWrapper";
 import ReactGA from "react-ga4";
 import Ads from "./components/common/Ads";
+import Tos from "./components/tos";
+import Policy from "./components/policy";
 ReactGA.initialize("G-RD6LGLC1LD");
 
 const queryClient = new QueryClient();
@@ -23,6 +25,9 @@ function App() {
             {/* <Ads adClient="ca-pub-4560319877250034" adSlot="1044013921" /> */}
             <Routes>
               <Route exact path="/" element={<HomePage />} />
+              <Route path="/tos" element={<Tos />} />
+              <Route path="/policy" element={<Policy />} />
+
               <Route
                 path="/player/:playerId/:playerName"
                 element={<PlayerViewWrapper />}

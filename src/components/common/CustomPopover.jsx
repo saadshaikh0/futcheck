@@ -5,8 +5,16 @@ import { setPlayer } from "../../redux/playerSlice";
 import { fillZeros, useOutsideClick } from "../utils/utils";
 import { Link } from "react-router-dom";
 const PopoverItems = ({ closePanel, player }) => {
-  const { base_id, id, name, rarity_url, nation_url, rating, position } =
-    player;
+  const {
+    base_id,
+    id,
+    name,
+    rarity_url,
+    nation_url,
+    rating,
+    position,
+    c_name,
+  } = player;
 
   const dispatch = useDispatch();
   if (!name || name.length == 0) {
@@ -44,7 +52,7 @@ const PopoverItems = ({ closePanel, player }) => {
 
         <img src={nation_url} width={32} />
         <div className="grid grid-rows-2">
-          <span>{name}</span>
+          <span>{c_name != "None" ? c_name : name}</span>
           <div>
             <span>{position[0]}</span>
             {otherPos.length ? <span>-{otherPos.join(",")}</span> : <></>}

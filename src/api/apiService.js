@@ -52,6 +52,14 @@ export const fetchLatestPlayers = async () => {
   const response = await instance.get(`/get_latest/`);
   return response.data.data;
 };
+export const fetchTopRatedPlayers = async () => {
+  const response = await instance.get(`/top_rated/`);
+  return response.data.data;
+};
+export const fetchAllRarities = async () => {
+  const response = await instance.get(`/get_promos/`);
+  return response.data.data;
+};
 export const fetchPlayerDetails = async (id) => {
   ReactGA.event({
     category: "Fetching Player details",

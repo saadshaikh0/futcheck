@@ -1,23 +1,35 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
-    <footer class="w-full pt-10 px-4 bg-slate-950 sm:px-6 lg:px-8 mx-auto">
-      <div class="text-center">
-        <div class="mt-3">
-          <p class="text-white">
+    <footer className="w-full pt-10 px-4 bg-slate-950 sm:px-6 lg:px-8 mx-auto">
+      <div className="text-center">
+        <div className="mt-3 text-white">
+          <p>
             &copy; 2024 FUTCHECK. All rights reserved. All FIFA assets are
             property of EA Sports.
           </p>
+          <div className="flex gap-2 justify-center items-center mt-2">
+            <span>
+              <Link to={"/tos"}> Terms of Service</Link>
+            </span>
+            <span className="w-[0.1em] h-[1em] bg-white"></span>
+            <span>
+              <Link to={"/policy"}>Privacy Policy</Link>
+            </span>
+            <span className="w-[0.1em] h-[1em] bg-white"></span>
+            <a href="mailto:admin@futcheck.com">Contact</a>
+          </div>
         </div>
 
-        <div class="mt-3 space-x-2">
+        <div className="mt-3 space-x-2">
           <a
-            class="inline-flex justify-center items-center size-10 text-center text-gray-500 hover:bg-gray-100 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:ring-offset-white transition dark:text-gray-500 dark:hover:text-gray-200 dark:hover:bg-gray-800"
+            className="inline-flex justify-center items-center size-10 text-center text-gray-500 hover:bg-gray-100 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:ring-offset-white transition dark:text-gray-500 dark:hover:text-gray-200 dark:hover:bg-gray-800"
             href="mailto:support@futcheck.com"
           >
             <svg
-              class="flex-shrink-0 size-3.5"
+              className="flex-shrink-0 size-3.5"
               xmlns="http://www.w3.org/2000/svg"
               width="16"
               height="16"
@@ -28,11 +40,11 @@ const Footer = () => {
             </svg>
           </a>
           <a
-            class="inline-block text-gray-500 hover:text-gray-800 dark:hover:text-gray-200"
+            className="inline-block text-gray-500 hover:text-gray-800 dark:hover:text-gray-200"
             href="https://twitter.com/realfutcheck"
           >
             <svg
-              class="flex-shrink-0 size-4"
+              className="flex-shrink-0 size-4"
               xmlns="http://www.w3.org/2000/svg"
               width="16"
               height="16"

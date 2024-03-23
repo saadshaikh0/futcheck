@@ -1,15 +1,26 @@
-import react from "react";
+import react, { useState } from "react";
 import { buildPlayerUrl, fillZeros } from "../utils/utils";
 import { useDispatch } from "react-redux";
 import { setPlayer } from "../../redux/playerSlice";
 import { Link } from "react-router-dom";
 const PlayerCard = ({ player }) => {
-  const { rarity_url, guid, id, base_id, name, text_color, rating, position } =
-    player;
+  const {
+    rarity_url,
+    guid,
+    id,
+    base_id,
+    name,
+    text_color,
+    rating,
+    position,
+    c_name,
+  } = player;
   const dispatch = useDispatch();
+  const player_name = c_name != "None" ? c_name : name;
+  const [validGuid, setValidGuid] = useState(!!guid);
   return (
     <Link
-      to={`/player/${id}/${name.replace(/\s+/g, "-")}`}
+      to={`/player/${id}/${name?.replace(/\s+/g, "-")}`}
       onClick={() => {
         player["bg_color"] = fillZeros(player["bg_color"]);
         dispatch(setPlayer({ ...player }));
@@ -19,7 +30,11 @@ const PlayerCard = ({ player }) => {
         <div className="block relative ">
           <img src={rarity_url} />
           <img
-            className="absolute top-0 w-full h-full"
+            className={
+              !validGuid || base_id == id
+                ? "absolute top-[20%] left-[52%] w-[65%] h-1/2 -translate-x-1/2"
+                : "absolute top-0 w-full h-full"
+            }
             src={buildPlayerUrl(guid, id, base_id)}
             onError={(e) => {
               e.target.onerror = null; // Prevent infinite loop in case backup image also fails
@@ -29,10 +44,11 @@ const PlayerCard = ({ player }) => {
               e.target.style.left = "52%";
               e.target.style.top = "20%";
               e.target.style.transform = "translate(-50%)";
+              setValidGuid(false);
             }}
           />
           <div className="absolute bottom-[15%] left-[50%] font-bold -translate-x-1/2">
-            {name.split(" ")[0]}
+            {player_name ? player_name.split(" ")[0] : ""}
           </div>
           <div class="absolute left-[23.8%] transform -translate-x-1/2 font-extrabold text-center top-[20.2%]">
             <div class="font-cruyff-condensed-numbers-bold text-[1em] leading-[0.91em]">
