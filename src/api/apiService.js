@@ -64,6 +64,23 @@ export const fetchPlayerByPromo = async (id) => {
   const response = await instance.get(`/get_players_by_promo/?id=${id}`);
   return response.data.data;
 };
+export const fetchSimilarPlayers = async ({
+  rating,
+  nation,
+  leagueid,
+  teamid,
+  skill_moves,
+  weak_foot,
+  rarity,
+}) => {
+  const response = await instance.get(
+    `/get_similar_players/?rating=${rating}&nation=${nation}&leagueid=${leagueid}&teamid=${teamid}&skill_moves=${skill_moves}&weak_foot=${weak_foot}&rarity=${rarity}&encoded_position=${"ST"}`,
+    {
+      timeout: 30000,
+    }
+  );
+  return response.data.data;
+};
 export const fetchPlayerDetails = async (id) => {
   ReactGA.event({
     category: "Fetching Player details",

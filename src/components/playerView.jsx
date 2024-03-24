@@ -7,11 +7,16 @@ import FutbinImg from "../assets/futbin.png";
 import FutWizImg from "../assets/futwiz.png";
 import FutggImg from "../assets/futgg.jpg";
 import { setPlayer } from "../redux/playerSlice";
-import { fetchPrice, fetchVersions } from "../api/apiService";
+import {
+  fetchPrice,
+  fetchSimilarPlayers,
+  fetchVersions,
+} from "../api/apiService";
 import { useQuery } from "@tanstack/react-query";
 import { TRAIT_MAP } from "./utils/traitsvg";
 import { WORK_RATE } from "./utils/constants";
 import CoinsImg from "../assets/coins.png";
+import SimilarPlayers from "./similarPlayers";
 
 const PlayerView = () => {
   const player = useSelector((state) => state.player.details);
@@ -30,6 +35,9 @@ const PlayerView = () => {
     text_color,
     bg_color,
     nation_url,
+    leagueid,
+    nation,
+    rarity,
     league_url,
     c_name,
     teamid,
@@ -95,7 +103,7 @@ const PlayerView = () => {
 
   if (!id) {
     return (
-      <div className="h-[90vh] bg-slate-950 ">
+      <div className="min-h-[90vh] bg-slate-950 ">
         <p className="text-white text-center text-2xl absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
           Search Players
         </p>
@@ -103,7 +111,7 @@ const PlayerView = () => {
     );
   }
   return (
-    <div className="h-full md:h-[90vh] bg-slate-950">
+    <div className="h-full md:min-h-[90vh] bg-slate-950">
       <div className="w-[90%] mx-auto pt-3">
         <div className="pt-5">
           <h1
@@ -371,6 +379,12 @@ const PlayerView = () => {
               />
             </div>
           )}
+        </div>
+        <div>
+          <h2 className="text-white text-xl md:text-4xl text-center font-bold my-4">
+            Similar players
+          </h2>
+          <SimilarPlayers player={player} />
         </div>
       </div>
     </div>
