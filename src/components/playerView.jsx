@@ -17,6 +17,10 @@ import { TRAIT_MAP } from "./utils/traitsvg";
 import { WORK_RATE } from "./utils/constants";
 import CoinsImg from "../assets/coins.png";
 import SimilarPlayers from "./similarPlayers";
+import PriceCard from "./PlayerViewCards/PriceCard";
+import StatsCard from "./PlayerViewCards/StatsCard";
+import InfoCard from "./PlayerViewCards/InfoCard";
+import PlaystyleCard from "./PlayerViewCards/PlaystyleCard";
 
 const PlayerView = () => {
   const player = useSelector((state) => state.player.details);
@@ -46,6 +50,8 @@ const PlayerView = () => {
     att_wr,
     def_wr,
     foot,
+    playstyles,
+    stats,
   } = player;
   const dispatch = useDispatch();
 
@@ -56,11 +62,11 @@ const PlayerView = () => {
     staleTime: 1000 * 60,
   });
   const [latestPriceData, setLatestPriceData] = useState({});
-  const {
-    futbin: futbinData = {},
-    futwiz: futwizData = {},
-    futgg: futggData = {},
-  } = data;
+  // const {
+  //   futbin: futbinData = {},
+  //   futwiz: futwizData = {},
+  //   futgg: futggData = {},
+  // } = data;
 
   const { data: playerVersions = [] } = useQuery({
     queryKey: ["fetchVersions", base_id, id],
@@ -313,7 +319,7 @@ const PlayerView = () => {
               </div>
             </div>
             {playerVersions && (
-              <div className="flex justify-center gap-4 mb-5">
+              <div className="flex justify-center gap-2 mb-5 flex-wrap">
                 {playerVersions.map((player) => {
                   return (
                     <div
@@ -355,32 +361,33 @@ const PlayerView = () => {
               <span class="sr-only">Loading...</span>
             </div>
           ) : (
-            <div className="grid md:grid-cols-3 gap-4">
-              <PlayerPriceBox
-                Img={FutbinImg}
-                name="Futbin"
-                price_data={futbinData}
-                url={`https://www.futbin.com/24/player/${futbin_id}`}
-              />
-              {futwiz_id && (
-                <PlayerPriceBox
-                  Img={FutWizImg}
-                  name="Futwiz"
-                  price_data={futwizData}
-                  url={`https://www.futwiz.com/en/fc24/player/${futwizData.url}/${futwiz_id}`}
-                />
-              )}
-
-              <PlayerPriceBox
-                Img={FutggImg}
-                name="Futgg"
-                price_data={futggData}
-                url={`https://www.fut.gg/players/player/24-${id}`}
-              />
+            <div className="flex flex-col h-full gap-4">
+              <div className="grid lg:grid-cols-[1fr_2fr] gap-2">
+                <div className="bg-gray-900 rounded-md">
+                  <PriceCard
+                    value={latestPriceData["value"]}
+                    updated={latestPriceData["updated"]}
+                  />
+                </div>
+                <div className="bg-gray-900 rounded-md">
+                  <PlaystyleCard
+                    iconPlaystyles={playstyle_plus}
+                    playstyles={playstyles}
+                  />
+                </div>
+              </div>
+              <div className="grow grid lg:grid-cols-[3fr_1fr] gap-4">
+                <div className="bg-gray-900 rounded-md">
+                  <StatsCard stats={stats} attributes={attributes} />
+                </div>
+                <div className="bg-gray-900 rounded-md">
+                  <InfoCard player={player} />
+                </div>
+              </div>
             </div>
           )}
         </div>
-        <div>
+        <div className="mt-14">
           <h2 className="text-white text-xl md:text-4xl text-center font-bold my-4">
             Similar players
           </h2>
