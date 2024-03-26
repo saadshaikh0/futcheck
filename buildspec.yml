@@ -1,0 +1,16 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 20
+  pre_build:
+    commands:
+      - npm i
+  build:
+    commands:
+      - npm run build
+      - aws s3 sync build/ s3://futcheck
+  post_build:
+    commands:
+      - aws cloudfront create-invalidation --distribution-id E2QQQ9D8S3JY69 --paths "/*"
