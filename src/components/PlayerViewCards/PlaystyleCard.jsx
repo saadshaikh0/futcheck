@@ -1,11 +1,20 @@
 import React from "react";
 
 const PlaystyleCard = ({ playstyles = [], iconPlaystyles = [] }) => {
+  if (!playstyles || playstyles.length == 0) {
+    return (
+      <div className="h-full w-full flex justify-center items-center">
+        <div className="text-white font-bold ">
+          Player does not possess any playstyle.
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="px-4 py-2">
       <h2 className="text-white font-bold mb-4">Playstyles</h2>
       <div className="flex gap-3 flex-wrap scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar scrollbar-thumb-slate-700 scrollbar-track-slate-300">
-        {iconPlaystyles.map((playstyle) => {
+        {iconPlaystyles?.map((playstyle) => {
           return (
             <div className="relative">
               <svg
@@ -33,7 +42,7 @@ https://www.ea.com/ea-sports-fc/ultimate-team/web-app/images/traits/icontrait${p
           );
         })}
 
-        {playstyles.map((playstyle) => {
+        {playstyles?.map((playstyle) => {
           return (
             <div className="relative">
               <svg

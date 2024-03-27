@@ -55,7 +55,7 @@ const InfoCard = ({ player }) => {
           }
         />
         <InfoRow label={"Rating"} value={rating} />
-        <InfoRow label={"Skills"} value={<div>{skill_moves} ★</div>} />
+        <InfoRow label={"Skills"} value={<div>{skill_moves + 1} ★</div>} />
         <InfoRow label={"Weak Foot"} value={<div>{weak_foot} ★</div>} />
         <InfoRow label={"Strong Foot"} value={<div>{FOOT[foot]}</div>} />
         <InfoRow label={"Att. WR"} value={WORK_RATE[att_wr]} />
