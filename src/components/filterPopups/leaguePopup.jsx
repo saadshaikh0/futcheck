@@ -17,7 +17,7 @@ export default function VersionPopup() {
       <Combobox
         value={filters?.leagueid ?? people[0]}
         onChange={(val) => {
-          dispatch(setFilters({ ...filters, leagueid: val }));
+          dispatch(setFilters({ ...filters, leagueid: val, page: 1 }));
         }}
       >
         <div className="relative mt-1 ">

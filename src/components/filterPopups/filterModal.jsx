@@ -93,7 +93,10 @@ const FilterModal = ({ isModalOpen, setIsModalOpen }) => {
           </div>
           <div className="grid grid-cols-2 my-2 gap-2">
             <button
-              onClick={() => dispatch(setFilters(filters))}
+              onClick={() => {
+                setIsModalOpen(false);
+                dispatch(setFilters(filters));
+              }}
               className="bg-fuchsia-400 text-white py-2"
             >
               Apply Filter

@@ -45,7 +45,12 @@ const AllPlayers = () => {
     dispatch(setFilters({ page: 1 }));
   };
   const filteredObject = Object.entries(filters).filter(
-    ([key, value]) => !(["max_rating", "page"].includes(key) || !value)
+    ([key, value]) =>
+      !(
+        ["max_rating", "page"].includes(key) ||
+        value == null ||
+        value == undefined
+      )
   );
   useEffect(() => {
     refetch();
@@ -64,7 +69,7 @@ const AllPlayers = () => {
     }
   };
   return (
-    <div className="relative w-full md:w-4/5 mx-auto mt-10 px-5">
+    <div className="relative w-full md:w-4/5 mx-auto mt-5 md:mt-10 px-5">
       <div>
         <h2 className="text-white text-xl  md:text-3xl font-medium">
           EAFC 24 Players Database
@@ -82,7 +87,7 @@ const AllPlayers = () => {
               <div className="flex gap-2 justify-between mt-2">
                 <button
                   onClick={clearFilters}
-                  className="bg-slate-800 text-white p-2 px-3 rounded"
+                  className="bg-slate-800 w-full md:w-auto my-3 md:my-0  text-white p-2 px-3 rounded"
                 >
                   Clear Filters
                 </button>
@@ -139,10 +144,16 @@ const AllPlayers = () => {
           </div>
         </div>
         <div>
-          <div className="md:mx-10 grid grid-cols-3 lg:grid-cols-6 gap-1 md:gap-4">
-            {players.map((player) => (
-              <PlayerCard player={player} />
-            ))}
+          <div className="md:mx-10 mt-3 grid grid-cols-3 lg:grid-cols-6 gap-1 md:gap-4">
+            {isLoading
+              ? [...Array(18).keys()].map(() => {
+                  return (
+                    <div class="animate-pulse flex justify-center items-center space-x-4">
+                      <div class="rounded bg-slate-200 h-20 w-20 md:h-40 md:w-40"></div>
+                    </div>
+                  );
+                })
+              : players.map((player) => <PlayerCard player={player} />)}
           </div>
         </div>
         <div></div>

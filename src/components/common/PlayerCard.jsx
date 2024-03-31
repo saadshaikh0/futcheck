@@ -19,6 +19,7 @@ const PlayerCard = ({ player }) => {
   const dispatch = useDispatch();
   const player_name = c_name != "None" ? c_name : name;
   const [validGuid, setValidGuid] = useState(!!guid);
+
   return (
     <Link
       to={`/player/${id}/${name?.replace(/\s+/g, "-")}`}

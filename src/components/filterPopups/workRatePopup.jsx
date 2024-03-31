@@ -12,7 +12,7 @@ const WorkRatePopup = () => {
       <div className="flex text-white mt-2">
         <button
           onClick={() => {
-            dispatch(setFilters({ ...filters, dwr: 0 }));
+            dispatch(setFilters({ ...filters, dwr: 0, page: 1 }));
           }}
           className={classNames(
             "px-3 py-2",
@@ -23,7 +23,7 @@ const WorkRatePopup = () => {
         </button>
         <button
           onClick={() => {
-            dispatch(setFilters({ ...filters, dwr: 1 }));
+            dispatch(setFilters({ ...filters, dwr: 1, page: 1 }));
           }}
           className={classNames(
             "px-3 py-2",
@@ -34,7 +34,7 @@ const WorkRatePopup = () => {
         </button>
         <button
           onClick={() => {
-            dispatch(setFilters({ ...filters, dwr: 2 }));
+            dispatch(setFilters({ ...filters, dwr: 2, page: 1 }));
           }}
           className={classNames(
             "px-3 py-2",
@@ -48,7 +48,7 @@ const WorkRatePopup = () => {
       <div className="flex text-white mt-2">
         <button
           onClick={() => {
-            dispatch(setFilters({ ...filters, awr: 0 }));
+            dispatch(setFilters({ ...filters, awr: 0, page: 1 }));
           }}
           className={classNames(
             "px-3 py-2",
@@ -59,7 +59,7 @@ const WorkRatePopup = () => {
         </button>
         <button
           onClick={() => {
-            dispatch(setFilters({ ...filters, awr: 1 }));
+            dispatch(setFilters({ ...filters, awr: 1, page: 1 }));
           }}
           className={classNames(
             "px-3 py-2",
@@ -70,7 +70,7 @@ const WorkRatePopup = () => {
         </button>
         <button
           onClick={() => {
-            dispatch(setFilters({ ...filters, awr: 2 }));
+            dispatch(setFilters({ ...filters, awr: 2, page: 1 }));
           }}
           className={classNames(
             "px-3 py-2",

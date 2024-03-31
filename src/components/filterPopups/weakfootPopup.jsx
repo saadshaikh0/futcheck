@@ -12,7 +12,7 @@ const SkillMovesPopup = () => {
         return (
           <div
             onClick={() => {
-              dispatch(setFilters({ ...filters, weak_foot: val }));
+              dispatch(setFilters({ ...filters, weak_foot: val, page: 1 }));
             }}
           >
             <svg

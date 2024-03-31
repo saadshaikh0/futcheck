@@ -49,6 +49,7 @@ const RatingPopup = () => {
               ...filters,
               min_rating: minRating,
               max_rating: maxRating,
+              page: 1,
             })
           )
         }
