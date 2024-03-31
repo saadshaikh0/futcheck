@@ -54,7 +54,7 @@ const FilterModal = ({ isModalOpen, setIsModalOpen }) => {
   return (
     <Dialog
       className={
-        "fixed top-[20%] left-1/2 -translate-x-1/2 bg-white w-[90%] mx-auto rounded"
+        "fixed top-[20%] left-1/2 -translate-x-1/2 bg-white w-[90%] mx-auto rounded z-20"
       }
       open={isModalOpen}
       onClose={() => setIsModalOpen(false)}
@@ -68,6 +68,7 @@ const FilterModal = ({ isModalOpen, setIsModalOpen }) => {
               class="button"
               aria-label="Close"
               data-close-modal=""
+              onClick={() => setIsModalOpen(false)}
             >
               <XMarkIcon className="h-8 w-8 text-white font-bold" />
             </button>

@@ -182,13 +182,22 @@ const AllPlayers = () => {
         </div>
       </div>
       {/* FAB visible only on smaller screens */}
-      <button
-        className="fixed bottom-4 right-4 md:hidden z-50 bg-fuchsia-500 p-4 rounded shadow-lg"
-        onClick={() => setModalOpen(true)}
-      >
-        Filter
-      </button>
+      {modalOpen ? (
+        <></>
+      ) : (
+        <button
+          className="fixed bottom-4 right-4 md:hidden z-50 bg-fuchsia-500 p-4 rounded shadow-lg"
+          onClick={() => setModalOpen(true)}
+        >
+          Filter
+        </button>
+      )}
       <FilterModal isModalOpen={modalOpen} setIsModalOpen={setModalOpen} />
+      {modalOpen ? (
+        <div className="bg-black z-10 opacity-50 absolute top-0 left-0 h-full w-full"></div>
+      ) : (
+        <></>
+      )}
     </div>
   );
 };
