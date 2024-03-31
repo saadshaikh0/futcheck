@@ -12,6 +12,8 @@ import Ads from "./components/common/Ads";
 import Tos from "./components/tos";
 import Policy from "./components/policy";
 import ErrorBoundary from "./ErrorBoundary";
+import AllPlayers from "./components/allPlayers";
+import AllPlayersWrapper from "./components/allPlayersWrapper";
 ReactGA.initialize("G-RD6LGLC1LD");
 
 const queryClient = new QueryClient();
@@ -34,6 +36,7 @@ function App() {
                   path="/player/:playerId/:playerName"
                   element={<PlayerViewWrapper />}
                 />
+                <Route path="/players" element={<AllPlayersWrapper />} />
               </Routes>
               <Footer />
             </Router>

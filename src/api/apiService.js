@@ -60,9 +60,56 @@ export const fetchAllRarities = async () => {
   const response = await instance.get(`/get_promos/`);
   return response.data.data;
 };
+export const fetchAllNations = async () => {
+  const response = await instance.get(`/get_nations/`);
+  return response.data.data;
+};
+export const fetchAllLeagues = async () => {
+  const response = await instance.get(`/get_leagues/`);
+  return response.data.data;
+};
+export const fetchAllTeams = async () => {
+  const response = await instance.get(`/get_teams/`);
+  return response.data.data;
+};
 export const fetchPlayerByPromo = async (id) => {
   const response = await instance.get(`/get_players_by_promo/?id=${id}`);
   return response.data.data;
+};
+export const fetchAllPlayers = async ({
+  page,
+  min_rating,
+  max_rating,
+  teamid,
+  nation,
+  rarity,
+  leagueid,
+  skill_moves,
+  weak_foot,
+  awr,
+  dwr,
+}) => {
+  // Construct query parameters
+  const queryParams = new URLSearchParams();
+
+  if (page) queryParams.append("page", page);
+  if (min_rating) queryParams.append("min_rating", min_rating);
+  if (max_rating) queryParams.append("max_rating", max_rating);
+  if (teamid) queryParams.append("teamid", teamid.id);
+  if (nation) queryParams.append("nation", nation.id);
+  if (rarity) queryParams.append("rarity", rarity.id);
+  if (leagueid) queryParams.append("leagueid", leagueid.id);
+  if (skill_moves) queryParams.append("skill_moves", skill_moves - 1);
+  if (weak_foot) queryParams.append("weak_foot", weak_foot);
+  if (awr !== null && awr !== undefined) queryParams.append("awr", awr);
+  if (dwr !== null && dwr !== undefined) queryParams.append("dwr", dwr);
+
+  // Construct the URL with query parameters
+  const url = `/players/?${queryParams.toString()}`;
+
+  // Make the GET request
+  const response = await instance.get(url);
+  return response.data;
 };
 export const fetchSimilarPlayers = async ({
   rating,
