@@ -142,7 +142,17 @@ export const fetchTopRatedPlayers = async () => {
 };
 export const fetchAllRarities = async () => {
   const response = await instance.get(`/get_promos/`);
-  return response.data.data;
+  let data = response.data.data;
+  data.forEach((promo) => {
+    promo.rarity_url = buildRarityUrl({
+      guid: promo.guid_no,
+      size: "s",
+      level: promo.levels,
+      rating: 99,
+      id: promo.id,
+    });
+  });
+  return data;
 };
 export const fetchAllNations = async () => {
   const response = await instance.get(`/get_nations/`);
@@ -156,10 +166,7 @@ export const fetchAllTeams = async () => {
   const response = await instance.get(`/get_teams/`);
   return response.data.data;
 };
-export const fetchPlayerByPromo = async (id) => {
-  const response = await instance.get(`/get_players_by_promo/?id=${id}`);
-  return response.data.data;
-};
+
 export const fetchAllPlayers = async ({
   page,
   min_rating,

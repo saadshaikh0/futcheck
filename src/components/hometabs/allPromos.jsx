@@ -24,7 +24,7 @@ const AllPromos = ({ rarities }) => {
             )
         )
         .map((rarity) => {
-          const { name, guid } = rarity;
+          const { name, rarity_url } = rarity;
           return (
             <Link
               to="/players"
@@ -34,7 +34,7 @@ const AllPromos = ({ rarities }) => {
             >
               {" "}
               <div className="flex flex-col justify-center items-center cursor-pointer">
-                <img src={guid} width={120} height={80} />
+                <img src={rarity_url} width={120} height={80} />
                 <p className="text-white capitalize text-center whitespace-nowrap overflow-hidden overflow-ellipsis w-full ">
                   {name}
                 </p>
