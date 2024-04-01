@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { buildPlayerUrl, convertToMinutes, fillZeros } from "./utils/utils";
+import {
+  buildPlayerUrl,
+  buildRarityUrl,
+  convertToMinutes,
+  fillZeros,
+} from "./utils/utils";
 import { setPlayer } from "../redux/playerSlice";
 import { fetchPrice, fetchVersions } from "../api/apiService";
 import { useQuery } from "@tanstack/react-query";
@@ -22,17 +27,14 @@ const PlayerView = () => {
     rating,
     guid,
     rarity_url,
+    rarity_id,
     futwiz_id,
-    futbin_id,
     attributes,
     playstyle_plus,
     position,
     text_color,
     bg_color,
     nation_url,
-    leagueid,
-    nation,
-    rarity,
     league_url,
     c_name,
     teamid,
@@ -40,9 +42,11 @@ const PlayerView = () => {
     skill_moves,
     att_wr,
     def_wr,
-    foot,
     playstyles,
     stats,
+    guid_no,
+    levels,
+    colors,
   } = player;
   const dispatch = useDispatch();
 
@@ -53,11 +57,6 @@ const PlayerView = () => {
     staleTime: 1000 * 60,
   });
   const [latestPriceData, setLatestPriceData] = useState({});
-  // const {
-  //   futbin: futbinData = {},
-  //   futwiz: futwizData = {},
-  //   futgg: futggData = {},
-  // } = data;
 
   const { data: playerVersions = [] } = useQuery({
     queryKey: ["fetchVersions", base_id, id],
@@ -147,6 +146,7 @@ const PlayerView = () => {
               className="block relative "
             >
               <img src={rarity_url.replace("_s_", "_e_")} />
+
               <img
                 style={
                   !guid || base_id == id

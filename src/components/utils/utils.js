@@ -37,6 +37,19 @@ https://www.ea.com/ea-sports-fc/ultimate-team/web-app/content/24B23FDE-7835-41C2
   return `https://www.ea.com/ea-sports-fc/ultimate-team/web-app/content/24B23FDE-7835-41C2-87A2-F453DFDB2E82/2024/fut/items/images/actionShot/${guId}/p${eaId}.png`;
 };
 
+export const buildRarityUrl = ({ guid, size, level, rating, id }) => {
+  let level_no = level;
+  if (level_no > 0) {
+    if (rating >= 75) {
+      level_no = 3;
+    } else if (rating >= 65) {
+      level_no = 2;
+    } else {
+      level_no = 1;
+    }
+  }
+  return `https://www.ea.com/ea-sports-fc/ultimate-team/web-app/content/24B23FDE-7835-41C2-87A2-F453DFDB2E82/2024/fut/items/images/backgrounds/itemBGs/${guid}/cards_bg_${size}_1_${id}_${level_no}.png`;
+};
 export const decimalToHex = (decimal) => {
   // Convert decimal to hexadecimal using toString() method with radix 16
   var hex = decimal.toString(16);
@@ -97,4 +110,32 @@ export const convertToMinutes = (timeString) => {
     }
   }
   return 0; // Default to 0 minutes if no match
+};
+export const getTextColor = ({ colors, rating, level }) => {
+  let level_no = level;
+  if (level_no > 0) {
+    if (rating >= 75) {
+      level_no = 3;
+    } else if (rating >= 65) {
+      level_no = 2;
+    } else {
+      level_no = 1;
+    }
+  }
+  let color = level_no == 0 ? colors[0] : colors[(level_no - 1) * 3];
+  return fillZeros(color);
+};
+export const getBgColor = ({ colors, rating, level }) => {
+  let level_no = level;
+  if (level_no > 0) {
+    if (rating >= 75) {
+      level_no = 3;
+    } else if (rating >= 65) {
+      level_no = 2;
+    } else {
+      level_no = 1;
+    }
+  }
+  let color = level_no == 0 ? colors[1] : colors[(level_no - 1) * 3 + 1];
+  return fillZeros(color);
 };

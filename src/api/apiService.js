@@ -1,4 +1,9 @@
-import { updateRarity } from "../components/utils/utils";
+import {
+  buildRarityUrl,
+  getBgColor,
+  getTextColor,
+  updateRarity,
+} from "../components/utils/utils";
 import instance from "./axiosclient";
 import ReactGA from "react-ga4";
 ReactGA.initialize("G-RD6LGLC1LD");
@@ -18,7 +23,26 @@ export const fetchPlayers = async (value, searchMode) => {
       searchQuery += `name=${value}`;
     }
     const response = await instance.get(searchQuery);
-    let data = updateRarity(response.data.data);
+    let data = response.data.data;
+    data.forEach((player) => {
+      player.rarity_url = buildRarityUrl({
+        guid: player.guid_no,
+        size: "s",
+        level: player.levels,
+        rating: player.rating,
+        id: player.rarity,
+      });
+      player.text_color = getTextColor({
+        colors: player.colors,
+        rating: player.rating,
+        level: player.levels,
+      });
+      player.bg_color = getBgColor({
+        colors: player.colors,
+        rating: player.rating,
+        level: player.levels,
+      });
+    });
     return data;
   } catch (error) {
     console.error("Error fetching users:", error);
@@ -44,17 +68,77 @@ export const fetchVersions = async (base_id, id) => {
     return [];
   }
   const response = await instance.get(`/versions/?id=${base_id}&eId=${id}`);
-  let data = updateRarity(response.data.data);
+  let data = response.data.data;
+  data.forEach((player) => {
+    player.rarity_url = buildRarityUrl({
+      guid: player.guid_no,
+      size: "s",
+      level: player.levels,
+      rating: player.rating,
+      id: player.rarity,
+    });
+    player.text_color = getTextColor({
+      colors: player.colors,
+      rating: player.rating,
+      level: player.levels,
+    });
+    player.bg_color = getBgColor({
+      colors: player.colors,
+      rating: player.rating,
+      level: player.levels,
+    });
+  });
   return data;
 };
 
 export const fetchLatestPlayers = async () => {
   const response = await instance.get(`/get_latest/`);
-  return response.data.data;
+
+  let data = response.data.data;
+  data.forEach((player) => {
+    player.rarity_url = buildRarityUrl({
+      guid: player.guid_no,
+      size: "s",
+      level: player.levels,
+      rating: player.rating,
+      id: player.rarity,
+    });
+    player.text_color = getTextColor({
+      colors: player.colors,
+      rating: player.rating,
+      level: player.levels,
+    });
+    player.bg_color = getBgColor({
+      colors: player.colors,
+      rating: player.rating,
+      level: player.levels,
+    });
+  });
+  return data;
 };
 export const fetchTopRatedPlayers = async () => {
   const response = await instance.get(`/top_rated/`);
-  return response.data.data;
+  let data = response.data.data;
+  data.forEach((player) => {
+    player.rarity_url = buildRarityUrl({
+      guid: player.guid_no,
+      size: "s",
+      level: player.levels,
+      rating: player.rating,
+      id: player.rarity,
+    });
+    player.text_color = getTextColor({
+      colors: player.colors,
+      rating: player.rating,
+      level: player.levels,
+    });
+    player.bg_color = getBgColor({
+      colors: player.colors,
+      rating: player.rating,
+      level: player.levels,
+    });
+  });
+  return data;
 };
 export const fetchAllRarities = async () => {
   const response = await instance.get(`/get_promos/`);
@@ -109,7 +193,27 @@ export const fetchAllPlayers = async ({
 
   // Make the GET request
   const response = await instance.get(url);
-  return response.data;
+  let data = response.data;
+  data.forEach((player) => {
+    player.rarity_url = buildRarityUrl({
+      guid: player.guid_no,
+      size: "s",
+      level: player.levels,
+      rating: player.rating,
+      id: player.rarity,
+    });
+    player.text_color = getTextColor({
+      colors: player.colors,
+      rating: player.rating,
+      level: player.levels,
+    });
+    player.bg_color = getBgColor({
+      colors: player.colors,
+      rating: player.rating,
+      level: player.levels,
+    });
+  });
+  return data;
 };
 export const fetchSimilarPlayers = async ({
   rating,
@@ -126,7 +230,27 @@ export const fetchSimilarPlayers = async ({
       timeout: 30000,
     }
   );
-  return response.data.data;
+  let data = response.data.data;
+  data.forEach((player) => {
+    player.rarity_url = buildRarityUrl({
+      guid: player.guid_no,
+      size: "s",
+      level: player.levels,
+      rating: player.rating,
+      id: player.rarity_id,
+    });
+    player.text_color = getTextColor({
+      colors: player.colors,
+      rating: player.rating,
+      level: player.levels,
+    });
+    player.bg_color = getBgColor({
+      colors: player.colors,
+      rating: player.rating,
+      level: player.levels,
+    });
+  });
+  return data;
 };
 export const fetchPlayerDetails = async (id) => {
   ReactGA.event({
@@ -135,5 +259,25 @@ export const fetchPlayerDetails = async (id) => {
     label: id,
   });
   const response = await instance.get(`/get_player/?id=${id}`);
-  return response.data.data;
+  let data = response.data.data;
+  data.forEach((player) => {
+    player.rarity_url = buildRarityUrl({
+      guid: player.guid_no,
+      size: "e",
+      level: player.levels,
+      rating: player.rating,
+      id: player.rarity_id,
+    });
+    player.text_color = getTextColor({
+      colors: player.colors,
+      rating: player.rating,
+      level: player.levels,
+    });
+    player.bg_color = getBgColor({
+      colors: player.colors,
+      rating: player.rating,
+      level: player.levels,
+    });
+  });
+  return data;
 };
