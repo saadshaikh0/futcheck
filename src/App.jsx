@@ -12,8 +12,8 @@ import Ads from "./components/common/Ads";
 import Tos from "./components/tos";
 import Policy from "./components/policy";
 import ErrorBoundary from "./ErrorBoundary";
-import AllPlayers from "./components/allPlayers";
 import AllPlayersWrapper from "./components/allPlayersWrapper";
+import Combinations from "./components/getCombinations";
 ReactGA.initialize("G-RD6LGLC1LD");
 
 const queryClient = new QueryClient();
@@ -31,7 +31,7 @@ function App() {
                 <Route exact path="/" element={<HomePage />} />
                 <Route path="/tos" element={<Tos />} />
                 <Route path="/policy" element={<Policy />} />
-
+                <Route path="/fc_combinations/" element={<Combinations />} />
                 <Route
                   path="/player/:playerId/:playerName"
                   element={<PlayerViewWrapper />}

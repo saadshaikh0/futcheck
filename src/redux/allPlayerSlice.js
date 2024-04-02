@@ -4,6 +4,7 @@ const initialState = {
   filters: {
     page: 1,
   },
+  ratings: {},
 };
 
 export const allPlayerSlice = createSlice({
@@ -13,10 +14,14 @@ export const allPlayerSlice = createSlice({
     setFilters: (state, action) => {
       state.filters = { ...action.payload };
     },
+    setRatings: (state, action) => {
+      const { rating, players } = action.payload;
+      state.ratings[rating] = players;
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { setFilters } = allPlayerSlice.actions;
+export const { setFilters, setRatings } = allPlayerSlice.actions;
 
 export default allPlayerSlice.reducer;

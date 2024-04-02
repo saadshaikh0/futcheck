@@ -15,7 +15,7 @@ export default function MobileTeamPopup({ filter, updateFilter }) {
       <Combobox
         value={filter?.teamid ?? people[0]}
         onChange={(val) => {
-          updateFilter("leagueid", val);
+          updateFilter("teamid", val);
         }}
       >
         <div className="relative mt-1 ">

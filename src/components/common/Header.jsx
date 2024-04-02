@@ -7,7 +7,11 @@ import { fetchPlayers } from "../../api/apiService";
 import { useDebounce } from "@uidotdev/usehooks";
 import FutcheckLogo from "../../assets/futcheck_logo.png";
 import { Link } from "react-router-dom";
-import { Bars3Icon, XMarkIcon } from "@heroicons/react/20/solid";
+import {
+  Bars3Icon,
+  MagnifyingGlassIcon,
+  XMarkIcon,
+} from "@heroicons/react/20/solid";
 import MobileMenuPopover from "./MobileMenuPopover";
 import { Popover } from "@headlessui/react";
 
@@ -102,9 +106,14 @@ const Navbar = () => {
                 />
               </div>
             </div>
-            <div className="hidden md:block">
-              <Link to="/players">
+            <div className="hidden md:flex gap-8">
+              <Link to="/players/">
                 <div className="text-white  font-bold">Players</div>
+              </Link>
+              <Link to="/fc_combinations/">
+                <div className="text-white flex gap-1 items-center  font-bold">
+                  Rating <MagnifyingGlassIcon className="w-4 h-4 text-white" />
+                </div>
               </Link>
             </div>
             <div className="flex items-center md:hidden ">

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 export const debounce = (func, delay) => {
   let timeoutId;
@@ -62,6 +62,31 @@ export const decimalToHex = (decimal) => {
   // Prepend '#' to the hexadecimal number to form a valid color code
   return "#" + hex;
 };
+
+export function convertString(input) {
+  // Initialize an empty array to hold the result strings
+  let result = [];
+
+  // Initialize a counter for occurrences
+  let count = 1;
+
+  // Loop through the string characters
+  for (let i = 0; i < input.length; i++) {
+    // Check if the current character is the same as the next character
+    if (input[i] === input[i + 1]) {
+      // If so, increment the count
+      count++;
+    } else {
+      // If not, push the current character and its count to the result array,
+      // then reset the count to 1
+      result.push([input[i], count]);
+      count = 1;
+    }
+  }
+
+  // Join the result array into a string, separated by commas
+  return result;
+}
 
 /**
  * Hook that alerts clicks outside of the passed ref
@@ -138,4 +163,30 @@ export const getBgColor = ({ colors, rating, level }) => {
   }
   let color = level_no == 0 ? colors[1] : colors[(level_no - 1) * 3 + 1];
   return fillZeros(color);
+};
+
+export const useScrollToBottom = (callback) => {
+  const endOfDivRef = useRef(null);
+
+  useEffect(() => {
+    const div = endOfDivRef.current;
+    const onScroll = () => {
+      if (div && div.scrollTop + div.clientHeight >= div.scrollHeight - 1) {
+        // Adding a tolerance of 1px for rounding issues
+        callback();
+      }
+    };
+
+    if (div) {
+      div.addEventListener("scroll", onScroll);
+    }
+
+    return () => {
+      if (div) {
+        div.removeEventListener("scroll", onScroll);
+      }
+    };
+  }, [callback]); // Ensure the effect re-runs if the callback changes
+
+  return endOfDivRef;
 };

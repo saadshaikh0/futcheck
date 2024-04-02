@@ -166,6 +166,12 @@ export const fetchAllTeams = async () => {
   const response = await instance.get(`/get_teams/`);
   return response.data.data;
 };
+export const fetch_combinations = async (payload) => {
+  const response = await instance.post(`/get_combinations/`, payload, {
+    timeout: 30000,
+  });
+  return response.data.body;
+};
 
 export const fetchAllPlayers = async ({
   page,
