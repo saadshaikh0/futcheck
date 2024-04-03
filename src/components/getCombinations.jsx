@@ -1,11 +1,12 @@
-import React, { useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import { fetch_combinations } from "../api/apiService";
 import DualRangeSlider from "./common/RangeSlider";
 import { convertString, useScrollToBottom } from "./utils/utils";
-import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/20/solid";
 import ShowPlayers from "./getCombinationComponents/showPlayers";
+import { useDebounce } from "@uidotdev/usehooks";
+import classNames from "classnames";
 
-const ListItem = ({ val, index }) => {
+const ListItem = ({ val, index, filterText }) => {
   const formattedResult = convertString(val);
   const [isShowPlayers, setIsShowPlayers] = useState(false);
 
@@ -18,8 +19,16 @@ const ListItem = ({ val, index }) => {
       ) : (
         <div className="grid grid-cols-3 gap-2">
           {formattedResult.map(([rating, count]) => {
+            let isPresent = filterText
+              .toLowerCase()
+              .includes(`${rating}x${count}`.toLowerCase());
             return (
-              <div className="bg-fuchsia-400 text-white font-bold py-3 rounded-md">
+              <div
+                className={classNames(
+                  "bg-fuchsia-400 text-white font-bold py-3 rounded-md",
+                  isPresent ? "bg-blue-500" : "bg-fuchsia-400"
+                )}
+              >
                 {rating}x{count}
               </div>
             );
@@ -39,24 +48,19 @@ const ListItem = ({ val, index }) => {
 };
 
 const Combinations = () => {
-  const total_combinations = useRef();
-
+  const [isLoading, setIsLoading] = useState(false);
   const [currentCombinations, setCurrentCombinations] = useState([]);
+  const [filterText, setFilterText] = useState("");
   const [squadRating, setSquadRating] = useState(70);
   const [minRating, setMinRating] = useState(67);
   const [maxRating, setMaxRating] = useState(73);
+  const [loadIndex, setLoadIndex] = useState(20); // New state to manage loaded items
 
   const handleScrollToBottom = () => {
-    if (currentCombinations.length < total_combinations.current?.length)
-      setCurrentCombinations([
-        ...currentCombinations,
-        ...total_combinations.current?.slice(
-          currentCombinations.length,
-          currentCombinations.length + 21
-        ),
-      ]);
+    setLoadIndex((prevIndex) => prevIndex + 20);
   };
   const scrollRef = useScrollToBottom(handleScrollToBottom);
+  const debouncedSearchTerm = useDebounce(filterText, 1000);
 
   const handleGenerateCombination = async () => {
     let payload = {
@@ -66,13 +70,43 @@ const Combinations = () => {
         (_, index) => minRating + index
       ),
     };
+    setIsLoading(true);
     const response = await fetch_combinations(payload);
-
+    setIsLoading(false);
     let parsedResponse = JSON.parse(response);
-    console.log(parsedResponse);
-    total_combinations.current = parsedResponse;
-    setCurrentCombinations(parsedResponse.slice(0, 21));
+    setCurrentCombinations(parsedResponse);
+    setFilterText("");
   };
+  const requiredCounts = debouncedSearchTerm.split(",").reduce((acc, cur) => {
+    const [num, count] = cur.split("x");
+    let parsedCount = parseInt(count, 10);
+    if (!isNaN(parsedCount)) {
+      acc[num] = parsedCount;
+    }
+    return acc;
+  }, {});
+
+  function arrayMatchesCriteria(array, criteria) {
+    const counts = array.reduce((acc, cur) => {
+      acc[cur] = (acc[cur] || 0) + 1;
+      return acc;
+    }, {});
+
+    return Object.entries(criteria).every(
+      ([num, count]) => counts[num] === count
+    );
+  }
+
+  const filteredArrays = useMemo(() => {
+    const results =
+      Object.keys(requiredCounts).length === 0
+        ? currentCombinations
+        : currentCombinations.filter((array) =>
+            arrayMatchesCriteria(array, requiredCounts)
+          );
+    return results.slice(0, loadIndex); // Only load up to loadIndex items
+  }, [requiredCounts, loadIndex, currentCombinations]);
+
   return (
     <div className="w-4/5 mx-auto mt-10">
       <div className="flex flex-col md:grid  md:grid-cols-[1fr_4fr] gap-5">
@@ -105,9 +139,6 @@ const Combinations = () => {
             </div>
             {squadRating ? (
               <>
-                <p className="text-center font-thin py-3 pt-1">
-                  Advanced Filters
-                </p>
                 <div className="flex flex-col font-medium">
                   <span>Available Ratings</span>
                   <DualRangeSlider
@@ -134,13 +165,60 @@ const Combinations = () => {
             Generate
           </div>
         </div>
-        <div
-          ref={scrollRef}
-          className="flex flex-wrap content-start justify-center gap-3 scrollbar-thin  scrollbar-thumb-fuchsia-400 scrollbar-track-slate-900  overflow-y-auto md:max-h-[80vh]"
-        >
-          {currentCombinations.map((combo, i) => {
-            return <ListItem val={combo} index={i} />;
-          })}
+        <div className="flex flex-col h-full md:max-h-[80vh]">
+          {isLoading ? (
+            <div className="animate-pulse flex flex-col gap-5 h-full">
+              <div className="md:pr-6">
+                {" "}
+                <div className=" w-full bg-slate-300 h-10 rounded-md "></div>
+              </div>
+              <div className=" h-full w-full flex flex-wrap gap-3  content-start">
+                {Array.from({ length: 12 }, (_, index) => index).map((i) => {
+                  return (
+                    <div className="w-full md:w-56 h-40 bg-slate-300">
+                      <div></div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ) : (
+            <>
+              <div className="mb-2">
+                <input
+                  value={filterText}
+                  onChange={(e) => setFilterText(e.target.value)}
+                  placeholder="Required Players : 84x4,87x6"
+                  className="w-full text-white mb-2 bg-slate-800 mx-1 rounded-lg py-2 px-4"
+                />
+              </div>
+              {filteredArrays.length ? (
+                <div
+                  ref={scrollRef}
+                  className="flex flex-wrap content-start  gap-3 scrollbar-thin  scrollbar-thumb-fuchsia-400 scrollbar-track-slate-900  overflow-y-auto h-full"
+                >
+                  {filteredArrays.map((combo, i) => {
+                    return (
+                      <ListItem
+                        filterText={debouncedSearchTerm}
+                        val={combo}
+                        index={i}
+                      />
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="bg-slate-900 h-full rounded-lg">
+                  <p className="text-2xl text-white text-center mt-10">
+                    {" "}
+                    {filterText.length > 0
+                      ? " No Solution Present"
+                      : "Click Generate to show squad combinations"}
+                  </p>
+                </div>
+              )}
+            </>
+          )}
         </div>
       </div>
     </div>
