@@ -13,37 +13,27 @@ const ListItem = ({ val, index }) => {
     <div className="bg-slate-800 w-full md:w-56 text-white p-4 pt-2 h-42 rounded-md flex flex-col gap-2 text-center">
       <p className="font-medium">Solution {index + 1}</p>
       <hr className="w-full " />
-      <div className="grid grid-cols-3 gap-2">
-        {formattedResult.map(([rating, count]) => {
-          return (
-            <div className="bg-fuchsia-400 text-white font-bold py-3 rounded-md">
-              {rating}x{count}
-            </div>
-          );
-        })}
-      </div>
+      {isShowPlayers ? (
+        <ShowPlayers tabs={formattedResult.map(([rating]) => rating)} />
+      ) : (
+        <div className="grid grid-cols-3 gap-2">
+          {formattedResult.map(([rating, count]) => {
+            return (
+              <div className="bg-fuchsia-400 text-white font-bold py-3 rounded-md">
+                {rating}x{count}
+              </div>
+            );
+          })}
+        </div>
+      )}
       <div className="mt-auto flex justify-center text-sm ">
         <button
           onClick={() => setIsShowPlayers(!isShowPlayers)}
           className="bg-slate-950 flex text-white p-1 px-2 rounded-md mt-1"
         >
-          {!isShowPlayers ? (
-            <>
-              {" "}
-              Show Players <ChevronDownIcon className="w-6 h-6 text-white" />
-            </>
-          ) : (
-            <>
-              Hide Players <ChevronUpIcon className="w-6 h-6 text-white" />
-            </>
-          )}
+          {!isShowPlayers ? <> Show Players</> : <>Hide Players</>}
         </button>
       </div>
-      {isShowPlayers ? (
-        <ShowPlayers tabs={formattedResult.map(([rating]) => rating)} />
-      ) : (
-        ""
-      )}
     </div>
   );
 };
@@ -89,12 +79,12 @@ const Combinations = () => {
         <div className="text-white justify-between md:h-[80vh] bg-slate-900 rounded-lg px-4 py-6 flex flex-col">
           <div className="flex flex-col">
             {" "}
-            <div className="grid grid-cols-[2fr_1fr]">
-              <div className="font-thin">Squad Rating</div>
+            <div className="grid grid-rows-[1fr_1fr]">
+              <div className="font-medium mb-5">Squad Rating</div>
               <div className="relative">
                 {" "}
                 <input
-                  className="w-full bg-slate-800 rounded-md pl-2"
+                  className="w-full accent-fuchsia-400  rounded-md pl-2"
                   type="range"
                   min={70}
                   max={99}
@@ -115,8 +105,10 @@ const Combinations = () => {
             </div>
             {squadRating ? (
               <>
-                <p className="text-center font-medium py-3">Advanced Filters</p>
-                <div className="flex flex-col font-thin">
+                <p className="text-center font-thin py-3 pt-1">
+                  Advanced Filters
+                </p>
+                <div className="flex flex-col font-medium">
                   <span>Available Ratings</span>
                   <DualRangeSlider
                     min={squadRating - 3}
