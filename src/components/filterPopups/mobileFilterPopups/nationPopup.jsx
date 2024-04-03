@@ -3,16 +3,14 @@ import { Combobox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronDownIcon } from "@heroicons/react/20/solid";
 import { useSelector } from "react-redux";
 
-const people = [{ id: -1, name: "Select Nation" }];
-
 export default function MobileNationPopup({ filter, updateFilter }) {
   const [query, setQuery] = useState("");
-  const { app, allPlayers } = useSelector((state) => state);
+  const { app } = useSelector((state) => state);
   const { nations } = app;
   return (
     <div className="">
       <Combobox
-        value={filter.nation ?? people[0]}
+        value={filter.nation}
         onChange={(val) => {
           updateFilter("nation", val);
         }}
@@ -21,7 +19,8 @@ export default function MobileNationPopup({ filter, updateFilter }) {
           <div className="relative w-full rounded-md cursor-default overflow-hidden  bg-white text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
             <Combobox.Input
               className="w-full border-none py-2 pl-3 pr-10 bg-slate-700 text-sm leading-5 text-white focus:ring-0"
-              displayValue={(person) => person.name}
+              displayValue={(person) => person?.name}
+              placeholder="Select Nation"
               onChange={(event) => setQuery(event.target.value)}
             />
             <Combobox.Button className="absolute inset-y-0 right-0 flex items-center text-white pr-2">

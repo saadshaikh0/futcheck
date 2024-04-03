@@ -1,5 +1,4 @@
-import { Popover } from "@headlessui/react";
-import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
+import { CalculatorIcon } from "@heroicons/react/20/solid";
 import React from "react";
 import { Link } from "react-router-dom";
 const MobileMenuPopover = () => {
@@ -11,7 +10,7 @@ const MobileMenuPopover = () => {
       </Link>
       <Link to="/fc_combinations/">
         <div className="text-white flex gap-1 items-center  font-bold">
-          Rating <MagnifyingGlassIcon className="w-4 h-4 text-white" />
+          Rating <CalculatorIcon className="w-4 h-4 text-white" />
         </div>
       </Link>
     </div>

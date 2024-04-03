@@ -4,8 +4,6 @@ import { CheckIcon, ChevronDownIcon } from "@heroicons/react/20/solid";
 import { useDispatch, useSelector } from "react-redux";
 import { setFilters } from "../../redux/allPlayerSlice";
 
-const people = [{ id: -1, name: "Select Rarity" }];
-
 export default function VersionPopup() {
   const [query, setQuery] = useState("");
   const { app, allPlayers } = useSelector((state) => state);
@@ -15,7 +13,7 @@ export default function VersionPopup() {
   return (
     <div className="">
       <Combobox
-        value={filters?.rarity ?? people[0]}
+        value={filters?.rarity}
         onChange={(val) => {
           dispatch(setFilters({ ...filters, rarity: val, page: 1 }));
         }}
@@ -26,8 +24,9 @@ export default function VersionPopup() {
               className="w-full border-none py-2 pl-3 pr-10 bg-slate-700 text-sm leading-5 text-white focus:ring-0"
               displayValue={(person) => {
                 console.log(person);
-                return person.name;
+                return person?.name;
               }}
+              placeholder="Select Rarity"
               onChange={(event) => setQuery(event.target.value)}
             />
             <Combobox.Button className="absolute inset-y-0 right-0 flex items-center text-white pr-2">

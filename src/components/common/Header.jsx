@@ -9,7 +9,7 @@ import FutcheckLogo from "../../assets/futcheck_logo.png";
 import { Link } from "react-router-dom";
 import {
   Bars3Icon,
-  MagnifyingGlassIcon,
+  CalculatorIcon,
   XMarkIcon,
 } from "@heroicons/react/20/solid";
 import MobileMenuPopover from "./MobileMenuPopover";
@@ -112,7 +112,7 @@ const Navbar = () => {
               </Link>
               <Link to="/fc_combinations/">
                 <div className="text-white flex gap-1 items-center  font-bold">
-                  Rating <MagnifyingGlassIcon className="w-4 h-4 text-white" />
+                  Rating <CalculatorIcon className="w-4 h-4 text-white" />
                 </div>
               </Link>
             </div>

@@ -1,9 +1,7 @@
 import { Fragment, useState } from "react";
 import { Combobox, Transition } from "@headlessui/react";
-import { CheckIcon, ChevronDownIcon } from "@heroicons/react/20/solid";
-import { useDispatch, useSelector } from "react-redux";
-
-const people = [{ id: -1, name: "Select Rarity" }];
+import { ChevronDownIcon } from "@heroicons/react/20/solid";
+import { useSelector } from "react-redux";
 
 export default function MobileVersionPopup({ filter, updateFilter }) {
   const [query, setQuery] = useState("");
@@ -12,7 +10,7 @@ export default function MobileVersionPopup({ filter, updateFilter }) {
   return (
     <div className="">
       <Combobox
-        value={filter.rarity ?? people[0]}
+        value={filter.rarity}
         onChange={(val) => {
           updateFilter("rarity", val);
         }}
@@ -22,9 +20,9 @@ export default function MobileVersionPopup({ filter, updateFilter }) {
             <Combobox.Input
               className="w-full border-none py-2 pl-3 pr-10 bg-slate-700 text-sm leading-5 text-white focus:ring-0"
               displayValue={(person) => {
-                console.log(person);
-                return person.name;
+                return person?.name;
               }}
+              placeholder="Select Rarity"
               onChange={(event) => setQuery(event.target.value)}
             />
             <Combobox.Button className="absolute inset-y-0 right-0 flex items-center text-white pr-2">

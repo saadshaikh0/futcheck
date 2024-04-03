@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Dialog } from "@headlessui/react";
-import { XMarkIcon } from "@heroicons/react/20/solid";
+import { ArrowPathIcon, XMarkIcon } from "@heroicons/react/20/solid";
 import MobileVersionPopup from "./mobileFilterPopups/versionPopup";
 import MobileRatingPopup from "./mobileFilterPopups/ratingPopup";
 import MobileNationPopup from "./mobileFilterPopups/nationPopup";
@@ -13,14 +13,22 @@ import { useDispatch, useSelector } from "react-redux";
 import { setFilters } from "../../redux/allPlayerSlice";
 
 const tabs = [
-  { name: "Version", component: <MobileVersionPopup /> },
-  { name: "Rating", component: <MobileRatingPopup /> },
-  { name: "Nation", component: <MobileNationPopup /> },
-  { name: "League", component: <MobileLeaguePopup /> },
-  { name: "Team", component: <MobileTeamPopup /> },
+  { name: "Version", value: "rarity", component: <MobileVersionPopup /> },
+  {
+    name: "Rating",
+    value: ["min_rating", "max_rating"],
+    component: <MobileRatingPopup />,
+  },
+  { name: "Nation", value: "nation", component: <MobileNationPopup /> },
+  { name: "League", value: "leagueid", component: <MobileLeaguePopup /> },
+  { name: "Team", value: "teamid", component: <MobileTeamPopup /> },
   //   { name: "Playstyles", component: <PlaystylePopup /> },
-  { name: "Skill Moves", component: <MobileSkillMovesPopup /> },
-  { name: "Weak Foot", component: <MobileWeakFootPopup /> },
+  {
+    name: "Skill Moves",
+    value: "skill_moves",
+    component: <MobileSkillMovesPopup />,
+  },
+  { name: "Weak Foot", value: "weak_foot", component: <MobileWeakFootPopup /> },
   { name: null, component: <MobileWorkRatePopup /> },
 ];
 
@@ -79,7 +87,24 @@ const FilterModal = ({ isModalOpen, setIsModalOpen }) => {
                 return (
                   <div>
                     {tab.name ? (
-                      <span className="text-white pl-1">{tab.name}</span>
+                      <div className="flex gap-3 items-center">
+                        <span className="text-white pl-1">{tab.name}</span>
+                        <div
+                          onClick={() => {
+                            let tempFilters = { ...filters };
+                            if (typeof tab.value == "object") {
+                              tab.value.forEach(
+                                (val) => (tempFilters[val] = null)
+                              );
+                            } else {
+                              tempFilters[tab.value] = null;
+                            }
+                            setMobileFilters({ ...tempFilters });
+                          }}
+                        >
+                          <ArrowPathIcon className="w-4 h-4 text-red-600" />
+                        </div>
+                      </div>
                     ) : (
                       ""
                     )}

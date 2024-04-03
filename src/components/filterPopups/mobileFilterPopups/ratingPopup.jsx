@@ -9,8 +9,8 @@ const MobileRatingPopup = ({ filter, updateFilter }) => {
         className="bg-slate-700 h-8 text-white rounded-lg px-2"
         type="number"
         min={30}
-        max={filter.max_rating - 1}
-        value={filter.min_rating}
+        max={filter?.max_rating - 1}
+        value={filter?.min_rating ?? 30}
         placeholder="30"
         onChange={(e) => {
           updateFilter("min_rating", e.target.value);
@@ -21,7 +21,7 @@ const MobileRatingPopup = ({ filter, updateFilter }) => {
         type="number"
         min={30}
         max={99}
-        value={filter.max_rating}
+        value={filter?.max_rating ?? 99}
         placeholder="99"
         onChange={(e) => {
           updateFilter("max_rating", e.target.value);
