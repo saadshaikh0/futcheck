@@ -25,7 +25,7 @@ const ListItem = ({ val, index, filterText }) => {
             return (
               <div
                 className={classNames(
-                  "bg-fuchsia-400 text-white font-bold py-3 rounded-md",
+                  " text-white font-bold py-3 rounded-md",
                   isPresent ? "bg-blue-500" : "bg-fuchsia-400"
                 )}
               >
