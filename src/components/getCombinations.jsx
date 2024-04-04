@@ -11,29 +11,33 @@ const ListItem = ({ val, index, filterText }) => {
   const [isShowPlayers, setIsShowPlayers] = useState(false);
 
   return (
-    <div className="bg-slate-800 w-full md:w-56 text-white p-4 pt-2 h-42 rounded-md flex flex-col gap-2 text-center">
-      <p className="font-medium">Solution {index + 1}</p>
-      <hr className="w-full " />
+    <div className="bg-slate-800 w-full md:w-56  text-white p-4 pt-2 h-42 rounded-md flex flex-col gap-2 text-center">
       {isShowPlayers ? (
-        <ShowPlayers tabs={formattedResult.map(([rating]) => rating)} />
+        <ShowPlayers
+          tabs={formattedResult.map(([rating, count]) => [rating, count])}
+        />
       ) : (
-        <div className="grid grid-cols-3 gap-2">
-          {formattedResult.map(([rating, count]) => {
-            let isPresent = filterText
-              .toLowerCase()
-              .includes(`${rating}x${count}`.toLowerCase());
-            return (
-              <div
-                className={classNames(
-                  " text-white font-bold py-3 rounded-md",
-                  isPresent ? "bg-blue-500" : "bg-fuchsia-400"
-                )}
-              >
-                {rating}x{count}
-              </div>
-            );
-          })}
-        </div>
+        <>
+          <p className="font-medium">Solution {index + 1}</p>
+          <hr className="w-full " />
+          <div className="grid grid-cols-3 gap-2">
+            {formattedResult.map(([rating, count]) => {
+              let isPresent = filterText
+                .toLowerCase()
+                .includes(`${rating}x${count}`.toLowerCase());
+              return (
+                <div
+                  className={classNames(
+                    " text-white font-bold py-3 rounded-md",
+                    isPresent ? "bg-blue-500" : "bg-fuchsia-400"
+                  )}
+                >
+                  {rating}x{count}
+                </div>
+              );
+            })}
+          </div>
+        </>
       )}
       <div className="mt-auto flex justify-center text-sm ">
         <button
