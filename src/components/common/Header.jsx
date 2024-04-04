@@ -84,6 +84,7 @@ const Navbar = () => {
             <div ref={ref} className="grow">
               <div ref={setReferenceElement} class=" relative  grow">
                 <input
+                  autoComplete="off"
                   onChange={(e) => {
                     const { value } = e.target;
                     setSearchValue(value);

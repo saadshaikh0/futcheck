@@ -1,19 +1,29 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Combobox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronDownIcon } from "@heroicons/react/20/solid";
 import { useDispatch, useSelector } from "react-redux";
 import { setFilters } from "../../redux/allPlayerSlice";
+import { useQuery } from "@tanstack/react-query";
+import { fetchAllRarities } from "../../api/apiService";
 
 export default function VersionPopup() {
   const [query, setQuery] = useState("");
-  const { app, allPlayers } = useSelector((state) => state);
-  const { rarities } = app;
+  const { allPlayers } = useSelector((state) => state);
+  const { data: rarities = [] } = useQuery({
+    queryKey: ["fetchAllRarities"],
+    queryFn: fetchAllRarities,
+    cacheTime: Infinity,
+    staleTime: Infinity,
+  });
   const { filters } = allPlayers;
   const dispatch = useDispatch();
+  useEffect(() => {
+    setQuery(filters?.rarity?.name ?? "");
+  }, [filters.rarity]);
   return (
     <div className="">
       <Combobox
-        value={filters?.rarity}
+        value={filters?.rarity ?? null}
         onChange={(val) => {
           dispatch(setFilters({ ...filters, rarity: val, page: 1 }));
         }}
@@ -24,7 +34,7 @@ export default function VersionPopup() {
               className="w-full border-none py-2 pl-3 pr-10 bg-slate-700 text-sm leading-5 text-white focus:ring-0"
               displayValue={(person) => {
                 console.log(person);
-                return person?.name;
+                return person?.name ?? "";
               }}
               placeholder="Select Rarity"
               onChange={(event) => setQuery(event.target.value)}

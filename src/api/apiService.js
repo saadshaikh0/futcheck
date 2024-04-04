@@ -141,8 +141,25 @@ export const fetchTopRatedPlayers = async () => {
   return data;
 };
 export const fetchAllRarities = async () => {
+  const PROMOS_TO_HIDE = [
+    "standard",
+    "legendary",
+    "select",
+    "premium",
+    "ultimate",
+    "vintage",
+    "epic",
+    "storyline",
+  ];
   const response = await instance.get(`/get_promos/`);
   let data = response.data.data;
+  data = data.filter(
+    (rarity) =>
+      !(
+        PROMOS_TO_HIDE.includes(rarity.name.toLowerCase()) ||
+        rarity.name.toLowerCase().includes("evo")
+      )
+  );
   data.forEach((promo) => {
     promo.rarity_url = buildRarityUrl({
       guid: promo.guid_no,
@@ -206,8 +223,8 @@ export const fetchAllPlayers = async ({
 
   // Make the GET request
   const response = await instance.get(url);
-  let data = response.data;
-  data.forEach((player) => {
+  const { players, total_pages, current_page } = response.data;
+  players.forEach((player) => {
     player.rarity_url = buildRarityUrl({
       guid: player.guid_no,
       size: "s",
@@ -226,7 +243,7 @@ export const fetchAllPlayers = async ({
       level: player.levels,
     });
   });
-  return data;
+  return { players, total_pages, current_page };
 };
 export const fetchSimilarPlayers = async ({
   rating,

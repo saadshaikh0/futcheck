@@ -32,7 +32,7 @@ const AllPlayers = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const dispatch = useDispatch();
   const {
-    data: players = [],
+    data = { players: [], total_pages: 0 },
     isLoading,
     refetch,
   } = useQuery({
@@ -109,11 +109,16 @@ const AllPlayers = () => {
                                 ...filters,
                                 min_rating: undefined,
                                 max_rating: undefined,
+                                page: 1,
                               })
                             );
                           } else {
                             dispatch(
-                              setFilters({ ...filters, [key]: undefined })
+                              setFilters({
+                                ...filters,
+                                [key]: undefined,
+                                page: 1,
+                              })
                             );
                           }
                         }}
@@ -146,14 +151,14 @@ const AllPlayers = () => {
         <div>
           <div className="md:mx-10 mt-3 grid grid-cols-3 lg:grid-cols-6 gap-1 md:gap-4">
             {isLoading
-              ? [...Array(18).keys()].map(() => {
+              ? [...Array(24).keys()].map(() => {
                   return (
                     <div class="animate-pulse flex justify-center items-center space-x-4">
                       <div class="rounded bg-slate-200 h-20 w-20 md:h-40 md:w-40"></div>
                     </div>
                   );
                 })
-              : players.map((player) => <PlayerCard player={player} />)}
+              : data.players.map((player) => <PlayerCard player={player} />)}
           </div>
         </div>
         <div></div>
@@ -166,16 +171,32 @@ const AllPlayers = () => {
                 setFilters({ ...filters, page: Math.max(currentPage - 1, 1) })
               );
             }}
-            className="bg-fuchsia-400 text-white px-4 py-2 rounded-md"
+            className="bg-fuchsia-400 text-white px-4 py-2 rounded-md disabled:bg-gray-500"
+            disabled={data.current_page == 1}
           >
             Previous
           </button>
+          <div className="bg-fuchsia-400 text-white flex gap-1 justify-center items-center p-2 rounded-md">
+            <span className="mr-1">Page</span>
+            {isLoading ? (
+              <div className="animate-pulse bg-fuchsia-200 h-4 w-4 "></div>
+            ) : (
+              <span>{data.current_page}</span>
+            )}{" "}
+            /
+            {isLoading ? (
+              <div className="animate-pulse bg-fuchsia-200 h-4 w-4 "></div>
+            ) : (
+              <span>{data.total_pages}</span>
+            )}
+          </div>
           <button
             onClick={() => {
               let currentPage = filters?.page ?? 1;
               dispatch(setFilters({ ...filters, page: currentPage + 1 }));
             }}
-            className="bg-fuchsia-400 text-white px-4 py-2 rounded-md"
+            className="bg-fuchsia-400 text-white px-4 py-2 rounded-md disabled:bg-gray-500 "
+            disabled={data.current_page == data.total_pages}
           >
             Next
           </button>

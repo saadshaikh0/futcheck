@@ -5,13 +5,14 @@ import { convertString, useScrollToBottom } from "./utils/utils";
 import ShowPlayers from "./getCombinationComponents/showPlayers";
 import { useDebounce } from "@uidotdev/usehooks";
 import classNames from "classnames";
+import { Helmet } from "react-helmet";
 
 const ListItem = ({ val, index, filterText }) => {
   const formattedResult = convertString(val);
   const [isShowPlayers, setIsShowPlayers] = useState(false);
 
   return (
-    <div className="bg-slate-800 w-full md:w-56  text-white p-4 pt-2 h-42 rounded-md flex flex-col gap-2 text-center">
+    <div className="bg-slate-800 w-full md:w-[32%]  text-white p-4 pt-2 h-42 rounded-md flex flex-col gap-2 text-center">
       {isShowPlayers ? (
         <ShowPlayers
           tabs={formattedResult.map(([rating, count]) => [rating, count])}
@@ -53,6 +54,7 @@ const ListItem = ({ val, index, filterText }) => {
 
 const Combinations = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [isValid, setIsValid] = useState(true);
   const [currentCombinations, setCurrentCombinations] = useState([]);
   const [filterText, setFilterText] = useState("");
   const [squadRating, setSquadRating] = useState(70);
@@ -112,120 +114,146 @@ const Combinations = () => {
   }, [requiredCounts, loadIndex, currentCombinations]);
 
   return (
-    <div className="w-4/5 mx-auto mt-10">
-      <div className="flex flex-col md:grid  md:grid-cols-[1fr_4fr] gap-5">
-        <div className="text-white justify-between md:h-[80vh] bg-slate-900 rounded-lg px-4 py-6 flex flex-col">
-          <div className="flex flex-col">
-            {" "}
-            <div className="grid grid-rows-[1fr_1fr]">
-              <div className="font-medium mb-5">Squad Rating</div>
-              <div className="relative">
-                {" "}
-                <input
-                  className="w-full accent-fuchsia-400  rounded-md pl-2"
-                  type="range"
-                  min={70}
-                  max={99}
-                  maxLength={2}
-                  onChange={(e) => {
-                    let rating = parseInt(e.target.value);
+    <>
+      <Helmet>
+        <meta
+          name="description"
+          content={`Find the perfect combination for your sbcs squad rating.`}
+        />
+      </Helmet>
+      <div className="w-4/5 mx-auto mt-4">
+        {/* Heading Section */}
+        <div className="text-white text-left mb-5">
+          <p className="text-2xl font-bold">Ultimate Squad Rating Combinator</p>
+          <p className="text-lg font-thin">Tailor Your Perfect Combination</p>
+        </div>
+        <div className="flex flex-col md:grid  md:grid-cols-[1fr_4fr] gap-5">
+          <div className="text-white justify-between md:h-[75vh] bg-slate-900 rounded-lg px-4 py-6 flex flex-col">
+            <div className="flex flex-col">
+              {" "}
+              <div className="grid grid-rows-[1fr_1fr]">
+                <div className="font-medium mb-5">Squad Rating</div>
+                <div className="relative">
+                  <input
+                    className="w-full accent-fuchsia-400  rounded-md pl-2"
+                    type="range"
+                    min={70}
+                    max={99}
+                    maxLength={2}
+                    onChange={(e) => {
+                      let rating = parseInt(e.target.value);
 
-                    setSquadRating(rating);
-                    setMinRating(Math.max(rating - 3, 0));
-                    setMaxRating(Math.min(99, rating + 3));
-                  }}
-                />
-                <div className="text-white absolute -top-[20px] left-1/2 -translate-x-1/2 ">
-                  {" "}
-                  {squadRating}
+                      setSquadRating(rating);
+                      setMinRating(Math.max(rating - 3, 0));
+                      setMaxRating(Math.min(99, rating + 3));
+                    }}
+                  />
+                  <div className="text-white absolute -top-[20px] left-1/2 -translate-x-1/2 ">
+                    {" "}
+                    {squadRating}
+                  </div>
                 </div>
               </div>
-            </div>
-            {squadRating ? (
-              <>
-                <div className="flex flex-col font-medium">
-                  <span>Available Ratings</span>
-                  <DualRangeSlider
-                    min={squadRating - 3}
-                    max={squadRating + 3}
-                    minPrice={minRating}
-                    setMinPrice={setMinRating}
-                    maxPrice={maxRating}
-                    setMaxPrice={setMaxRating}
-                  />
-                </div>
-              </>
-            ) : (
-              ""
-            )}
-            {/* <div className="flex flex-col font-thin">
+              {squadRating ? (
+                <>
+                  <div className="flex flex-col font-medium">
+                    <span>Available Ratings</span>
+                    <DualRangeSlider
+                      min={squadRating - 3}
+                      max={squadRating + 3}
+                      minPrice={minRating}
+                      setMinPrice={setMinRating}
+                      maxPrice={maxRating}
+                      setMaxPrice={setMaxRating}
+                    />
+                  </div>
+                </>
+              ) : (
+                ""
+              )}
+              {/* <div className="flex flex-col font-thin">
               <span>Required Players</span>
             </div> */}
-          </div>
-          <div
-            onClick={handleGenerateCombination}
-            className="px-2 cursor-pointer bg-fuchsia-600 rounded-sm w-auto self-center"
-          >
-            Generate
-          </div>
-        </div>
-        <div className="flex flex-col h-full md:max-h-[80vh]">
-          {isLoading ? (
-            <div className="animate-pulse flex flex-col gap-5 h-full">
-              <div className="md:pr-6">
-                {" "}
-                <div className=" w-full bg-slate-300 h-10 rounded-md "></div>
-              </div>
-              <div className=" h-full w-full flex flex-wrap gap-3  content-start">
-                {Array.from({ length: 12 }, (_, index) => index).map((i) => {
-                  return (
-                    <div className="w-full md:w-56 h-40 bg-slate-300">
-                      <div></div>
-                    </div>
-                  );
-                })}
-              </div>
             </div>
-          ) : (
-            <>
-              <div className="mb-2">
-                <input
-                  value={filterText}
-                  onChange={(e) => setFilterText(e.target.value)}
-                  placeholder="Required Players : 84x4,87x6"
-                  className="w-full text-white mb-2 bg-slate-800 mx-1 rounded-lg py-2 px-4"
-                />
-              </div>
-              {filteredArrays.length ? (
-                <div
-                  ref={scrollRef}
-                  className="flex flex-wrap content-start  gap-3 scrollbar-thin  scrollbar-thumb-fuchsia-400 scrollbar-track-slate-900  overflow-y-auto h-full"
-                >
-                  {filteredArrays.map((combo, i) => {
+            <div
+              onClick={handleGenerateCombination}
+              className="px-2 cursor-pointer bg-fuchsia-600 rounded-sm w-auto self-center"
+            >
+              Generate
+            </div>
+          </div>
+          <div className="flex flex-col h-full md:max-h-[75vh]">
+            {isLoading ? (
+              <div className="animate-pulse flex flex-col gap-5 h-full">
+                <div className="md:pr-6">
+                  {" "}
+                  <div className=" w-full bg-slate-300 h-10 rounded-md "></div>
+                </div>
+                <div className=" h-full w-full flex flex-wrap gap-3  content-start">
+                  {Array.from({ length: 9 }, (_, index) => index).map((i) => {
                     return (
-                      <ListItem
-                        filterText={debouncedSearchTerm}
-                        val={combo}
-                        index={i}
-                      />
+                      <div className="w-full md:w-[32%] h-36 bg-slate-300">
+                        <div></div>
+                      </div>
                     );
                   })}
                 </div>
-              ) : (
-                <div className="bg-slate-900 h-full rounded-lg">
-                  <p className="text-2xl text-white text-center mt-10">
-                    {" "}
-                    {filterText.length > 0
-                      ? " No Solution Present"
-                      : "Click Generate to show squad combinations"}
-                  </p>
+              </div>
+            ) : (
+              <>
+                <div className="mb-2">
+                  {!isValid && (
+                    <p className="text-red-500 text-sm -mt-6 mb-1 pl-2 ">
+                      Please enter in the format {`{Rating}x{Count}`}, e.g:
+                      84x4,87x6
+                    </p>
+                  )}
+                  <input
+                    value={filterText}
+                    onChange={(e) => {
+                      let value = e.target.value;
+                      setFilterText(e.target.value);
+                      const isValidFormat = /^(\d+x\d+,)*\d+x\d+$/;
+                      setIsValid(isValidFormat.test(value) || value === "");
+                    }}
+                    placeholder="Required Players : 84x4,87x6"
+                    className={classNames(
+                      "w-full text-white mb-2 bg-slate-800 mx-1 rounded-lg py-2 px-4",
+                      !isValid ? "border-2 border-red-500" : ""
+                    )}
+                  />
                 </div>
-              )}
-            </>
-          )}
+                {filteredArrays.length ? (
+                  <div
+                    ref={scrollRef}
+                    className="flex flex-wrap content-start  gap-3 scrollbar-thin  scrollbar-thumb-fuchsia-400 scrollbar-track-slate-900  overflow-y-auto h-full"
+                  >
+                    {filteredArrays.map((combo, i) => {
+                      return (
+                        <ListItem
+                          filterText={debouncedSearchTerm}
+                          val={combo}
+                          index={i}
+                        />
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <div className="bg-slate-900 h-full rounded-lg">
+                    <p className="text-2xl text-white text-center mt-10">
+                      {" "}
+                      {filterText.length > 0
+                        ? " No Solution Present"
+                        : "Click Generate to show squad combinations"}
+                    </p>
+                  </div>
+                )}
+              </>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -13,7 +13,7 @@ export default function VersionPopup() {
   return (
     <div className="">
       <Combobox
-        value={filters?.nation}
+        value={filters?.nation ?? null}
         onChange={(val) => {
           dispatch(setFilters({ ...filters, nation: val, page: 1 }));
         }}

@@ -19,10 +19,6 @@ const AllPlayersWrapper = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     const getData = async () => {
-      if (app.rarities?.length == 0) {
-        const response = await fetchAllRarities();
-        dispatch(setRarities(response));
-      }
       if (app.nations?.length == 0) {
         const response = await fetchAllNations();
         dispatch(setNations(response));
