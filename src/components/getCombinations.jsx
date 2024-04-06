@@ -1,13 +1,16 @@
 import React, { useMemo, useRef, useState } from "react";
-import { fetch_combinations } from "../api/apiService";
+import { fetchRatingsPrices, fetch_combinations } from "../api/apiService";
 import DualRangeSlider from "./common/RangeSlider";
 import { convertString, useScrollToBottom } from "./utils/utils";
 import ShowPlayers from "./getCombinationComponents/showPlayers";
 import { useDebounce } from "@uidotdev/usehooks";
 import classNames from "classnames";
 import { Helmet } from "react-helmet";
+import { useQuery } from "@tanstack/react-query";
+import CoinsImg from "../assets/coins.png";
+import CostInfo from "./getCombinationComponents/costInfo";
 
-const ListItem = ({ val, index, filterText }) => {
+const ListItem = ({ val, index, filterText, price, ratings_price }) => {
   const formattedResult = convertString(val);
   const [isShowPlayers, setIsShowPlayers] = useState(false);
 
@@ -19,7 +22,20 @@ const ListItem = ({ val, index, filterText }) => {
         />
       ) : (
         <>
-          <p className="font-medium">Solution {index + 1}</p>
+          <div className="flex justify-between">
+            <p className="font-medium">Solution {index + 1}</p>
+            <p className="flex gap-1 items-center">
+              <img src={CoinsImg} className="w-3 h-3" />
+              <span className="font-medium flex gap-1 items-center">
+                {" "}
+                {price}{" "}
+                <CostInfo
+                  ratings_price={ratings_price}
+                  result={formattedResult}
+                />
+              </span>
+            </p>
+          </div>
           <hr className="w-full " />
           <div className="grid grid-cols-3 gap-2">
             {formattedResult.map(([rating, count]) => {
@@ -43,7 +59,7 @@ const ListItem = ({ val, index, filterText }) => {
       <div className="mt-auto flex justify-center text-sm ">
         <button
           onClick={() => setIsShowPlayers(!isShowPlayers)}
-          className="bg-slate-950 flex text-white p-1 px-2 rounded-md mt-1"
+          className="bg-purple-500 flex text-white font-medium p-1 px-2 rounded-md mt-1"
         >
           {!isShowPlayers ? <> Show Players</> : <>Hide Players</>}
         </button>
@@ -67,7 +83,19 @@ const Combinations = () => {
   };
   const scrollRef = useScrollToBottom(handleScrollToBottom);
   const debouncedSearchTerm = useDebounce(filterText, 1000);
+  const { data: ratings_price = {} } = useQuery({
+    queryKey: ["fetchRatingsPrices"],
+    queryFn: fetchRatingsPrices,
 
+    staleTime: 1000 * 60,
+  });
+  const calculatePrice = (combo) => {
+    let cost = 0;
+    combo.forEach((rating) => {
+      cost += ratings_price[rating];
+    });
+    return cost;
+  };
   const handleGenerateCombination = async () => {
     let payload = {
       squad_rating: squadRating,
@@ -80,6 +108,10 @@ const Combinations = () => {
     const response = await fetch_combinations(payload);
     setIsLoading(false);
     let parsedResponse = JSON.parse(response);
+    parsedResponse = parsedResponse.map((val) => {
+      let price = calculatePrice(val);
+      return { array: val, price: price };
+    });
     setCurrentCombinations(parsedResponse);
     setFilterText("");
   };
@@ -107,7 +139,7 @@ const Combinations = () => {
     const results =
       Object.keys(requiredCounts).length === 0
         ? currentCombinations
-        : currentCombinations.filter((array) =>
+        : currentCombinations.filter(({ array }) =>
             arrayMatchesCriteria(array, requiredCounts)
           );
     return results.slice(0, loadIndex); // Only load up to loadIndex items
@@ -228,15 +260,19 @@ const Combinations = () => {
                     ref={scrollRef}
                     className="flex flex-wrap content-start  gap-3 scrollbar-thin  scrollbar-thumb-fuchsia-400 scrollbar-track-slate-900  overflow-y-auto h-full"
                   >
-                    {filteredArrays.map((combo, i) => {
-                      return (
-                        <ListItem
-                          filterText={debouncedSearchTerm}
-                          val={combo}
-                          index={i}
-                        />
-                      );
-                    })}
+                    {filteredArrays
+                      .sort((a, b) => a.price - b.price)
+                      .map(({ array, price }, i) => {
+                        return (
+                          <ListItem
+                            filterText={debouncedSearchTerm}
+                            val={array}
+                            index={i}
+                            price={price}
+                            ratings_price={ratings_price}
+                          />
+                        );
+                      })}
                   </div>
                 ) : (
                   <div className="bg-slate-900 h-full rounded-lg">

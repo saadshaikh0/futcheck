@@ -175,6 +175,14 @@ export const fetchAllNations = async () => {
   const response = await instance.get(`/get_nations/`);
   return response.data.data;
 };
+export const fetchRatingsPrices = async () => {
+  const response = await instance.get("/get_ratings_prices/");
+  let data = response.data.data;
+  let ratings_price = {};
+  data.forEach(({ rating, price_ps }) => (ratings_price[rating] = price_ps));
+  return ratings_price;
+};
+
 export const fetchAllLeagues = async () => {
   const response = await instance.get(`/get_leagues/`);
   return response.data.data;
