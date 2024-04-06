@@ -156,7 +156,7 @@ const Combinations = () => {
       </Helmet>
       <div className="w-4/5 mx-auto mt-4">
         {/* Heading Section */}
-        <div className="text-white text-left mb-5">
+        <div className="text-white text-center  mb-5">
           <p className="text-2xl font-bold">Ultimate Squad Rating Combinator</p>
           <p className="text-lg font-thin">Tailor Your Perfect Combination</p>
         </div>
