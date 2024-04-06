@@ -2,11 +2,17 @@ import { Fragment, useState } from "react";
 import { Combobox, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { useSelector } from "react-redux";
+import { useQuery } from "@tanstack/react-query";
+import { fetchAllRarities } from "../../../api/apiService";
 
 export default function MobileVersionPopup({ filter, updateFilter }) {
   const [query, setQuery] = useState("");
-  const { app, allPlayers } = useSelector((state) => state);
-  const { rarities } = app;
+  const { data: rarities = [] } = useQuery({
+    queryKey: ["fetchAllRarities"],
+    queryFn: fetchAllRarities,
+    cacheTime: Infinity,
+    staleTime: Infinity,
+  });
   return (
     <div className="">
       <Combobox
