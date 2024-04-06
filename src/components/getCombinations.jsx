@@ -9,6 +9,7 @@ import { Helmet } from "react-helmet";
 import { useQuery } from "@tanstack/react-query";
 import CoinsImg from "../assets/coins.png";
 import CostInfo from "./getCombinationComponents/costInfo";
+import { ChevronDoubleRightIcon } from "@heroicons/react/20/solid";
 
 const ListItem = ({ val, index, filterText, price, ratings_price }) => {
   const formattedResult = convertString(val);
@@ -277,11 +278,46 @@ const Combinations = () => {
                   </div>
                 ) : (
                   <div className="bg-slate-900 h-full rounded-lg">
-                    <p className="text-2xl text-white text-center mt-10">
+                    <p className="text-2xl text-white text-center mt-5">
                       {" "}
-                      {filterText.length > 0
-                        ? " No Solution Present"
-                        : "Click Generate to show squad combinations"}
+                      {filterText.length > 0 ? (
+                        " No Solution Present"
+                      ) : (
+                        <>
+                          <div className="text-white text-center font-bold text-lg">
+                            How To Use ?
+                          </div>
+                          <ol class="flex flex-col md:flex-row  gap-2 md:gap-0 items-center md:justify-center w-full p-3 space-x-2 text-sm font-medium text-center text-gray-500 bg-slate-900   rounded-lg shadow-sm dark:text-gray-400 sm:text-base dark:bg-gray-800 dark:border-gray-700 sm:p-4 sm:space-x-4 rtl:space-x-reverse">
+                            <li class="flex items-center ">
+                              <span class="flex items-center justify-center w-5 h-5 me-2 text-xs border border-gray-500  rounded-full shrink-0 ">
+                                1
+                              </span>
+                              Select Squad Rating
+                              <span class="hidden sm:inline-flex sm:ms-2">
+                                Info
+                              </span>
+                            </li>
+                            <div>
+                              <ChevronDoubleRightIcon className="w-6 h-6 text-gray-500 rotate-90 md:rotate-0" />
+                            </div>
+                            <li class="flex items-center ">
+                              <span class="flex items-center justify-center w-5 h-5 me-2 text-xs border border-gray-500 rounded-full shrink-0 dark:border-gray-400">
+                                2
+                              </span>
+                              Adjust Available Ratings(Optional)
+                            </li>
+                            <div>
+                              <ChevronDoubleRightIcon className="w-6 h-6 text-gray-500 rotate-90 md:rotate-0" />
+                            </div>
+                            <li class="flex items-center ">
+                              <span class="flex items-center justify-center w-5 h-5 me-2 text-xs border border-gray-500 rounded-full shrink-0 dark:border-gray-400">
+                                3
+                              </span>
+                              Click Generate
+                            </li>
+                          </ol>
+                        </>
+                      )}
                     </p>
                   </div>
                 )}
