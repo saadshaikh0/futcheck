@@ -32,6 +32,7 @@ const ListItem = ({ val, index, filterText, price, ratings_price }) => {
                 <CostInfo
                   ratings_price={ratings_price}
                   result={formattedResult}
+                  price={price}
                 />
               </span>
             </p>

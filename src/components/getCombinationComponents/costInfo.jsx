@@ -1,5 +1,9 @@
 import React, { useState } from "react";
-import { QuestionMarkCircleIcon } from "@heroicons/react/20/solid";
+import {
+  ChartPieIcon,
+  QuestionMarkCircleIcon,
+  TableCellsIcon,
+} from "@heroicons/react/20/solid";
 import { Popover } from "@headlessui/react";
 import CoinsImg from "../../assets/coins.png";
 import { usePopper } from "react-popper";
@@ -74,52 +78,123 @@ const renderCustomLabel = ({
   );
 };
 
-const CostPopup = ({ result, ratings_price }) => {
-  const data = result.map(([rating, count]) => {
-    let price = ratings_price[rating] * count;
-    return { name: `${rating}x${count}`, value: price };
-  });
+const TableWrapper = ({ result, ratings_price, price }) => {
   return (
-    <div className=" w-60 bg-slate-700 relative shadow-lg rounded-lg z-100">
-      <div className="flex flex-col ">
-        <p className="pt-1 text-white font-medium">Cost Breakdown</p>
-        <div className="w-full h-[25vh]">
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart width={100} height={100}>
-              <Pie
-                data={data}
-                cx="50%"
-                cy="55%"
-                labelLine={true}
-                label={renderCustomLabel}
-                outerRadius={50}
-                fill="#8884d8"
-                dataKey="value"
-                // margin={{ top: 0, right: 30, left: 20, bottom: 5 }}
-              >
-                {data.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={COLORS[index % COLORS.length]}
-                  />
-                ))}
-              </Pie>
-              {/* <Legend
+    <div className="flex flex-col w-full">
+      <table class="table-auto w-full">
+        <thead className="font-thin text-sm gap-1">
+          <tr>
+            <th className="font-medium">Rating</th>
+            <th className="font-medium">Price</th>
+            <th className="font-medium">Count</th>
+            <th className="font-medium">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          {result.map(([rating, count]) => {
+            return (
+              <tr>
+                <td>{rating}</td>
+                <td>{ratings_price[rating]}</td>
+                <td>{count}</td>
+                <td>{ratings_price[rating] * count}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+      <hr className="w-full" />
+      <div className="flex items-center justify-end px-2 py-1 gap-2">
+        <span className="font-medium">Total Cost : </span>
+        <span className="flex gap-1 items-center">
+          <img src={CoinsImg} className="w-4 h-4" /> {price}
+        </span>
+      </div>
+    </div>
+  );
+};
+const PieWrapper = ({ data }) => {
+  return (
+    <div className="w-full h-[25vh]">
+      <ResponsiveContainer width="100%" height="100%">
+        <PieChart width={100} height={100}>
+          <Pie
+            data={data}
+            cx="50%"
+            cy="55%"
+            labelLine={true}
+            label={renderCustomLabel}
+            outerRadius={50}
+            fill="#8884d8"
+            dataKey="value"
+            isAnimationActive={false}
+            // margin={{ top: 0, right: 30, left: 20, bottom: 5 }}
+          >
+            {data.map((entry, index) => (
+              <Cell
+                key={`cell-${index}`}
+                fill={COLORS[index % COLORS.length]}
+              />
+            ))}
+          </Pie>
+          {/* <Legend
                 margin={10}
                 wrapperStyle={{ fontSize: "10px", marginBottom: "10px" }}
                 align="center"
                 verticalAlign="top"
                 height={20}
               /> */}
-            </PieChart>
-          </ResponsiveContainer>
+        </PieChart>
+      </ResponsiveContainer>
+    </div>
+  );
+};
+const CostPopup = ({ result, ratings_price, price }) => {
+  const [mode, setMode] = useState("table");
+  const data = result.map(([rating, count]) => {
+    let price = ratings_price[rating] * count;
+    return { name: `${rating}x${count}`, value: price };
+  });
+  return (
+    <div className=" w-60 bg-slate-700 relative shadow-lg rounded-lg z-100">
+      <div className="flex flex-col gap-1">
+        <div className="relative">
+          <p className="pt-1 text-white font-medium">Cost Breakdown</p>
+          <div className="absolute right-2 top-2 flex gap-1">
+            <button
+              className={
+                mode == "table" ? "bg-fuchsia-400 px-1 rounded-md" : ""
+              }
+              onClick={() => setMode("table")}
+            >
+              <TableCellsIcon className="w-4 h-4 text-white" />
+            </button>
+            <button
+              className={mode == "pie" ? "bg-fuchsia-400 px-1 rounded-md" : ""}
+              onClick={() => setMode("pie")}
+            >
+              <ChartPieIcon className="w-4 h-4 text-white" />
+            </button>
+          </div>
+        </div>
+        <hr />
+        <div className="flex justify-center">
+          {mode == "table" ? (
+            <TableWrapper
+              result={result}
+              ratings_price={ratings_price}
+              price={price}
+            />
+          ) : (
+            <PieWrapper data={data} />
+          )}
         </div>
       </div>
     </div>
   );
 };
 
-const CostInfo = ({ result, ratings_price }) => {
+const CostInfo = ({ result, ratings_price, price }) => {
   let [referenceElement, setReferenceElement] = useState();
   let [popperElement, setPopperElement] = useState();
   let [arrowElement, setArrowElement] = useState(); // Add state for the arrow element
@@ -154,7 +229,13 @@ const CostInfo = ({ result, ratings_price }) => {
           className="bg-white w-4 h-4"
         />
 
-        {<CostPopup ratings_price={ratings_price} result={result} />}
+        {
+          <CostPopup
+            ratings_price={ratings_price}
+            result={result}
+            price={price}
+          />
+        }
       </Popover.Panel>
     </Popover>
   );
