@@ -1,4 +1,7 @@
 import { useEffect, useRef } from "react";
+import { useDispatch } from "react-redux";
+import { setUserInfo } from "../../redux/appSlice";
+import { verifyToken } from "../../api/apiService";
 
 export const debounce = (func, delay) => {
   let timeoutId;
@@ -109,6 +112,32 @@ export function useOutsideClick(ref, onClickOutside) {
     };
   }, [ref]);
 }
+
+export const useFetchUserInfo = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const fetchUserInfo = async (token) => {
+      try {
+        const userInfo = await verifyToken({
+          token: token,
+        });
+        localStorage.setItem("google_token", token);
+        dispatch(setUserInfo(userInfo));
+      } catch (error) {
+        console.error("Failed to fetch user info", error);
+        // Optionally clear user info or handle error
+      }
+    };
+
+    const token = localStorage.getItem("google_token");
+    if (token) {
+      fetchUserInfo(token);
+    }
+  }, [dispatch]);
+};
+
+export default useFetchUserInfo;
 export const updateRarity = (data) => {
   data.forEach((player) => {
     if (player.rarity == 0 || player.rarity == 1)
@@ -120,18 +149,20 @@ export const updateRarity = (data) => {
   return data;
 };
 export const convertToMinutes = (timeString) => {
-  const matches = timeString.match(
-    /(\d+)\s*(min|hour|mins|sec|secs|hours) ago/
-  );
-  if (matches) {
-    const value = parseInt(matches[1]);
-    const unit = matches[2];
-    if (unit.includes("hour")) {
-      return value * 3600; // Convert hours to minutes
-    } else if (unit.includes("min")) {
-      return value * 60;
-    } else {
-      return value; // Minutes
+  if (typeof timeString == "string") {
+    const matches = timeString?.match(
+      /(\d+)\s*(min|hour|mins|sec|secs|hours) ago/
+    );
+    if (matches) {
+      const value = parseInt(matches[1]);
+      const unit = matches[2];
+      if (unit.includes("hour")) {
+        return value * 3600; // Convert hours to minutes
+      } else if (unit.includes("min")) {
+        return value * 60;
+      } else {
+        return value; // Minutes
+      }
     }
   }
   return 0; // Default to 0 minutes if no match
@@ -189,4 +220,27 @@ export const useScrollToBottom = (callback) => {
   }, [callback]); // Ensure the effect re-runs if the callback changes
 
   return endOfDivRef;
+};
+
+export const decodeJWT = (token) => {
+  try {
+    const base64Url = token.split(".")[1]; // Get the payload part
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/"); // Convert to a standard base64 string
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split("")
+        .map(function (c) {
+          return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+        })
+        .join("")
+    );
+
+    return JSON.parse(jsonPayload);
+  } catch (error) {
+    console.error("Error decoding the JWT:", error);
+    return null;
+  }
+};
+export const capitalizeFirstLetter = (string) => {
+  return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
 };
