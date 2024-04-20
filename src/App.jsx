@@ -15,6 +15,9 @@ import ErrorBoundary from "./ErrorBoundary";
 import AllPlayersWrapper from "./components/allPlayersWrapper";
 import Combinations from "./components/getCombinations";
 import { Helmet } from "react-helmet";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import useFetchUserInfo from "./components/utils/utils";
+
 ReactGA.initialize("G-RD6LGLC1LD");
 
 const queryClient = new QueryClient();
@@ -30,26 +33,31 @@ function App() {
       </Helmet>
       <ErrorBoundary>
         <Provider store={store}>
-          <QueryClientProvider client={queryClient}>
-            <div className="App">
-              <Router>
-                <Header />
-                {/* <Ads adClient="ca-pub-4560319877250034" adSlot="1044013921" /> */}
-                <Routes>
-                  <Route exact path="/" element={<HomePage />} />
-                  <Route path="/tos" element={<Tos />} />
-                  <Route path="/policy" element={<Policy />} />
-                  <Route path="/fc_combinations/" element={<Combinations />} />
-                  <Route
-                    path="/player/:playerId/:playerName"
-                    element={<PlayerViewWrapper />}
-                  />
-                  <Route path="/players" element={<AllPlayersWrapper />} />
-                </Routes>
-                <Footer />
-              </Router>
-            </div>
-          </QueryClientProvider>
+          <GoogleOAuthProvider clientId="55917895097-n505fctm2fkegjjfc66bhcrq4vtsvol3.apps.googleusercontent.com">
+            <QueryClientProvider client={queryClient}>
+              <div className="App">
+                <Router>
+                  <Header />
+                  {/* <Ads adClient="ca-pub-4560319877250034" adSlot="1044013921" /> */}
+                  <Routes>
+                    <Route exact path="/" element={<HomePage />} />
+                    <Route path="/tos" element={<Tos />} />
+                    <Route path="/policy" element={<Policy />} />
+                    <Route
+                      path="/fc_combinations/"
+                      element={<Combinations />}
+                    />
+                    <Route
+                      path="/player/:playerId/:playerName"
+                      element={<PlayerViewWrapper />}
+                    />
+                    <Route path="/players" element={<AllPlayersWrapper />} />
+                  </Routes>
+                  <Footer />
+                </Router>
+              </div>
+            </QueryClientProvider>
+          </GoogleOAuthProvider>
         </Provider>
       </ErrorBoundary>
     </>

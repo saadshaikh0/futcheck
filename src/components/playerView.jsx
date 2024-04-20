@@ -13,6 +13,7 @@ import StatsCard from "./PlayerViewCards/StatsCard";
 import InfoCard from "./PlayerViewCards/InfoCard";
 import PlaystyleCard from "./PlayerViewCards/PlaystyleCard";
 import { Helmet } from "react-helmet";
+import { BellIcon, StarIcon } from "@heroicons/react/20/solid";
 
 const PlayerView = () => {
   const player = useSelector((state) => state.player.details);
@@ -142,6 +143,15 @@ const PlayerView = () => {
                   {latestPriceData["value"]}
                 </span>
               </div>
+              {/* <div className="flex gap-2 justify-center mt-2">
+                <div className="bg-slate-800 text-white items-center gap-1 text-sm flex p-2 rounded-full">
+                  Favourite
+                  <StarIcon className="w-4 h-4 text-white" />
+                </div>
+                <div className="bg-slate-800 text-white items-center gap-1 text-sm flex p-2 rounded-full">
+                  Notify <BellIcon className="w-4 h-4 text-white" />
+                </div>
+              </div> */}
               <div
                 style={{
                   color: text_color,

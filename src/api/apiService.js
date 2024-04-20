@@ -1,3 +1,4 @@
+import axios from "axios";
 import {
   buildRarityUrl,
   getBgColor,
@@ -317,5 +318,11 @@ export const fetchPlayerDetails = async (id) => {
       level: player.levels,
     });
   });
+  return data;
+};
+
+export const verifyToken = async (payload) => {
+  const response = await instance.post("/verify_token/", payload);
+  let data = response.data.user_info;
   return data;
 };

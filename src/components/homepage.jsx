@@ -7,12 +7,14 @@ import {
 } from "../api/apiService";
 import { useQuery } from "@tanstack/react-query";
 import AllPromos from "./hometabs/allPromos";
+import { useSelector } from "react-redux";
 
 const tabs = ["Latest Players", "Top Rated", "Promos"];
-
+// const userTabs = ["Favourites"];
+const userTabs = [];
 const HomePage = () => {
-  const [selectedTab, setSelectedTab] = useState(0);
-
+  const [selectedTab, setSelectedTab] = useState("Latest Players");
+  const userInfo = useSelector((state) => state.app.userInfo);
   const { data: players = [], isLoading } = useQuery({
     queryKey: ["fetchLatestPlayers"],
     queryFn: fetchLatestPlayers,
@@ -37,12 +39,12 @@ const HomePage = () => {
         <ul class="flex flex-wrap text-sm font-medium text-center text-gray-500 gap-4">
           {tabs.map((tab, index) => {
             return (
-              <li onClick={() => setSelectedTab(index)} class="me-2">
+              <li onClick={() => setSelectedTab(tab)} class="me-2">
                 <a
                   href="#"
                   aria-current="page"
                   class={`inline-block px-2 text-gray-500 text-lg rounded ${
-                    index == selectedTab ? "bg-fuchsia-400 text-slate-950" : ""
+                    tab == selectedTab ? "bg-fuchsia-400 text-slate-950" : ""
                   } `}
                 >
                   {tab}
@@ -50,12 +52,30 @@ const HomePage = () => {
               </li>
             );
           })}
+          {userInfo &&
+            userTabs.map((tab, index) => {
+              return (
+                <li onClick={() => setSelectedTab(tab)} class="me-2">
+                  <a
+                    href="#"
+                    aria-current="page"
+                    class={`inline-block px-2 text-gray-500 text-lg rounded ${
+                      tab == selectedTab ? "bg-fuchsia-400 text-slate-950" : ""
+                    } `}
+                  >
+                    {tab}
+                  </a>
+                </li>
+              );
+            })}
         </ul>
       </div>
       <div className="w-4/5 mx-auto">
-        {selectedTab == 0 && <LatestPlayers players={players} />}
-        {selectedTab == 1 && <LatestPlayers players={top_rated_players} />}
-        {selectedTab == 2 && <AllPromos rarities={all_promos} />}
+        {selectedTab == tabs[0] && <LatestPlayers players={players} />}
+        {selectedTab == tabs[1] && (
+          <LatestPlayers players={top_rated_players} />
+        )}
+        {selectedTab == tabs[2] && <AllPromos rarities={all_promos} />}
       </div>
     </div>
   );

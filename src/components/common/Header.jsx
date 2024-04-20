@@ -1,9 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
-import { debounce, useOutsideClick } from "../utils/utils";
+import useFetchUserInfo, {
+  debounce,
+  decodeJWT,
+  useOutsideClick,
+} from "../utils/utils";
 import CustomPopover from "./CustomPopover";
 import { usePopper } from "react-popper";
 import { useQuery } from "@tanstack/react-query";
-import { fetchPlayers } from "../../api/apiService";
+import { fetchPlayers, verifyToken } from "../../api/apiService";
 import { useDebounce } from "@uidotdev/usehooks";
 import FutcheckLogo from "../../assets/futcheck_logo.png";
 import { Link } from "react-router-dom";
@@ -14,22 +18,24 @@ import {
 } from "@heroicons/react/20/solid";
 import MobileMenuPopover from "./MobileMenuPopover";
 import { Popover } from "@headlessui/react";
+import { useDispatch } from "react-redux";
+import Account from "./Account";
 
 const Navbar = () => {
   let [referenceElement, setReferenceElement] = useState();
   let [popperElement, setPopperElement] = useState();
   let [mobileReferenceElement, setMobileReferenceElement] = useState();
-  let [mobilePopperElement, setMobilePopperElement] = useState();
 
   const [open, setOpen] = useState(false);
   const [searchMode, setSearchMode] = useState(false);
   const [searchValue, setSearchValue] = useState("");
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const debouncedSearchTerm = useDebounce(searchValue, 1000);
   const ref = useRef();
   const closePanel = () => {
     setOpen(false);
   };
+  useFetchUserInfo();
+
   useOutsideClick(ref, closePanel);
   let { styles, attributes } = usePopper(referenceElement, popperElement, {
     modifiers: [
@@ -41,20 +47,6 @@ const Navbar = () => {
       },
     ],
   });
-  let { menuStyles, menuAttributes } = usePopper(
-    mobileReferenceElement,
-    mobilePopperElement,
-    {
-      modifiers: [
-        {
-          name: "offset",
-          options: {
-            offset: [0, 15],
-          },
-        },
-      ],
-    }
-  );
 
   const { data: players = [], isLoading } = useQuery({
     queryKey: ["fetchPlayers", debouncedSearchTerm, searchMode],
@@ -107,7 +99,7 @@ const Navbar = () => {
                 />
               </div>
             </div>
-            <div className="hidden md:flex gap-8">
+            <div className="hidden md:flex gap-8 md:items-center">
               <Link to="/players/">
                 <div className="text-white  font-bold">Players</div>
               </Link>
@@ -137,6 +129,7 @@ const Navbar = () => {
                 )}
               </Popover>
             </div>
+            <Account />
           </div>
         </nav>
       </header>
