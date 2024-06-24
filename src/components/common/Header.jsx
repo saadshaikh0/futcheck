@@ -103,6 +103,15 @@ const Navbar = () => {
               <Link to="/players/">
                 <div className="text-white  font-bold">Players</div>
               </Link>
+              <Link to="/sbc/">
+                <div className="text-white  font-bold">SBC</div>
+              </Link>
+              <Link to="/squad-builder/">
+                <div className="text-white  font-bold">Squad Builder</div>
+              </Link>
+              <Link to="/my-club/">
+                <div className="text-white  font-bold">Club</div>
+              </Link>
               <Link to="/fc_combinations/">
                 <div className="text-white flex gap-1 items-center  font-bold">
                   Rating <CalculatorIcon className="w-4 h-4 text-white" />

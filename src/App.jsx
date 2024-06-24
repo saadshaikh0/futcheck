@@ -16,7 +16,10 @@ import AllPlayersWrapper from "./components/allPlayersWrapper";
 import Combinations from "./components/getCombinations";
 import { Helmet } from "react-helmet";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import useFetchUserInfo from "./components/utils/utils";
+import SquadBuilderWrapper from "./components/squadBuilderWrapper";
+import ClubWrapper from "./components/clubWrapper";
+import SbcWrapper from "./components/SbcWrapper";
+import SbcViewWrapper from "./components/sbcViewWrapper";
 
 ReactGA.initialize("G-RD6LGLC1LD");
 
@@ -47,6 +50,14 @@ function App() {
                       path="/fc_combinations/"
                       element={<Combinations />}
                     />
+                    <Route
+                      path="/squad-builder/"
+                      element={<SquadBuilderWrapper />}
+                    />
+                    <Route path="/my-club/" element={<ClubWrapper />} />
+
+                    <Route path="/sbc/:sbcId" element={<SbcViewWrapper />} />
+                    <Route path="/sbc/" element={<SbcWrapper />} />
                     <Route
                       path="/player/:playerId/:playerName"
                       element={<PlayerViewWrapper />}

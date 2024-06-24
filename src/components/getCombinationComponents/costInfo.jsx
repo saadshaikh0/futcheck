@@ -7,14 +7,7 @@ import {
 import { Popover } from "@headlessui/react";
 import CoinsImg from "../../assets/coins.png";
 import { usePopper } from "react-popper";
-import {
-  Cell,
-  Label,
-  Legend,
-  Pie,
-  PieChart,
-  ResponsiveContainer,
-} from "recharts";
+import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
 
 const COLORS = [
   "#cecfe5",
@@ -128,7 +121,6 @@ const PieWrapper = ({ data }) => {
             fill="#8884d8"
             dataKey="value"
             isAnimationActive={false}
-            // margin={{ top: 0, right: 30, left: 20, bottom: 5 }}
           >
             {data.map((entry, index) => (
               <Cell
@@ -137,13 +129,6 @@ const PieWrapper = ({ data }) => {
               />
             ))}
           </Pie>
-          {/* <Legend
-                margin={10}
-                wrapperStyle={{ fontSize: "10px", marginBottom: "10px" }}
-                align="center"
-                verticalAlign="top"
-                height={20}
-              /> */}
         </PieChart>
       </ResponsiveContainer>
     </div>

@@ -1,7 +1,7 @@
 import { GoogleLogin, googleLogout } from "@react-oauth/google";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setUserInfo } from "../../redux/appSlice";
+import { removeUserInfo, setUserInfo } from "../../redux/appSlice";
 import { verifyToken } from "../../api/apiService";
 import { Popover } from "@headlessui/react";
 import { capitalizeFirstLetter } from "../utils/utils";
@@ -39,7 +39,7 @@ const Account = () => {
                     className="text-white self-start "
                     onClick={() => {
                       localStorage.setItem("google_token", null);
-                      dispatch(setUserInfo(null));
+                      dispatch(removeUserInfo());
                     }}
                   >
                     Sign Out{" "}
@@ -56,6 +56,8 @@ const Account = () => {
             const userInfo = await verifyToken({
               token: credentialResponse.credential,
             });
+            const { access, refresh } = userInfo.tokens;
+            localStorage.setItem("access_token", access);
             localStorage.setItem("google_token", credentialResponse.credential);
             dispatch(setUserInfo(userInfo));
           }}

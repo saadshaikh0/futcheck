@@ -40,6 +40,9 @@ https://www.ea.com/ea-sports-fc/ultimate-team/web-app/content/24B23FDE-7835-41C2
   return `https://www.ea.com/ea-sports-fc/ultimate-team/web-app/content/24B23FDE-7835-41C2-87A2-F453DFDB2E82/2024/fut/items/images/actionShot/${guId}/p${eaId}.png`;
 };
 
+export const buildSbcImageUrl = (imageId) => {
+  return `https://www.ea.com/ea-sports-fc/ultimate-team/web-app/content/24B23FDE-7835-41C2-87A2-F453DFDB2E82/2024/fut/sbc/companion/sets/images/sbc_set_image_${imageId}.png`;
+};
 export const buildRarityUrl = ({ guid, size, level, rating, id }) => {
   let level_no = level;
   if (level_no > 0) {
@@ -122,7 +125,9 @@ export const useFetchUserInfo = () => {
         const userInfo = await verifyToken({
           token: token,
         });
+        const { access, refresh } = userInfo.tokens;
         localStorage.setItem("google_token", token);
+        localStorage.setItem("access_token", access);
         dispatch(setUserInfo(userInfo));
       } catch (error) {
         console.error("Failed to fetch user info", error);
@@ -137,6 +142,29 @@ export const useFetchUserInfo = () => {
   }, [dispatch]);
 };
 
+export const addRarityUrl = (data, type = "s") => {
+  let updatedData = data.map((player) => {
+    player.rarity_url = buildRarityUrl({
+      guid: player.guid_no,
+      size: type,
+      level: player.levels,
+      rating: player.rating,
+      id: player.rarity,
+    });
+    player.text_color = getTextColor({
+      colors: player.colors,
+      rating: player.rating,
+      level: player.levels,
+    });
+    player.bg_color = getBgColor({
+      colors: player.colors,
+      rating: player.rating,
+      level: player.levels,
+    });
+    return player;
+  });
+  return updatedData;
+};
 export default useFetchUserInfo;
 export const updateRarity = (data) => {
   data.forEach((player) => {
@@ -148,24 +176,58 @@ export const updateRarity = (data) => {
   });
   return data;
 };
-export const convertToMinutes = (timeString) => {
-  if (typeof timeString == "string") {
-    const matches = timeString?.match(
-      /(\d+)\s*(min|hour|mins|sec|secs|hours) ago/
-    );
-    if (matches) {
-      const value = parseInt(matches[1]);
-      const unit = matches[2];
-      if (unit.includes("hour")) {
-        return value * 3600; // Convert hours to minutes
-      } else if (unit.includes("min")) {
-        return value * 60;
-      } else {
-        return value; // Minutes
-      }
-    }
+export function getTimeUntilExpiration(endTimestamp) {
+  const now = Date.now();
+  const endTime = new Date(endTimestamp).getTime();
+  const timeDiff = endTime - now;
+
+  if (timeDiff <= 0) {
+    return "Expired";
   }
-  return 0; // Default to 0 minutes if no match
+
+  const seconds = Math.floor(timeDiff / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const hours = Math.floor(minutes / 60);
+  const days = Math.floor(hours / 24);
+
+  if (days > 0) {
+    return `${days} days`;
+  } else if (hours > 0) {
+    return `${hours} hours`;
+  } else if (minutes > 0) {
+    return `${minutes} minutes`;
+  } else {
+    return `${seconds} seconds`;
+  }
+}
+export const timeAgo = (inputDate) => {
+  const currentDate = new Date();
+  const pastDate = new Date(inputDate);
+  const diffInMilliseconds = currentDate - pastDate;
+
+  const seconds = Math.floor(diffInMilliseconds / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const hours = Math.floor(minutes / 60);
+  const days = Math.floor(hours / 24);
+  const weeks = Math.floor(days / 7);
+  const months = Math.floor(days / 30);
+  const years = Math.floor(days / 365);
+
+  if (years > 0) {
+    return years === 1 ? "1 year ago" : `${years} years ago`;
+  } else if (months > 0) {
+    return months === 1 ? "1 month ago" : `${months} months ago`;
+  } else if (weeks > 0) {
+    return weeks === 1 ? "1 week ago" : `${weeks} weeks ago`;
+  } else if (days > 0) {
+    return days === 1 ? "1 day ago" : `${days} days ago`;
+  } else if (hours > 0) {
+    return hours === 1 ? "1 hour ago" : `${hours} hours ago`;
+  } else if (minutes > 0) {
+    return minutes === 1 ? "1 minute ago" : `${minutes} minutes ago`;
+  } else {
+    return seconds === 1 ? "1 second ago" : `${seconds} seconds ago`;
+  }
 };
 export const getTextColor = ({ colors, rating, level }) => {
   let level_no = level;
@@ -178,7 +240,11 @@ export const getTextColor = ({ colors, rating, level }) => {
       level_no = 1;
     }
   }
-  let color = level_no == 0 ? colors[0] : colors[(level_no - 1) * 3];
+  let color = colors
+    ? level_no == 0
+      ? colors[0]
+      : colors[(level_no - 1) * 3]
+    : "#ffffff";
   return fillZeros(color);
 };
 export const getBgColor = ({ colors, rating, level }) => {
@@ -192,7 +258,11 @@ export const getBgColor = ({ colors, rating, level }) => {
       level_no = 1;
     }
   }
-  let color = level_no == 0 ? colors[1] : colors[(level_no - 1) * 3 + 1];
+  let color = colors
+    ? level_no == 0
+      ? colors[1]
+      : colors[(level_no - 1) * 3 + 1]
+    : "#ffffff";
   return fillZeros(color);
 };
 

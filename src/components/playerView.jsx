@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { buildPlayerUrl, convertToMinutes, fillZeros } from "./utils/utils";
+import { buildPlayerUrl, fillZeros, timeAgo } from "./utils/utils";
 import { setPlayer } from "../redux/playerSlice";
-import { fetchPrice, fetchVersions } from "../api/apiService";
+import { addToFavourites, fetchVersions } from "../api/apiService";
 import { useQuery } from "@tanstack/react-query";
 import { TRAIT_MAP } from "./utils/traitsvg";
 import { WORK_RATE } from "./utils/constants";
@@ -14,9 +14,12 @@ import InfoCard from "./PlayerViewCards/InfoCard";
 import PlaystyleCard from "./PlayerViewCards/PlaystyleCard";
 import { Helmet } from "react-helmet";
 import { BellIcon, StarIcon } from "@heroicons/react/20/solid";
+import classNames from "classnames";
+import { updateFavouritePlayers } from "../redux/appSlice";
 
 const PlayerView = () => {
   const player = useSelector((state) => state.player.details);
+  const userInfo = useSelector((state) => state.app.userInfo);
   const {
     id,
     base_id,
@@ -44,16 +47,10 @@ const PlayerView = () => {
     guid_no,
     levels,
     colors,
+    latest_price,
+    last_updated,
   } = player;
   const dispatch = useDispatch();
-
-  const { data = {}, isLoading } = useQuery({
-    queryKey: ["fetchPrices", id, futwiz_id],
-    queryFn: () => fetchPrice(id, futwiz_id),
-
-    staleTime: 1000 * 60,
-  });
-  const [latestPriceData, setLatestPriceData] = useState({});
 
   const { data: playerVersions = [] } = useQuery({
     queryKey: ["fetchVersions", base_id, id],
@@ -61,19 +58,6 @@ const PlayerView = () => {
     cacheTime: 1000 * 60 * 100,
     staleTime: Infinity,
   });
-
-  useEffect(() => {
-    if (data.futbin) {
-      let arr = [data.futbin, data.futwiz, data.futgg];
-      const sortedArray = arr.sort((a, b) => {
-        const timeA = convertToMinutes(a.updated);
-        const timeB = convertToMinutes(b.updated);
-        return timeA - timeB; // Sort in descending order
-      });
-      // console.log(sortedArray);
-      setLatestPriceData(sortedArray[0]);
-    }
-  }, [data]);
 
   useEffect(() => {
     // Select all path elements inside the SVG
@@ -103,6 +87,7 @@ const PlayerView = () => {
       </div>
     );
   }
+  const isFavourite = userInfo?.favourite_players?.includes(id);
   return (
     <>
       <Helmet>
@@ -140,18 +125,36 @@ const PlayerView = () => {
                   }}
                 >
                   <img src={CoinsImg} className="mt-1" width={24} />
-                  {latestPriceData["value"]}
+                  {latest_price?.toLocaleString("en-US")}
                 </span>
               </div>
-              {/* <div className="flex gap-2 justify-center mt-2">
-                <div className="bg-slate-800 text-white items-center gap-1 text-sm flex p-2 rounded-full">
-                  Favourite
-                  <StarIcon className="w-4 h-4 text-white" />
+              {userInfo && (
+                <div className="flex gap-2 justify-center mt-2">
+                  <div
+                    onClick={async () => {
+                      let payload = {
+                        player_id: id,
+                        type: isFavourite ? "D" : "I",
+                      };
+                      const res = await addToFavourites(payload);
+                      console.log(res);
+                      dispatch(updateFavouritePlayers(res));
+                    }}
+                    className="bg-slate-800 text-white items-center gap-1 text-sm flex p-2 rounded-full"
+                  >
+                    Favourite
+                    <StarIcon
+                      className={classNames(
+                        "w-4 h-4 ",
+                        isFavourite ? "text-yellow-500" : "text-white"
+                      )}
+                    />
+                  </div>
+                  <div className="bg-slate-800 text-white items-center gap-1 text-sm flex p-2 rounded-full">
+                    Notify <BellIcon className="w-4 h-4 text-white" />
+                  </div>
                 </div>
-                <div className="bg-slate-800 text-white items-center gap-1 text-sm flex p-2 rounded-full">
-                  Notify <BellIcon className="w-4 h-4 text-white" />
-                </div>
-              </div> */}
+              )}
               <div
                 style={{
                   color: text_color,
@@ -348,9 +351,8 @@ const PlayerView = () => {
               <div className="grid lg:grid-cols-[1fr_2fr] gap-2">
                 <div className="bg-gray-900 rounded-md">
                   <PriceCard
-                    isLoading={isLoading}
-                    value={latestPriceData["value"]}
-                    updated={latestPriceData["updated"]}
+                    value={latest_price}
+                    updated={timeAgo(last_updated)}
                   />
                 </div>
                 <div className="bg-gray-900 rounded-md">

@@ -12,7 +12,7 @@ import VersionPopup from "./filterPopups/versionPopup";
 import WorkRatePopup from "./filterPopups/workRatePopup";
 import WeakFootPopup from "./filterPopups/weakfootPopup";
 import { useDispatch, useSelector } from "react-redux";
-import { setFilters } from "../redux/allPlayerSlice";
+import { setFilters, setIsClub } from "../redux/allPlayerSlice";
 import { FILTER_TEXT, WORK_RATE } from "./utils/constants";
 import FilterModal from "./filterPopups/filterModal";
 const tabs = [
@@ -29,6 +29,8 @@ const tabs = [
 
 const AllPlayers = () => {
   const filters = useSelector((state) => state.allPlayers.filters);
+  const isClub = useSelector((state) => state.allPlayers.isClub);
+  const userInfo = useSelector((state) => state.app.userInfo);
   const [modalOpen, setModalOpen] = useState(false);
   const dispatch = useDispatch();
   const {
@@ -36,8 +38,8 @@ const AllPlayers = () => {
     isLoading,
     refetch,
   } = useQuery({
-    queryKey: ["fetchAllPlayers", filters],
-    queryFn: () => fetchAllPlayers(filters),
+    queryKey: ["fetchAllPlayers", filters, isClub],
+    queryFn: () => fetchAllPlayers(filters, isClub),
     enabled: false,
   });
 
@@ -54,7 +56,7 @@ const AllPlayers = () => {
   );
   useEffect(() => {
     refetch();
-  }, [filters]);
+  }, [filters, isClub]);
   const getValues = (key, value) => {
     if (key == "page") {
       return value;
@@ -138,6 +140,22 @@ const AllPlayers = () => {
 
         <div className="hidden md:block">
           <div className="text-white h-full flex flex-col gap-3 bg-slate-800  mt-2 px-4 py-2 rounded">
+            {userInfo && (
+              <label class="grid grid-cols-[1fr_1fr] gap-4">
+                <div className="text-white font-bold">My Club</div>
+                <div className="mx-auto">
+                  <input
+                    type="checkbox"
+                    value=""
+                    onChange={(e) => {
+                      dispatch(setIsClub(e.target.checked));
+                    }}
+                    class="sr-only peer"
+                  />
+                  <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                </div>
+              </label>
+            )}
             {tabs.map((tab) => {
               return (
                 <div>

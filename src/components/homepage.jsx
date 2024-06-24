@@ -3,6 +3,7 @@ import LatestPlayers from "./hometabs/latestPlayers";
 import {
   fetchAllRarities,
   fetchLatestPlayers,
+  fetchPlayersByIds,
   fetchTopRatedPlayers,
 } from "../api/apiService";
 import { useQuery } from "@tanstack/react-query";
@@ -10,12 +11,11 @@ import AllPromos from "./hometabs/allPromos";
 import { useSelector } from "react-redux";
 
 const tabs = ["Latest Players", "Top Rated", "Promos"];
-// const userTabs = ["Favourites"];
-const userTabs = [];
+const userTabs = ["Favourites"];
 const HomePage = () => {
   const [selectedTab, setSelectedTab] = useState("Latest Players");
   const userInfo = useSelector((state) => state.app.userInfo);
-  const { data: players = [], isLoading } = useQuery({
+  const { data: players = [] } = useQuery({
     queryKey: ["fetchLatestPlayers"],
     queryFn: fetchLatestPlayers,
     cacheTime: Infinity,
@@ -31,6 +31,12 @@ const HomePage = () => {
     queryKey: ["fetchAllRarities"],
     queryFn: fetchAllRarities,
     cacheTime: Infinity,
+    staleTime: Infinity,
+  });
+  const { data: favouritePlayers = [] } = useQuery({
+    queryKey: ["favouritePlayers", userInfo?.favourite_players],
+    queryFn: () => fetchPlayersByIds({ ids: userInfo?.favourite_players }),
+    cacheTime: 1000 * 60 * 100,
     staleTime: Infinity,
   });
   return (
@@ -76,6 +82,9 @@ const HomePage = () => {
           <LatestPlayers players={top_rated_players} />
         )}
         {selectedTab == tabs[2] && <AllPromos rarities={all_promos} />}
+        {selectedTab == userTabs[0] && (
+          <LatestPlayers players={favouritePlayers} />
+        )}
       </div>
     </div>
   );

@@ -12,7 +12,7 @@ const PlayerViewWrapper = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     async function fetchData() {
-      if (!id) {
+      if (!id || id !== playerId) {
         const data = await fetchPlayerDetails(playerId);
 
         dispatch(setPlayer({ ...data[0] }));
