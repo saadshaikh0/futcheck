@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import FootballPitchImg from "../../assets/football_pitch.jpg";
+import FootballPitchImg from "../../assets/football_pitch_squad_builder_night.jpg";
 import Formation from "./formation";
 import { fetchBestSquad, fetchBestSquadClub } from "../../api/apiService";
 import { useSelector } from "react-redux";
@@ -118,6 +118,8 @@ const SquadBuilder = () => {
               src={FootballPitchImg}
               className="w-full h-full absolute top-0 left-0 "
             />
+            <div className={`absolute inset-0 bg-black  opacity-40`}></div>
+
             <div className="z-10 absolute w-full h-full">
               {" "}
               {bestSquad && (

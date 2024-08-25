@@ -3,6 +3,31 @@ import { useDispatch } from "react-redux";
 import { setUserInfo } from "../../redux/appSlice";
 import { verifyToken } from "../../api/apiService";
 
+// utils.js
+import store from "../../redux/store";
+import { RARITY, RARITY_GROUP, SBC_REQUIREMENTS } from "./sbc_requirements";
+
+export const getNationName = (id) => {
+  const state = store.getState();
+  const nations = state.app.nations; // Adjust based on your state structure
+  const nation = nations.find((nation) => nation.id === id);
+  return nation ? nation.name : "Unknown";
+};
+
+export const getLeagueName = (id) => {
+  const state = store.getState();
+  const leagues = state.app.leagues; // Adjust based on your state structure
+  const league = leagues.find((league) => league.id === id);
+  return league ? league.name : "Unknown";
+};
+
+export const getTeamName = (id) => {
+  const state = store.getState();
+  const teams = state.app.teams; // Adjust based on your state structure
+  const team = teams.find((team) => team.id === id);
+  return team ? team.name : "Unknown";
+};
+
 export const debounce = (func, delay) => {
   let timeoutId;
   return function (...args) {
@@ -31,6 +56,11 @@ export const fillZeros = (hexcode) => {
   hexcode = "#" + hexcode;
 
   return hexcode;
+};
+
+export const buildChallengeImageUrl = (challengeImageId) => {
+  return `https://www.ea.com/ea-sports-fc/ultimate-team/web-app/content/24B23FDE-7835-41C2-87A2-F453DFDB2E82/2024/fut/sbc/companion/challenges/images/sbc_challenge_image_${challengeImageId}.png
+`;
 };
 
 export const buildPlayerUrl = (guId, eaId, baseId) => {
@@ -314,3 +344,219 @@ export const decodeJWT = (token) => {
 export const capitalizeFirstLetter = (string) => {
   return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
 };
+
+export const convertElgReqToFormat = (reqs) => {
+  const finalArr = [];
+  reqs.forEach((req) => {
+    const { type, eligibilityslot, eligibilityvalue } = req;
+    let obj = finalArr[eligibilityslot - 1] ?? {};
+    switch (type) {
+      case "SCOPE":
+        obj["scope"] = eligibilityvalue;
+        break;
+
+      case "PLAYER_COUNT":
+        obj["playerValue"] = eligibilityvalue;
+        break;
+
+      default:
+        if (type && eligibilityvalue) {
+          obj["type"] = type;
+          obj["value"] = eligibilityvalue;
+        }
+    }
+    finalArr[eligibilityslot - 1] = obj;
+  });
+  return finalArr;
+};
+
+export const convertElgReqToStrings = (req) => {
+  let u = "sbc.requirements.";
+  let c = "scope" + req["scope"];
+  let playerValue = req["playerValue"];
+  let e = (playerValue === 1 ? u + "player." : u + "players.") + c;
+  let str = "";
+  let type = req["type"];
+  let value = req["value"];
+  let i = "";
+  switch (type) {
+    case "ALL_PLAYERS_CHEMISTRY_POINTS":
+      str = u + "team.player-chemistry-points." + c;
+      str = SBC_REQUIREMENTS[str];
+      str = str.replace("%1", value.toString());
+
+      break;
+    case "CHEMISTRY_POINTS":
+      str = u + "team.chemistry-points." + c;
+      str = SBC_REQUIREMENTS[str];
+      str = str.replace("%1", value.toString());
+
+      break;
+    case "TEAM_STAR_RATING":
+      str = u + "team.rating." + c;
+      str = SBC_REQUIREMENTS[str];
+      str = str.replace("%1", value.toString());
+      break;
+    case "TEAM_RATING_1_TO_100":
+      str = u + "team.rating1to100." + c;
+      str = SBC_REQUIREMENTS[str];
+      str = str.replace("%1", value.toString());
+
+      break;
+    case "SAME_NATION_COUNT":
+      str = u + "players." + c;
+      str = SBC_REQUIREMENTS[str];
+      str = str.replace("%1", value.toString()).replace("%2", "Nation");
+      break;
+    case "SAME_LEAGUE_COUNT":
+      str = u + "players." + c;
+      str = SBC_REQUIREMENTS[str];
+      str = str.replace("%1", value.toString()).replace("%2", "League");
+      break;
+    case "SAME_CLUB_COUNT":
+      str = u + "players." + c;
+      str = SBC_REQUIREMENTS[str];
+      str = str.replace("%1", value.toString()).replace("%2", "Club");
+      break;
+    case "NATION_COUNT":
+      str = u + "nations." + c;
+      str = SBC_REQUIREMENTS[str];
+      str = str.replace("%1", value.toString());
+
+      break;
+    case "LEAGUE_COUNT":
+      str = u + "leagues." + c;
+      str = SBC_REQUIREMENTS[str];
+      str = str.replace("%1", value.toString());
+
+      break;
+    case "CLUB_COUNT":
+      str = u + "clubs." + c;
+      str = SBC_REQUIREMENTS[str];
+      str = str.replace("%1", value.toString());
+
+      break;
+    case "NATION_ID":
+      str = e + ".val";
+      str = SBC_REQUIREMENTS[str];
+      str = str.replace("%1", playerValue.toString());
+      i = getNationName(value);
+      str = i + ":" + str;
+
+      break;
+    case "LEAGUE_ID":
+      str = e + ".val";
+      str = SBC_REQUIREMENTS[str];
+      str = str.replace("%1", playerValue.toString());
+      i = getLeagueName(value);
+      str = i + ":" + str;
+      break;
+    case "CLUB_ID":
+      str = e + ".val";
+      str = SBC_REQUIREMENTS[str];
+      str = str.replace("%1", playerValue.toString());
+      i = getTeamName(value);
+      str = i + ":" + str;
+      break;
+    case "LEGEND_COUNT":
+      var h = playerValue === 1 ? "legend." : "legends.";
+      str = u + h + c;
+      str = SBC_REQUIREMENTS[str];
+      str = str.replace("%1", value.toString());
+
+      break;
+    case "PLAYER_RARITY":
+      // let rarityName = getRarityName(value);
+      let rarityName = RARITY[`item.raretype${value}`];
+      str = u + "rare." + c;
+      str = SBC_REQUIREMENTS[str];
+      str = str.replace("%1", playerValue.toString());
+      str = rarityName + ": " + str;
+      break;
+    case "PLAYER_RARITY_GROUP":
+      let rarityGroup = RARITY_GROUP[`Player_Group_${value}`];
+      str = u + "rare." + c;
+      str = SBC_REQUIREMENTS[str];
+      str = str.replace("%1", playerValue.toString());
+      str = rarityGroup + ": " + str;
+      break;
+    case "PLAYER_MAX_OVR":
+      str = u + "rating.max." + c;
+      str = SBC_REQUIREMENTS[str];
+      str = str
+        .replace("%1", playerValue.toString())
+        .replace("%2", value.toString());
+      break;
+    case "PLAYER_MIN_OVR":
+      str = u + "rating.min." + c;
+      str = SBC_REQUIREMENTS[str];
+      str = str
+        .replace("%1", playerValue.toString())
+        .replace("%2", value.toString());
+    case "PLAYER_EXACT_OVR":
+      str = u + "rating.exact." + c;
+      str = SBC_REQUIREMENTS[str];
+      str = str
+        .replace("%1", playerValue.toString())
+        .replace("%2", value.toString());
+
+    case "FIRST_OWNER_PLAYERS_COUNT":
+      str = u + "firstowner." + c;
+      str = SBC_REQUIREMENTS[str];
+      str = str.replace("%1", value.toString());
+      break;
+    default:
+      return "Reached default case building eligibility string: ";
+  }
+  return str;
+};
+
+export function convertFormation(input = "f433") {
+  // Remove the initial 'f'
+  input = input.slice(1);
+  // Use a regular expression to find all numeric characters
+  let numbers = input.match(/\d+/g);
+
+  // Join the numbers with a hyphen
+  let formattedNumbers = numbers[0].split("").join("-");
+
+  // Find any trailing alphabets
+  let alphabets = input.match(/[a-zA-Z]+$/);
+
+  // Concatenate the formatted numbers with the alphabets if any
+  let result = alphabets ? formattedNumbers + alphabets[0] : formattedNumbers;
+
+  return result;
+}
+
+// {
+//   league: "La Liga",
+//   image:
+//     "https://www.ea.com/ea-sports-fc/ultimate-team/web-app/content/24B23FDE-7835-41C2-87A2-F453DFDB2E82/2024/fut/items/images/mobile/leagueLogos/dark/53.png",
+//   leagueid: 53,
+//   Spain: 35,
+//   Argentina: 25,
+//   France: 15,
+//   Portugal: 10,
+// },
+
+export function convertCostDistribution(cost_distribution, leagueIdMap) {
+  let nations = new Set();
+  let data = cost_distribution?.map((val) => {
+    const leagueData = leagueIdMap[val.leagueid];
+    let temp_data = {
+      ...val,
+      league: leagueData?.name,
+      image: leagueData?.guid,
+    };
+    Object.keys(val).forEach((key) => {
+      if (key !== "leagueid") {
+        nations.add(key);
+      }
+    });
+
+    return temp_data;
+  });
+  nations = Array.from(nations);
+  return { data, nations };
+}

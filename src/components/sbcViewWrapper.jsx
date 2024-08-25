@@ -12,7 +12,7 @@ const SbcWrapper = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     async function fetchData() {
-      if (!setid || setid !== sbcId) {
+      if (!setid || setid != sbcId) {
         const data = await fetchSbcDetails(sbcId);
 
         dispatch(setSbc({ ...data }));

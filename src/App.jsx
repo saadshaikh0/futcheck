@@ -20,6 +20,9 @@ import SquadBuilderWrapper from "./components/squadBuilderWrapper";
 import ClubWrapper from "./components/clubWrapper";
 import SbcWrapper from "./components/SbcWrapper";
 import SbcViewWrapper from "./components/sbcViewWrapper";
+import PlayerDashboardWrapper from "./components/playerDashboardWrapper";
+import NewHomePage from "./components/NewHomePage";
+import ChallengeSolutions from "./components/sbc/ChallengeSolution";
 
 ReactGA.initialize("G-RD6LGLC1LD");
 
@@ -44,6 +47,11 @@ function App() {
                   {/* <Ads adClient="ca-pub-4560319877250034" adSlot="1044013921" /> */}
                   <Routes>
                     <Route exact path="/" element={<HomePage />} />
+                    <Route
+                      exact
+                      path="/new_homepage"
+                      element={<NewHomePage />}
+                    />
                     <Route path="/tos" element={<Tos />} />
                     <Route path="/policy" element={<Policy />} />
                     <Route
@@ -55,16 +63,20 @@ function App() {
                       element={<SquadBuilderWrapper />}
                     />
                     <Route path="/my-club/" element={<ClubWrapper />} />
-
+                    <Route
+                      path="/challenge-solution/:challengeId/:solutionId"
+                      element={<ChallengeSolutions />}
+                    />
                     <Route path="/sbc/:sbcId" element={<SbcViewWrapper />} />
                     <Route path="/sbc/" element={<SbcWrapper />} />
+
                     <Route
                       path="/player/:playerId/:playerName"
-                      element={<PlayerViewWrapper />}
+                      element={<PlayerDashboardWrapper />}
                     />
                     <Route path="/players" element={<AllPlayersWrapper />} />
                   </Routes>
-                  <Footer />
+                  {/* <Footer /> */}
                 </Router>
               </div>
             </QueryClientProvider>

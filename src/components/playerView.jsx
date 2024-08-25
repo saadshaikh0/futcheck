@@ -4,7 +4,7 @@ import { buildPlayerUrl, fillZeros, timeAgo } from "./utils/utils";
 import { setPlayer } from "../redux/playerSlice";
 import { addToFavourites, fetchVersions } from "../api/apiService";
 import { useQuery } from "@tanstack/react-query";
-import { TRAIT_MAP } from "./utils/traitsvg";
+import { getTraitIcon, TRAIT_MAP } from "./utils/traitsvg";
 import { WORK_RATE } from "./utils/constants";
 import CoinsImg from "../assets/coins.png";
 import SimilarPlayers from "./similarPlayers";
@@ -268,7 +268,7 @@ const PlayerView = () => {
                           ></path>
                         </svg>
                         <div className="playstyle_icon">
-                          {TRAIT_MAP[playstyle]}
+                          {getTraitIcon(playstyle, text_color)}
                         </div>
                       </div>
                     );

@@ -1,3 +1,4 @@
+import { ChevronDoubleRightIcon } from "@heroicons/react/20/solid";
 import classNames from "classnames";
 import React from "react";
 
@@ -65,6 +66,39 @@ const getBackgroundColorClass = (value) => {
   }
 };
 
+const DiamondSvg = ({ isFill }) => {
+  return (
+    <div className="w-[0.75rem] h-[0.50rem]">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 100 125"
+        x="0px"
+        y="0px"
+        className={isFill ? "fill-blue-400" : "fill-gray-500"}
+      >
+        <path d="M16.65,49.87c7.39-4.19,33.35-40.17,33.35-40.17,0,0,25.96,35.98,33.35,40.17l-33.35,40.44L16.65,49.87Z" />
+      </svg>
+    </div>
+  );
+};
+const ChemistryPoints = ({ fillArr }) => {
+  return (
+    <div className="  cursor-pointer relative">
+      <div className=" h-8 w-8 bg-gray-700 top-0 left-0 z-10  rounded-full shadow-lg"></div>
+
+      <div className=" absolute top-[5px] left-[4px]  ">
+        <div className="flex flex-col justify-center items-center">
+          <DiamondSvg isFill={fillArr[1]} />
+          <div className="flex">
+            <DiamondSvg isFill={fillArr[0]} />
+            <DiamondSvg isFill={fillArr[2]} />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const AttributeCard = ({ group_name, value, stats }) => {
   return (
     <div>
@@ -95,15 +129,28 @@ const AttributeCard = ({ group_name, value, stats }) => {
           </div>
         );
       })}
+      {group_name == "pace" && (
+        <div className="flex flex-col pt-5 text-center">
+          <div className="font-bold bg-gray-600">AcceleRATE</div>
+          <div className="bg-black font-medium">Mostly Explosive</div>
+        </div>
+      )}
     </div>
   );
 };
 
 const StatsCard = ({ stats, attributes }) => {
   return (
-    <div className="text-white p-4">
-      {/* <h1 className="font-bold mb-2">In Game Stats</h1> */}
-      <div className="grid grid-cols-[1fr_1fr] lg:grid-cols-[1fr_1fr_1fr] gap-3 lg:gap-5">
+    <div className="text-white px-4 ">
+      <h2 className="text-md py-3 justify-center font-bold flex items-center gap-3">
+        Apply Chemistry{" "}
+        <div className="rounded-full cursor-pointer bg-gray-700">
+          {" "}
+          <ChevronDoubleRightIcon className="w-6 h-6 " />
+        </div>
+      </h2>
+
+      <div className="grid grid-cols-[1fr_1fr] lg:grid-cols-[1fr_1fr] gap-3 lg:gap-5">
         {Object.keys(IN_GAME_STATS).map((stat, index) => (
           <AttributeCard
             stats={stats}

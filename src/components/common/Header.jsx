@@ -7,7 +7,13 @@ import useFetchUserInfo, {
 import CustomPopover from "./CustomPopover";
 import { usePopper } from "react-popper";
 import { useQuery } from "@tanstack/react-query";
-import { fetchPlayers, verifyToken } from "../../api/apiService";
+import {
+  fetchAllLeagues,
+  fetchAllNations,
+  fetchAllTeams,
+  fetchPlayers,
+  verifyToken,
+} from "../../api/apiService";
 import { useDebounce } from "@uidotdev/usehooks";
 import FutcheckLogo from "../../assets/futcheck_logo.png";
 import { Link } from "react-router-dom";
@@ -18,13 +24,16 @@ import {
 } from "@heroicons/react/20/solid";
 import MobileMenuPopover from "./MobileMenuPopover";
 import { Popover } from "@headlessui/react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Account from "./Account";
+import { setLeagues, setNations, setTeams } from "../../redux/appSlice";
 
 const Navbar = () => {
   let [referenceElement, setReferenceElement] = useState();
   let [popperElement, setPopperElement] = useState();
   let [mobileReferenceElement, setMobileReferenceElement] = useState();
+  const app = useSelector((state) => state.app);
+  const dispatch = useDispatch();
 
   const [open, setOpen] = useState(false);
   const [searchMode, setSearchMode] = useState(false);
@@ -59,11 +68,28 @@ const Navbar = () => {
       setOpen(true);
     }
   }, [players]);
+  useEffect(() => {
+    const getData = async () => {
+      if (app.nations?.length == 0) {
+        const response = await fetchAllNations();
+        dispatch(setNations(response));
+      }
+      if (app.leagues?.length == 0) {
+        const response = await fetchAllLeagues();
+        dispatch(setLeagues(response));
+      }
+      if (app.teams?.length == 0) {
+        const response = await fetchAllTeams();
+        dispatch(setTeams(response));
+      }
+    };
+    getData();
+  }, []);
   return (
     <div>
       <header
         ref={setMobileReferenceElement}
-        class="flex flex-wrap  sm:justify-start sm:flex-nowrap relative z-50 w-full bg-black text-sm py-3 sm:py-0"
+        class="flex flex-wrap  sm:justify-start sm:flex-nowrap relative z-50 w-full bg-black text-sm py-3 sm:py-0 sm:pb-2"
       >
         <nav
           class="relative max-w-[85rem] w-full mx-auto px-4 pt-2 sm:flex sm:items-center sm:justify-between sm:px-6 lg:px-8"

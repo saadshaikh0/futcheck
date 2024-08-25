@@ -231,7 +231,7 @@ export const fetchPlayersByIds = async (payload) => {
 export const fetchBestSquad = async (payload) => {
   try {
     let response = await instance.post("/get_best_squad/", payload, {
-      timeout: 100000,
+      timeout: 200000,
     });
     console.log(response);
     let squadResponse = await fetchPlayersByIds({ ids: response.data.squad });
@@ -291,6 +291,65 @@ export const fetchSbcDetails = async (id) => {
     return data;
   } catch (error) {
     console.error("Error fetching Sbc Details:", error);
+    throw error;
+  }
+};
+
+export const fetchChallengeDetails = async (id) => {
+  try {
+    let response = await instance.get(
+      `/fetch_challenge_details/?challengeId=${id}`,
+      {
+        timeout: 60000,
+      }
+    );
+    let data = response.data;
+
+    return data[0];
+  } catch (error) {
+    console.error("Error fetching Challenge Details:", error);
+    throw error;
+  }
+};
+
+export const fetchChallengeSolutions = async (id) => {
+  try {
+    let response = await instance.get(
+      `/fetch_challenge_solutions/?challengeId=${id}`,
+      {
+        timeout: 60000,
+      }
+    );
+    let data = response.data;
+
+    // Map to an array of promises
+    const solutionsWithSquad = await Promise.all(
+      data.map(async (solution) => {
+        const { details } = solution;
+        let squadResponse = await fetchPlayersByIds({ ids: details.squad });
+        solution.details.squad = squadResponse;
+        return solution;
+      })
+    );
+
+    return solutionsWithSquad;
+  } catch (error) {
+    console.error("Error fetching Challenge solutions:", error);
+    throw error;
+  }
+};
+
+export const fetchPlayerPriceHistory = async (id) => {
+  try {
+    let response = await instance.get(
+      `/get_player_price_history/?player_id=${id}`,
+      {
+        timeout: 60000,
+      }
+    );
+    return response.data?.price_history || [];
+  } catch (error) {
+    console.error("Error fetching Challenge solutions:", error);
     throw error;
   }
 };

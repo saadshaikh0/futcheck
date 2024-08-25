@@ -5,6 +5,9 @@ const initialState = {
   teams: [],
   leagues: [],
   nations: [],
+  nationIdMap: {},
+  leagueIdMap: {},
+  teamIdMap: {},
   userInfo: null,
 };
 
@@ -28,12 +31,24 @@ export const appSlice = createSlice({
     },
     setLeagues: (state, action) => {
       state.leagues = [...action.payload];
+      state.leagueIdMap = action.payload.reduce((map, obj) => {
+        map[obj.id] = obj;
+        return map;
+      }, {});
     },
     setNations: (state, action) => {
       state.nations = [...action.payload];
+      state.nationIdMap = action.payload.reduce((map, obj) => {
+        map[obj.id] = obj;
+        return map;
+      }, {});
     },
     setTeams: (state, action) => {
       state.teams = [...action.payload];
+      state.teamIdMap = action.payload.reduce((map, obj) => {
+        map[obj.id] = obj;
+        return map;
+      }, {});
     },
   },
 });

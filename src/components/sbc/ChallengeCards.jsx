@@ -1,17 +1,38 @@
 import React from "react";
+import {
+  buildChallengeImageUrl,
+  convertElgReqToFormat,
+  convertElgReqToStrings,
+} from "../utils/utils";
+import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setChallenge } from "../../redux/sbcSlice";
 
-const ChallengeCard = () => {
+const ChallengeCard = ({ challengeDetails }) => {
+  const {
+    challengeId,
+    name,
+    description,
+    cost,
+    challengeImageId,
+    eligibilityRequirements,
+    id,
+  } = challengeDetails;
+
+  const dispatch = useDispatch();
+  const formattedReqs = convertElgReqToFormat(eligibilityRequirements);
+  const reqStrings = formattedReqs.map((req) => convertElgReqToStrings(req));
   return (
     <div
       class="
-        bg-dark-gray rounded grid grid-rows-[auto_1fr] items-center !grid-rows-[auto_1fr_40px]     "
+        bg-gray-800 rounded grid text-white grid-rows-[auto_1fr] items-center !grid-rows-[auto_1fr_40px]     "
     >
-      <div class="bg-darker-gray rounded-t py-2 px-4 relative text-white grid grid-cols-[1fr_auto] gap-2">
-        <h2 class="text-xl font-bold">89 Rated Squad</h2>
+      <div class="bg-gray-900 rounded-t py-2 px-4 relative text-white grid grid-cols-[1fr_auto] gap-2">
+        <h2 class="text-xl font-bold">{name}</h2>
         <div class="self-end text-right flex gap-2">
           <div class="bg-gray rounded font-bold text-sm px-2 py-1 flex items-center">
             <span class="price-coin price-coin--size-xs mr-2"></span>
-            111,250
+            {cost}
           </div>
         </div>
       </div>
@@ -20,15 +41,15 @@ const ChallengeCard = () => {
           <a href="/24/squad-builder/5bedfe18-5eec-452f-a645-9d48b236fe1e/">
             {" "}
             <img
-              src="https://game-assets.fut.gg/2024/sbcs/challenges/2101.png?quality=90&amp;width=400"
+              src={buildChallengeImageUrl(challengeImageId)}
               alt="89 Rated Squad"
               loading="lazy"
             />
           </a>{" "}
         </div>
         <div>
-          <p class="text-sm mb-3 font-medium">Exchange an 89 Rated Squad.</p>
-          <div class="bg-darker-gray rounded px-2 py-1  ">
+          <p class="text-sm mb-3 font-medium">{description}</p>
+          <div class="bg-gray-900 rounded px-2 py-1  ">
             <div class="flex justify-between items-center gap-2">
               <div class="grid grid-cols-[17px_1fr] gap-2 items-center">
                 <div class="w-[15px]">
@@ -44,16 +65,23 @@ const ChallengeCard = () => {
             </div>
           </div>
           <div class="mt-2">
-            <p class="text-sm">Min. Team Rating: 89</p>
+            {reqStrings.map((req) => (
+              <p class="text-sm">{req}</p>
+            ))}
           </div>
         </div>
       </div>
-      <a
-        href="/24/squad-builder/5bedfe18-5eec-452f-a645-9d48b236fe1e/"
-        class="uppercase bg-darker-gray rounded font-bold text-white py-2 text-center block hover:bg-orange hover:text-white text-sm h-[40px]"
+      <Link
+        onClickCapture={() => {
+          dispatch(setChallenge(challengeDetails));
+        }}
+        to={`/challenge-solution/${challengeId}/1`}
       >
-        View Solution
-      </a>
+        <span className="uppercase bg-gray-900 rounded font-bold text-white py-2 text-center block hover:bg-orange hover:text-white text-sm h-[40px]">
+          {" "}
+          View Solutions
+        </span>
+      </Link>
     </div>
   );
 };

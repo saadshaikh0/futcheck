@@ -17,7 +17,7 @@ export const calculateRatingsCount = (players) => {
 export const calculateClubValue = (players) => {
   const result = players.reduce(
     (acc, player) => {
-      let player_value = parseInt(player.rating) * 10;
+      let player_value = player.latest_price;
       acc.total_value += player_value;
       if (!player.untradeable) {
         acc.tradeable_value += player_value;

@@ -1,18 +1,18 @@
 import React, { useEffect } from "react";
-import PlayerView from "./playerView";
-import { fetchPlayerDetails } from "../api/apiService";
+import PlayerDashboard from "./PlayerDashboard/playerDashboard";
 import { useDispatch, useSelector } from "react-redux";
+import { fetchPlayerDetails } from "../api/apiService";
 import { setPlayer } from "../redux/playerSlice";
 import { useParams } from "react-router-dom";
 
-const PlayerViewWrapper = () => {
+const PlayerDashboardWrapper = () => {
   const { playerId } = useParams();
   const player = useSelector((state) => state.player.details);
   const { id } = player;
   const dispatch = useDispatch();
   useEffect(() => {
     async function fetchData() {
-      if (!id || id != playerId) {
+      if (!id || id !== playerId) {
         const data = await fetchPlayerDetails(playerId);
 
         dispatch(setPlayer({ ...data[0] }));
@@ -20,7 +20,11 @@ const PlayerViewWrapper = () => {
     }
     fetchData();
   }, [id]);
-  return <PlayerView />;
+
+  if (!id) {
+    return <div>Loading</div>;
+  }
+  return <PlayerDashboard />;
 };
 
-export default PlayerViewWrapper;
+export default PlayerDashboardWrapper;

@@ -19,7 +19,7 @@ const SbcCard = ({ data }) => {
   } = data;
   return (
     <>
-      <div className="bg-gray-800 rounded-md grid grid-rows-[auto_1fr] items-center text-white">
+      <div className="bg-gray-800 h-full rounded-md grid grid-rows-[auto_1fr] items-center text-white">
         <Link to={`/sbc/${setid}`}>
           {" "}
           <div className="bg-gray-900 rounded-t py-2 px-4 relative text-white grid grid-cols-[1fr_auto] gap-2">

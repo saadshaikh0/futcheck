@@ -1,0 +1,9 @@
+/* Add this to your global CSS file */
+.grid-container:hover .row-1 {
+  opacity: 0;
+  height: 0;
+}
+
+.grid-container:hover .row-2 {
+  height: 100%;
+}
