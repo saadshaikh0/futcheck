@@ -218,7 +218,9 @@ export const addToFavourites = async (payload) => {
 };
 export const fetchPlayersByIds = async (payload) => {
   try {
-    const response = await instance.post("/get_players/", payload);
+    const response = await instance.get(
+      `/get_players/?ids=${payload.ids.join(",")}`
+    );
     let data = response.data.data;
     data = addRarityUrl(data, "s");
     return data;
