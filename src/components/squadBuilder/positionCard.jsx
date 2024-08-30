@@ -47,6 +47,6 @@ const PositionCard = ({ player }) => {
   //   text_color: "#fbebab",
   //   bg_color: "#090f23",
   // };
-  return <PlayerCard player={player} />;
+  return <PlayerCard player={player} isMini={true} isHover={true} />;
 };
 export default PositionCard;

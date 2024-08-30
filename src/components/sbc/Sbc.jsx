@@ -28,13 +28,13 @@ const SBC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-10">
             {/* <NewSbcCard data={sbcs[6]} /> */}
             {sbcs
-              .filter((sbc) => {
-                return (
-                  (sbc.endTimeStamp &&
-                    new Date(sbc.endTimeStamp) >= currentTimestamp) ||
-                  sbc.endTime == 0
-                );
-              })
+              // .filter((sbc) => {
+              //   return (
+              //     (sbc.endTimeStamp &&
+              //       new Date(sbc.endTimeStamp) >= currentTimestamp) ||
+              //     sbc.endTime == 0
+              //   );
+              // })
               .map((sbc) => {
                 return <NewSbcCard data={sbc} />;
               })}

@@ -8,6 +8,7 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
+  ReferenceLine,
   Area,
 } from "recharts";
 import { fetchPlayerPriceHistory } from "../../api/apiService";
@@ -46,9 +47,13 @@ const PlayerPriceGraph = ({ id }) => {
             <stop offset="95%" stopColor="#8884d8" stopOpacity={0} />
           </linearGradient>
         </defs>
-        <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
+        {/* <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" /> */}
         <XAxis dataKey="name" />
-        <YAxis />
+        <YAxis
+          type="number"
+          domain={["dataMin", "dataMax"]}
+          padding={{ bottom: 20 }}
+        />
         <Tooltip />
         <Legend />
         <Area
@@ -66,6 +71,7 @@ const PlayerPriceGraph = ({ id }) => {
           dot={{ r: 0 }}
           activeDot={{ r: 8 }}
         />
+        {/* <ReferenceLine y={10000000} stroke="red" strokeDasharray="3 3" /> */}
       </LineChart>
     </ResponsiveContainer>
   );

@@ -123,7 +123,11 @@ const ChallengeSolutions = () => {
                         )}
                         style={{ left, bottom }}
                       >
-                        <PlayerCard player={playerData} />
+                        <PlayerCard
+                          player={playerData}
+                          isMini={true}
+                          isHover={true}
+                        />
                       </div>
                     );
                   })}
