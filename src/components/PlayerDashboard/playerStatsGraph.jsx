@@ -52,10 +52,10 @@ const PlayerStatsGraph = ({ player }) => {
   return (
     <RadarChart
       cx={200}
-      cy={125}
-      outerRadius={85}
+      cy={105}
+      outerRadius={75}
       width={400}
-      height={250}
+      height={200}
       data={data}
     >
       <PolarGrid />

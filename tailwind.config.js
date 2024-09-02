@@ -4,7 +4,16 @@ const plugin = require("tailwindcss/plugin");
 module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      screens: {
+        "scale-125": {
+          raw: "(min-resolution: 120dpi), (min-device-pixel-ratio: 1.25)",
+        },
+        "scale-150": {
+          raw: "(min-resolution: 150dpi), (min-device-pixel-ratio: 1.50)",
+        },
+      },
+    },
   },
 
   plugins: [

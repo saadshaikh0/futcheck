@@ -19,7 +19,7 @@ const SbcView = () => {
     repeatRefreshInterval,
   } = sbc;
   return (
-    <div className="h-full md:min-h-[90vh] bg-slate-950">
+    <div className="h-full  bg-slate-950">
       <div className="w-[90%] mx-auto pt-3">
         <div className="pt-5 flex flex-col justify-center items-center">
           <p

@@ -23,7 +23,7 @@ export default function PlayerCarousel({ player, versions, onPlayerChange }) {
     }
   };
   return (
-    <div className=" h-[46vh] w-[40vw] self-center">
+    <div className="w-full  md:h-[42vh] md:w-[40vw] self-center">
       <Swiper
         effect={"coverflow"}
         grabCursor={true}

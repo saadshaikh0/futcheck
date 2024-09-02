@@ -28,7 +28,7 @@ const PlayerStatCard = ({ player }) => {
           Info
         </div>
       </div>
-      <div>
+      <div className="text-sm md:text-base scale-125:text-sm ">
         {selectedTab == "stats" && (
           <StatsCard stats={player.stats} attributes={player.attributes} />
         )}

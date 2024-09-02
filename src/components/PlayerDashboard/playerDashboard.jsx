@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import PlayerCarousel from "./playerCarousel";
 import PlayerStatsGraph from "./playerStatsGraph";
 import PlayerStatCard from "./playerStatCard";
@@ -9,7 +9,7 @@ import StatsCard from "../PlayerViewCards/StatsCard";
 import PlayerPriceGraph from "./playerPriceGraph";
 import SalesCard from "./SalesCard";
 import { useQuery } from "@tanstack/react-query";
-import { fetchVersions } from "../../api/apiService";
+import { fetchPlayerPriceHistory, fetchVersions } from "../../api/apiService";
 import { useSelector } from "react-redux";
 
 const PlayerDashboard = () => {
@@ -23,14 +23,75 @@ const PlayerDashboard = () => {
   });
 
   const [playerDetails, setPlayerDetails] = useState(player ?? []);
+  const { data: price_history_data = [] } = useQuery({
+    queryKey: ["fetchPlayerPriceHistory", playerDetails.id],
+    queryFn: () => fetchPlayerPriceHistory(playerDetails.id),
+    cacheTime: 1000 * 60 * 100,
+    staleTime: Infinity,
+  });
 
+  const { priceChange, percentageChange } = useMemo(() => {
+    if (price_history_data.length >= 2) {
+      // Extract the last two prices
+      const lastPrice = price_history_data[price_history_data.length - 1].price;
+      const previousPrice =
+        price_history_data[price_history_data.length - 2].price;
+
+      // Calculate the difference
+      const change = lastPrice - previousPrice;
+
+      // Calculate the percentage change
+      const percentage = ((change / previousPrice) * 100).toFixed(2);
+
+      return {
+        priceChange: change,
+        percentageChange: percentage,
+      };
+    }
+
+    return {
+      priceChange: null,
+      percentageChange: null,
+    };
+  }, [price_history_data]);
   const onPlayerChange = (player) => {
     setPlayerDetails(player);
   };
   return (
-    <div className=" h-full md:min-h-[90vh] bg-gray-950">
-      <div className="w-[90%] md:min-h-[90vh] text-center text-white mx-auto pt-3">
-        <div className="grid grid-cols-[1fr_2fr_1fr] gap-5 h-full">
+    <div className=" h-full  bg-gray-950">
+      <div className="w-[90%]  text-center text-white mx-auto pt-3">
+        {/* Mobile Version */}
+        <div className="md:hidden flex flex-col gap-5">
+          <PlayerCarousel
+            player={player}
+            versions={playerVersions}
+            onPlayerChange={onPlayerChange}
+          />
+          <div className="rounded-md">
+            <PriceCard
+              player={playerDetails}
+              priceChange={priceChange}
+              percentageChange={percentageChange}
+            />
+          </div>
+          <div className="bg-gray-900 rounded-md">
+            <PlaystyleCard
+              playstyles={playerDetails.playstyles}
+              iconPlaystyles={playerDetails.playstyle_plus}
+            />
+          </div>
+          <div className="bg-gray-900 rounded-md flex-grow">
+            <PlayerStatCard player={playerDetails} />
+          </div>
+          <div className="bg-gray-900 rounded-md flex-grow">
+            <PlayerPriceGraph data={price_history_data} />
+          </div>
+          <div className="bg-gray-900 rounded-md pb-3 flex-grow">
+            <SalesCard data={price_history_data} />
+          </div>
+        </div>
+        {/* Desktop Version */}
+        <div className="hidden md:grid grid-cols-[1fr_2fr_1fr] gap-5 h-full">
           <div className="flex flex-col gap-4">
             <div className="bg-gray-900 rounded-md">
               <PlaystyleCard
@@ -42,26 +103,32 @@ const PlayerDashboard = () => {
               <PlayerStatCard player={playerDetails} />
             </div>
           </div>
-          <div className="flex flex-col h-full ">
+          <div className="flex flex-col h-full gap-4">
             <PlayerCarousel
               player={player}
               versions={playerVersions}
               onPlayerChange={onPlayerChange}
             />
-            <div className="bg-gray-900 rounded-md">
-              <PlayerPriceGraph id={playerDetails.id} />
+            <div className="bg-gray-900 rounded-md flex-grow">
+              <PlayerPriceGraph data={price_history_data} />
             </div>
           </div>
-          <div className="flex flex-col gap-2">
-            <div className="bg-gray-900 rounded-md">
-              <h2 className="font-bold pt-2">Stats Graph</h2>
-              <PlayerStatsGraph player={playerDetails} />
+          <div className="flex flex-col gap-4 h-full">
+            <div className="flex flex-col gap-2 h-[42vh]">
+              <div className="bg-gray-900 rounded-md pb-2">
+                <h2 className="font-bold pt-2">Stats Graph</h2>
+                <PlayerStatsGraph player={playerDetails} />
+              </div>
+              <div className="rounded-md">
+                <PriceCard
+                  player={playerDetails}
+                  priceChange={priceChange}
+                  percentageChange={percentageChange}
+                />
+              </div>
             </div>
-            <div className="bg-green-700 rounded-md">
-              <PriceCard player={playerDetails} />
-            </div>
-            <div className="bg-gray-900 rounded-md pb-3">
-              <SalesCard player={playerDetails} />
+            <div className="bg-gray-900 rounded-md pb-3 flex-grow">
+              <SalesCard data={price_history_data} />
             </div>
           </div>
         </div>

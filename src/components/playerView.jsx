@@ -82,7 +82,7 @@ const PlayerView = () => {
 
   if (!id) {
     return (
-      <div className="min-h-[90vh] bg-slate-950 ">
+      <div className="h-full bg-slate-950 ">
         <p className="text-white text-center text-2xl absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
           Search Players
         </p>
@@ -101,7 +101,7 @@ const PlayerView = () => {
           } EAFC 24 stats , price , versions and much more.`}
         />
       </Helmet>
-      <div className="h-full md:min-h-[90vh] bg-slate-950">
+      <div className="h-full  bg-slate-950">
         <div className="w-[90%] mx-auto pt-3">
           <div className="pt-5">
             <h1

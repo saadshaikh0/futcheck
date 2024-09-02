@@ -540,6 +540,32 @@ export function convertFormation(input = "f433") {
 //   Portugal: 10,
 // },
 
+export const formatValue = (value) => {
+  const formatWithSuffix = (num, suffix) => {
+    let formattedValue = num.toFixed(3);
+
+    // Ensure the string length is at most 3 characters
+    if (formattedValue.length > 4) {
+      formattedValue = formattedValue.slice(0, 4);
+    }
+
+    // Remove trailing period if present
+    if (formattedValue.endsWith(".")) {
+      formattedValue = formattedValue.slice(0, -1);
+    }
+
+    return `${formattedValue}${suffix}`;
+  };
+
+  if (Math.abs(value) >= 1000000) {
+    return formatWithSuffix(value / 1000000, "M");
+  } else if (Math.abs(value) >= 1000) {
+    return formatWithSuffix(value / 1000, "K");
+  } else {
+    return value.toString();
+  }
+};
+
 export function convertCostDistribution(cost_distribution, leagueIdMap) {
   let nations = new Set();
   let data = cost_distribution?.map((val) => {
@@ -560,3 +586,7 @@ export function convertCostDistribution(cost_distribution, leagueIdMap) {
   nations = Array.from(nations);
   return { data, nations };
 }
+
+// Example usage:
+const result = timeAgo("2024-09-02T01:19:16.301");
+console.log(result); // Output will be something like "5 minutes ago", "1 hour ago", etc.
