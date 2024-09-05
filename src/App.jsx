@@ -41,17 +41,18 @@ function App() {
         <Provider store={store}>
           <GoogleOAuthProvider clientId="55917895097-n505fctm2fkegjjfc66bhcrq4vtsvol3.apps.googleusercontent.com">
             <QueryClientProvider client={queryClient}>
-              <div className="App">
+              <div className="App scrollbar-thin">
                 <Router>
                   <Header />
                   {/* <Ads adClient="ca-pub-4560319877250034" adSlot="1044013921" /> */}
                   <Routes>
-                    <Route exact path="/" element={<HomePage />} />
-                    <Route
+                    {/* <Route exact path="/" element={<HomePage />} /> */}
+                    <Route exact path="/" element={<NewHomePage />} />
+                    {/* <Route
                       exact
                       path="/new_homepage"
                       element={<NewHomePage />}
-                    />
+                    /> */}
                     <Route path="/tos" element={<Tos />} />
                     <Route path="/policy" element={<Policy />} />
                     <Route
@@ -76,7 +77,8 @@ function App() {
                     />
                     <Route path="/players" element={<AllPlayersWrapper />} />
                   </Routes>
-                  {/* <Footer /> */}
+
+                  <Footer />
                 </Router>
               </div>
             </QueryClientProvider>

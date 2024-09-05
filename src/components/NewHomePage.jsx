@@ -21,6 +21,7 @@ import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import NewSbcCard from "./sbc/NewSbcCard";
 import PlayerCard from "./common/PlayerCard";
+import LatestPlayers from "./hometabs/latestPlayers";
 
 const tabs = ["RECENT", "HOT", "IN PACKS"];
 const NewHomePage = () => {
@@ -56,14 +57,21 @@ const NewHomePage = () => {
   };
   const handleSlideChange = (swiper) => {
     const newIndex = swiper.activeIndex;
-
-    setSelectedPlayer(top_rated_players[newIndex]);
+    let players;
+    if (selectedTab == "HOT") {
+      players = top_rated_players;
+    } else if (selectedTab == "IN PACKS") {
+      players = top_rated_players;
+    } else {
+      players = latest_players;
+    }
+    setSelectedPlayer(players[newIndex]);
   };
   const currentTimestamp = new Date();
   const players = selectedTab == "RECENT" ? latest_players : top_rated_players;
   return (
     <div
-      className="home-page relative h-screen w-full bg-fixed"
+      className="home-page relative min-h-[92vh] w-full bg-fixed  "
       style={{
         background: `url(${FOOTBALL_STADIUM_IMAGE}) `,
         backgroundAttachment: "fixed",
@@ -71,9 +79,9 @@ const NewHomePage = () => {
     >
       <div className={`absolute inset-0 bg-black  opacity-70`}></div>
 
-      <div className="w-full h-full absolute z-10">
+      <div className="w-full h-full overflow-auto absolute z-10">
         <div
-          className="text-4xl text-center font-bold pt-10 z-100 grid grid-cols-3 "
+          className="text-xl md:text-4xl text-center font-bold pt-10 z-100 grid grid-cols-3 "
           style={{ color: "white" }}
         >
           {tabs.map((tab) => {
@@ -91,10 +99,8 @@ const NewHomePage = () => {
               </span>
             );
           })}
-          {/* <span className="opacity-50 cursor-pointer"> RECENT</span>
-          <span className="cursor-pointer"> HOT</span>
-          <span className="opacity-50 cursor-pointer"> IN PACKS</span> */}
         </div>
+
         <Swiper
           ref={swiperRef}
           effect={"coverflow"}
@@ -109,20 +115,20 @@ const NewHomePage = () => {
           }}
           pagination={true}
           modules={[EffectCoverflow]}
-          className="h-[75%]"
+          className="h-[calc(90%-15rem)] md:h-[calc(90%-4rem)] hidden md:block"
           onSlideChange={handleSlideChange}
           slideActiveClass="active-slide"
         >
           {players?.map((player) => {
             return (
-              <SwiperSlide>
-                <PlayerCard player={player} isMini={false} />
+              <SwiperSlide key={player.id}>
+                <PlayerCard isHome={true} player={player} isMini={false} />
               </SwiperSlide>
             );
           })}
         </Swiper>
         {selectedPlayer?.id && (
-          <div className="">
+          <div className="hidden md:block">
             <div className="flex flex-col text-white text-2xl text-center font-bold">
               <Link
                 to={`/player/${
@@ -140,7 +146,10 @@ const NewHomePage = () => {
             </div>
           </div>
         )}
-        <div className="w-full bg-white mt-10 px-10 py-5">
+        <div className="mt-4 px-4 md:hidden">
+          <LatestPlayers players={players} />
+        </div>
+        {/* <div className="w-full bg-white mt-10 px-10 py-5">
           <h2 className="text-center text-black font-bold text-4xl">
             AI Powered SBC Solutions
           </h2>
@@ -211,7 +220,7 @@ const NewHomePage = () => {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

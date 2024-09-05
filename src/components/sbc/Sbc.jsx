@@ -20,7 +20,7 @@ const SBC = () => {
     >
       <div className={`fixed inset-0 bg-black  opacity-70`}></div>
 
-      <div className="w-4/5 h-full mx-auto pt-10 relative">
+      <div className="w-4/5 h-full mx-auto pt-10 relative pb-10">
         <div className="flex-col">
           <h2 className="text-white text-2xl font-bold">
             FC 24 Squad Building Challenges

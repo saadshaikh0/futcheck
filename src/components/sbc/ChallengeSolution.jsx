@@ -96,7 +96,12 @@ const ChallengeSolutions = () => {
               }}
             >
               <div className={`absolute inset-0 bg-black  opacity-20`}></div>
-
+              {selectedSolution && (
+                <div className="flex flex-col absolute top-0 right-9 text-white font-bold text-right">
+                  <div>Rating: {selectedSolution.details.rating}</div>
+                  <div>Chemistry: {selectedSolution.details.chemistry}</div>
+                </div>
+              )}
               <div className="flex w-full flex-wrap relative h-full">
                 {selectedSolution &&
                   selectedSolution.details.squad.map((player, index) => {
@@ -111,6 +116,7 @@ const ChallengeSolutions = () => {
                       selectedSolution.details.squad[playerIndex];
                     return (
                       <div
+                        key={playerData.id}
                         className={classNames(
                           "w-32  absolute ",
                           playerData.leagueid ==

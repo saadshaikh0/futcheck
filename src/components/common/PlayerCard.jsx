@@ -12,6 +12,7 @@ const PlayerCard = ({
   isMini = true,
   isDisabled = true,
   isHover = false,
+  isHome = false,
 }) => {
   const {
     id,
@@ -90,7 +91,9 @@ const PlayerCard = ({
             className={classNames(
               "font-bold leading-none  absolute left-[50%] transform -translate-x-1/2 -translate-y-1/2 w-[75.2%] whitespace-nowrap overflow-hidden text-overflow-ellipsis text-center",
               isMini
-                ? "text-1em top-[75%] "
+                ? "text-[0.8em] top-[80%] "
+                : isHome
+                ? "text-[1.4em] scale-125:text-[1.2em] top-[67%] "
                 : "text-[1.4em] scale-125:text-[1em] top-[67%] "
             )}
           >
@@ -98,53 +101,137 @@ const PlayerCard = ({
           </div>
           {!isMini && (
             <div
-              class={`flex flex-row absolute top-[72%] w-[68.8%] font-bold left-1/2 transform -translate-x-1/2 justify-between`}
+              className={`flex flex-row absolute top-[72%] w-[68.8%] font-bold left-1/2 transform -translate-x-1/2 justify-between`}
             >
-              <div class="relative">
-                <div class="font-cruyff-condensed-medium scale-125:text-[0.5em] text-[0.78em] leading-none mb-[0.2em] text-center">
+              <div className="relative">
+                <div
+                  className={classNames(
+                    "font-cruyff-condensed-medium  leading-none mb-[0.2em] text-center",
+                    isHome
+                      ? "scale-125:text-[0.78em] text-[0.78em]"
+                      : "scale-125:text-[0.5em] text-[0.78em]"
+                  )}
+                >
                   PAC
                 </div>
-                <div class="font-cruyff-condensed-numbers-medium text-[1.2em] scale-125:text-[0.8em] leading-none text-center relative">
+                <div
+                  className={classNames(
+                    "font-cruyff-condensed-numbers-medium  leading-none text-center relative",
+                    isHome
+                      ? "text-[1.2em] scale-125:text-[1em]"
+                      : "text-[1.2em] scale-125:text-[0.8em]"
+                  )}
+                >
                   {attributes[0]}
                 </div>
               </div>
-              <div class="relative">
-                <div class="font-cruyff-condensed-medium scale-125:text-[0.5em] text-[0.78em] leading-none mb-[0.2em] text-center">
+              <div className="relative">
+                <div
+                  className={classNames(
+                    "font-cruyff-condensed-medium  leading-none mb-[0.2em] text-center",
+                    isHome
+                      ? "scale-125:text-[0.78em] text-[0.78em]"
+                      : "scale-125:text-[0.5em] text-[0.78em]"
+                  )}
+                >
                   SHO
                 </div>
-                <div class="font-cruyff-condensed-numbers-medium text-[1.2em] scale-125:text-[0.8em] leading-none text-center relative">
+                <div
+                  className={classNames(
+                    "font-cruyff-condensed-numbers-medium  leading-none text-center relative",
+                    isHome
+                      ? "text-[1.2em] scale-125:text-[1em]"
+                      : "text-[1.2em] scale-125:text-[0.8em]"
+                  )}
+                >
                   {attributes[1]}
                 </div>
               </div>
-              <div class="relative">
-                <div class="font-cruyff-condensed-medium scale-125:text-[0.5em] text-[0.78em] leading-none mb-[0.2em] text-center">
+              <div className="relative">
+                <div
+                  className={classNames(
+                    "font-cruyff-condensed-medium  leading-none mb-[0.2em] text-center",
+                    isHome
+                      ? "scale-125:text-[0.78em] text-[0.78em]"
+                      : "scale-125:text-[0.5em] text-[0.78em]"
+                  )}
+                >
                   PAS
                 </div>
-                <div class="font-cruyff-condensed-numbers-medium text-[1.2em] scale-125:text-[0.8em] leading-none text-center relative">
+                <div
+                  className={classNames(
+                    "font-cruyff-condensed-numbers-medium  leading-none text-center relative",
+                    isHome
+                      ? "text-[1.2em] scale-125:text-[1em]"
+                      : "text-[1.2em] scale-125:text-[0.8em]"
+                  )}
+                >
                   {attributes[2]}
                 </div>
               </div>
-              <div class="relative">
-                <div class="font-cruyff-condensed-medium scale-125:text-[0.5em] text-[0.78em] leading-none mb-[0.2em] text-center">
+              <div className="relative">
+                <div
+                  className={classNames(
+                    "font-cruyff-condensed-medium  leading-none mb-[0.2em] text-center",
+                    isHome
+                      ? "scale-125:text-[0.78em] text-[0.78em]"
+                      : "scale-125:text-[0.5em] text-[0.78em]"
+                  )}
+                >
                   DRI
                 </div>
-                <div class="font-cruyff-condensed-numbers-medium text-[1.2em] scale-125:text-[0.8em] leading-none text-center relative">
+                <div
+                  className={classNames(
+                    "font-cruyff-condensed-numbers-medium  leading-none text-center relative",
+                    isHome
+                      ? "text-[1.2em] scale-125:text-[1em]"
+                      : "text-[1.2em] scale-125:text-[0.8em]"
+                  )}
+                >
                   {attributes[3]}
                 </div>
               </div>
-              <div class="relative">
-                <div class="font-cruyff-condensed-medium scale-125:text-[0.5em] text-[0.78em] leading-none mb-[0.2em] text-center">
+              <div className="relative">
+                <div
+                  className={classNames(
+                    "font-cruyff-condensed-medium  leading-none mb-[0.2em] text-center",
+                    isHome
+                      ? "scale-125:text-[0.78em] text-[0.78em]"
+                      : "scale-125:text-[0.5em] text-[0.78em]"
+                  )}
+                >
                   DEF
                 </div>
-                <div class="font-cruyff-condensed-numbers-medium text-[1.2em] scale-125:text-[0.8em] leading-none text-center relative">
+                <div
+                  className={classNames(
+                    "font-cruyff-condensed-numbers-medium  leading-none text-center relative",
+                    isHome
+                      ? "text-[1.2em] scale-125:text-[1em]"
+                      : "text-[1.2em] scale-125:text-[0.8em]"
+                  )}
+                >
                   {attributes[4]}
                 </div>
               </div>
-              <div class="relative">
-                <div class="font-cruyff-condensed-medium scale-125:text-[0.5em] text-[0.78em] leading-none mb-[0.2em] text-center">
+              <div className="relative">
+                <div
+                  className={classNames(
+                    "font-cruyff-condensed-medium  leading-none mb-[0.2em] text-center",
+                    isHome
+                      ? "scale-125:text-[0.78em] text-[0.78em]"
+                      : "scale-125:text-[0.5em] text-[0.78em]"
+                  )}
+                >
                   PHY
                 </div>
-                <div class="font-cruyff-condensed-numbers-medium text-[1.2em] scale-125:text-[0.8em] leading-none text-center relative">
+                <div
+                  className={classNames(
+                    "font-cruyff-condensed-numbers-medium  leading-none text-center relative",
+                    isHome
+                      ? "text-[1.2em] scale-125:text-[1em]"
+                      : "text-[1.2em] scale-125:text-[0.8em]"
+                  )}
+                >
                   {attributes[5]}
                 </div>
               </div>
@@ -161,6 +248,8 @@ const PlayerCard = ({
                 "font-cruyff-condensed-numbers-bold leading-[0.91em]",
                 isMini
                   ? "text-[1.2em] scale-125:text-[1em]"
+                  : isHome
+                  ? "text-[2em] scale-125:text-[1.5em]"
                   : "text-[2em] scale-125:text-[1em]"
               )}
             >
@@ -171,6 +260,8 @@ const PlayerCard = ({
                 "font-cruyff-condensed-medium leading-none  -mt-[0.07em]",
                 isMini
                   ? "text-[0.6em] scale-125:text-[0.4em]"
+                  : isHome
+                  ? "text-[2em] scale-125:text-[0.9em]"
                   : "text-[1em] scale-125:text-[0.8em]"
               )}
             >
@@ -179,7 +270,12 @@ const PlayerCard = ({
           </div>
           <div
             id="playstyle_container"
-            class="absolute left-[9.8%] top-[57.2%] transform -translate-y-1/2 -translate-x-1/2 z-2 text-[0.9em] scale-125:text-[0.7em]  text-transparent"
+            className={classNames(
+              "absolute left-[9.8%] top-[57.2%] transform -translate-y-1/2 -translate-x-1/2 z-2   text-transparent",
+              isHome
+                ? "text-[0.9em] scale-125:text-[0.8em]"
+                : "text-[0.9em] scale-125:text-[0.7em]"
+            )}
           >
             {playstyle_plus.map((playstyle) => {
               return (
@@ -213,7 +309,14 @@ const PlayerCard = ({
           {/* ALternate Positions */}
 
           {!isMini && (
-            <div class="absolute right-[3.96%] top-[28.1%] transform -translate-y-1/2 z-2 w-[14%] text-center flex flex-col gap-[0.1em] text-[0.85em] scale-125:text-[0.6em]">
+            <div
+              className={classNames(
+                "absolute right-[3.96%] top-[28.1%] transform -translate-y-1/2 z-2 w-[14%] text-center flex flex-col gap-[0.1em] ",
+                isHome
+                  ? "text-[0.85em] scale-125:text-[0.7em]"
+                  : "text-[0.85em] scale-125:text-[0.6em]"
+              )}
+            >
               {position.slice(1).map((pos) => (
                 <div
                   class={`rounded-[0.35em] font-medium border-[0.09em] border-[--color] text-[--color] w-full whitespace-nowrap font-cruyff-condensed-medium  flex justify-center leading-[1] pb-[0.04em]  relative`}
@@ -227,7 +330,14 @@ const PlayerCard = ({
             </div>
           )}
           {!isMini && (
-            <div class="absolute font-bold right-[3.96%] top-[58.2%] transform -translate-y-1/2 z-2 w-[12%] text-center flex flex-col gap-[0.1em] text-[0.73em] scale-125:text-[0.5em]">
+            <div
+              className={classNames(
+                "absolute font-bold right-[3.96%] top-[58.2%] transform -translate-y-1/2 z-2 w-[12%] text-center flex flex-col gap-[0.1em] ",
+                isHome
+                  ? "text-[0.73em] scale-125:text-[0.65em]"
+                  : "text-[0.73em] scale-125:text-[0.5em]"
+              )}
+            >
               <div class="p-[0.1em]  rounded-[0.35em] bg-[--fill-color] border-[0.09em] border-[--color] text-[--color] w-full whitespace-nowrap font-cruyff-condensed-medium  flex justify-center leading-[1]  relative">
                 {skill_moves + 1} ★
               </div>
@@ -252,8 +362,10 @@ const PlayerCard = ({
           )}
           <div
             className={classNames(
-              "absolute flex justify-center items-center w-full gap-[0.4em] ",
-              isMini ? "top-[79.8%]" : "top-[81.8%]"
+              "absolute  flex justify-center items-center  gap-[0.4em] ",
+              isMini
+                ? `flex-col bg-white bg-opacity-10 top-[10.8%] right-[10%] py-4`
+                : "top-[81.8%] w-full"
             )}
           >
             <img
@@ -261,7 +373,7 @@ const PlayerCard = ({
               class={classNames(
                 "object-contain",
                 isMini
-                  ? "max-h-[1em] max-w-[1.4em]"
+                  ? " max-h-[1em] max-w-[1.2em]"
                   : "max-h-[1.3em] max-w-[1.7em] scale-125:max-h-[1em] scale-125:max-w-[1em]"
               )}
               alt="Nation"
@@ -271,7 +383,7 @@ const PlayerCard = ({
               class={classNames(
                 "object-contain",
                 isMini
-                  ? "max-h-[1em] max-w-[1.4em]"
+                  ? "hidden max-h-[1em] max-w-[1em]"
                   : "max-h-[1.3em] max-w-[1.7em] scale-125:max-h-[1em] scale-125:max-w-[1em]"
               )}
               alt="League"
@@ -281,7 +393,7 @@ const PlayerCard = ({
               class={classNames(
                 "object-contain",
                 isMini
-                  ? "max-h-[1em] max-w-[1.4em]"
+                  ? " max-h-[1em] max-w-[1.2em]"
                   : "max-h-[1.3em] max-w-[1.7em] scale-125:max-h-[1em] scale-125:max-w-[1em]"
               )}
               alt="Club"

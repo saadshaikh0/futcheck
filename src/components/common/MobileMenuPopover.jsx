@@ -8,9 +8,9 @@ const MobileMenuPopover = () => {
         {" "}
         <p className="text-md font-bold">Players</p>
       </Link>
-      <Link to="/fc_combinations/">
+      <Link to="/sbc/">
         <div className="text-white flex gap-1 items-center  font-bold">
-          Rating <CalculatorIcon className="w-4 h-4 text-white" />
+          SBCs
         </div>
       </Link>
     </div>

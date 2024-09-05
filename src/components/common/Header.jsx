@@ -130,19 +130,19 @@ const Navbar = () => {
                 <div className="text-white  font-bold">Players</div>
               </Link>
               <Link to="/sbc/">
-                <div className="text-white  font-bold">SBC</div>
+                <div className="text-white  font-bold">SBCs</div>
               </Link>
-              <Link to="/squad-builder/">
+              {/* <Link to="/squad-builder/">
                 <div className="text-white  font-bold">Squad Builder</div>
-              </Link>
-              <Link to="/my-club/">
+              </Link> */}
+              {/* <Link to="/my-club/">
                 <div className="text-white  font-bold">Club</div>
               </Link>
               <Link to="/fc_combinations/">
                 <div className="text-white flex gap-1 items-center  font-bold">
                   Rating <CalculatorIcon className="w-4 h-4 text-white" />
                 </div>
-              </Link>
+              </Link> */}
             </div>
             <div className="flex items-center md:hidden ">
               <Popover>
@@ -164,7 +164,9 @@ const Navbar = () => {
                 )}
               </Popover>
             </div>
-            <Account />
+            <div className="ml-2">
+              <Account />
+            </div>
           </div>
         </nav>
       </header>
