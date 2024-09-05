@@ -71,7 +71,7 @@ const NewHomePage = () => {
   const players = selectedTab == "RECENT" ? latest_players : top_rated_players;
   return (
     <div
-      className="home-page relative min-h-[92vh] w-full bg-fixed  "
+      className="home-page relative min-h-[calc(100vh-4rem)] w-full bg-fixed  "
       style={{
         background: `url(${FOOTBALL_STADIUM_IMAGE}) `,
         backgroundAttachment: "fixed",

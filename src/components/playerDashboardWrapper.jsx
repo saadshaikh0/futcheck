@@ -24,7 +24,11 @@ const PlayerDashboardWrapper = () => {
   if (!id) {
     return <div>Loading</div>;
   }
-  return <PlayerDashboard />;
+  return (
+    <div className="min-h-[calc(100vh-4rem)]">
+      <PlayerDashboard />
+    </div>
+  );
 };
 
 export default PlayerDashboardWrapper;

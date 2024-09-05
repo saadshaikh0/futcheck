@@ -89,7 +89,7 @@ const Navbar = () => {
     <div>
       <header
         ref={setMobileReferenceElement}
-        class="flex flex-wrap  sm:justify-start sm:flex-nowrap relative z-50 w-full bg-black text-sm py-3 sm:py-0 sm:pb-2"
+        class="flex flex-wrap h-[4rem]  sm:justify-start sm:flex-nowrap relative z-50 w-full bg-black text-sm py-3 sm:py-0 sm:pb-2"
       >
         <nav
           class="relative max-w-[85rem] w-full mx-auto px-4 pt-2 sm:flex sm:items-center sm:justify-between sm:px-6 lg:px-8"

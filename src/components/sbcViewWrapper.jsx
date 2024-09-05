@@ -20,7 +20,11 @@ const SbcWrapper = () => {
     }
     fetchData();
   }, [setid]);
-  return <SbcView />;
+  return (
+    <div className="min-h-[calc(100vh-4rem)]">
+      <SbcView />
+    </div>
+  );
 };
 
 export default SbcWrapper;
