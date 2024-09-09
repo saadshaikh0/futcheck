@@ -18,6 +18,26 @@ const col7 = "75%";
 const col8 = "85%";
 const col9 = "95%";
 
+const small_row0 = "0%";
+const small_row1 = "10%";
+const small_row2 = "20%";
+const small_row3 = "30%";
+const small_row4 = "40%";
+const small_row5 = "50%";
+const small_row6 = "60%";
+const small_row7 = "70%";
+const small_row8 = "80%";
+const small_col0 = "0%";
+const small_col1 = "5%";
+const small_col2 = "10%";
+const small_col3 = "26%";
+const small_col4 = "36%";
+const small_col5 = "46%";
+const small_col6 = "66%";
+const small_col7 = "65%";
+const small_col8 = "75%";
+const small_col9 = "85%";
+
 export const FORMATIONS_POSITIONS_ABBR = {
   "3-1-4-2": [
     "GK",
@@ -694,5 +714,410 @@ export const FORMATIONS_POSITIONS = {
     [col5, row5], // CM
     [col1, row5], // LM
     [col4, row7], // ST
+  ],
+};
+
+export const FORMATIONS_POSITIONS_SMALL = {
+  "3-1-4-2": [
+    [small_col4, small_row0], // GK
+    [small_col2, small_row2], // CB
+    [small_col4, small_row2], // CB
+    [small_col6, small_row2], // CB
+    [small_col4, small_row4], // CDM
+    [small_col1, small_row6], // RM
+    [small_col3, small_row6], // CM
+    [small_col5, small_row6], // CM
+    [small_col7, small_row6], // LM
+    [small_col3, small_row8], // ST
+    [small_col5, small_row8], // ST
+  ],
+  "3-4-1-2": [
+    [small_col4, small_row0], // GK
+    [small_col2, small_row2], // CB
+    [small_col4, small_row2], // CB
+    [small_col6, small_row2], // CB
+    [small_col7, small_row5], // RM
+    [small_col3, small_row5], // CM
+    [small_col5, small_row5], // CM
+    [small_col1, small_row5], // LM
+    [small_col4, small_row7], // CAM
+    [small_col2, small_row8], // ST
+    [small_col6, small_row8], // ST
+  ],
+  "3-4-2-1": [
+    [small_col4, small_row0], // GK
+    [small_col2, small_row2], // CB
+    [small_col4, small_row2], // CB
+    [small_col6, small_row2], // CB
+    [small_col7, small_row5], // RM
+    [small_col3, small_row5], // CM
+    [small_col5, small_row5], // CM
+    [small_col1, small_row5], // LM
+    [small_col3, small_row7], // CF
+    [small_col5, small_row7], // CF
+    [small_col4, small_row8], // ST
+  ],
+  "3-4-3": [
+    [small_col4, small_row0], // GK
+    [small_col2, small_row2], // CB
+    [small_col4, small_row2], // CB
+    [small_col6, small_row2], // CB
+    [small_col7, small_row5], // RM
+    [small_col3, small_row4], // CM
+    [small_col5, small_row4], // CM
+    [small_col1, small_row5], // LM
+    [small_col6, small_row7], // RW
+    [small_col4, small_row8], // ST
+    [small_col2, small_row7], // LW
+  ],
+  "3-5-2": [
+    [small_col4, small_row0], // GK
+    [small_col2, small_row2], // CB
+    [small_col4, small_row2], // CB
+    [small_col6, small_row2], // CB
+    [small_col3, small_row4], // CDM
+    [small_col5, small_row4], // CDM
+    [small_col7, small_row5], // RM
+    [small_col1, small_row5], // LM
+    [small_col4, small_row6], // CAM
+    [small_col3, small_row8], // ST
+    [small_col5, small_row8], // ST
+  ],
+  "4-1-2-1-2": [
+    [small_col4, small_row0], // GK
+    [small_col7, small_row2], // RB
+    [small_col3, small_row2], // CB
+    [small_col5, small_row2], // CB
+    [small_col1, small_row2], // LB
+    [small_col4, small_row4], // CDM
+    [small_col2, small_row5], // RM
+    [small_col6, small_row5], // LM
+    [small_col4, small_row6], // CAM
+    [small_col3, small_row8], // ST
+    [small_col5, small_row8], // ST
+  ],
+  "4-1-2-1-2a": [
+    [small_col4, small_row0], // GK
+    [small_col7, small_row2], // RB
+    [small_col3, small_row2], // CB
+    [small_col5, small_row2], // CB
+    [small_col1, small_row2], // LB
+    [small_col4, small_row4], // CDM
+    [small_col2, small_row5], // CM
+    [small_col6, small_row5], // CM
+    [small_col4, small_row6], // CAM
+    [small_col3, small_row8], // ST
+    [small_col5, small_row8], // ST
+  ],
+  "4-1-3-2": [
+    [small_col4, small_row0], // GK
+    [small_col7, small_row2], // RB
+    [small_col3, small_row2], // CB
+    [small_col5, small_row2], // CB
+    [small_col1, small_row2], // LB
+    [small_col4, small_row4], // CDM
+    [small_col2, small_row6], // RM
+    [small_col4, small_row6], // CM
+    [small_col6, small_row6], // LM
+    [small_col3, small_row8], // ST
+    [small_col5, small_row8], // ST
+  ],
+  "4-1-4-1": [
+    [small_col4, small_row0], // GK
+    [small_col7, small_row2], // RB
+    [small_col3, small_row2], // CB
+    [small_col5, small_row2], // CB
+    [small_col1, small_row2], // LB
+    [small_col4, small_row4], // CDM
+    [small_col7, small_row6], // RM
+    [small_col3, small_row6], // CM
+    [small_col5, small_row6], // CM
+    [small_col1, small_row6], // LM
+    [small_col4, small_row8], // ST
+  ],
+  "4-2-1-3": [
+    [small_col4, small_row0], // GK
+    [small_col7, small_row2], // RB
+    [small_col3, small_row2], // CB
+    [small_col5, small_row2], // CB
+    [small_col1, small_row2], // LB
+    [small_col2, small_row4], // CDM
+    [small_col6, small_row4], // CDM
+    [small_col4, small_row5], // CAM
+    [small_col6, small_row7], // RW
+    [small_col4, small_row7], // ST
+    [small_col2, small_row7], // LW
+  ],
+  "4-2-2-2": [
+    [small_col4, small_row0], // GK
+    [small_col7, small_row2], // RB
+    [small_col3, small_row2], // CB
+    [small_col5, small_row2], // CB
+    [small_col1, small_row2], // LB
+    [small_col3, small_row4], // CDM
+    [small_col5, small_row4], // CDM
+    [small_col2, small_row6], // CAM
+    [small_col6, small_row6], // CAM
+    [small_col3, small_row8], // ST
+    [small_col5, small_row8], // ST
+  ],
+  "4-2-3-1": [
+    [small_col4, small_row0], // GK
+    [small_col7, small_row2], // RB
+    [small_col3, small_row2], // CB
+    [small_col5, small_row2], // CB
+    [small_col1, small_row2], // LB
+    [small_col3, small_row4], // CDM
+    [small_col5, small_row4], // CDM
+    [small_col2, small_row6], // CAM
+    [small_col4, small_row6], // CAM
+    [small_col6, small_row6], // CAM
+    [small_col4, small_row8], // ST
+  ],
+  "4-2-3-1a": [
+    [small_col4, small_row0], // GK
+    [small_col7, small_row2], // RB
+    [small_col3, small_row2], // CB
+    [small_col5, small_row2], // CB
+    [small_col1, small_row2], // LB
+    [small_col3, small_row4], // CDM
+    [small_col5, small_row4], // CDM
+    [small_col1, small_row6], // RM
+    [small_col7, small_row6], // LM
+    [small_col4, small_row6], // CAM
+    [small_col4, small_row8], // ST
+  ],
+  "4-2-4": [
+    [small_col4, small_row0], // GK
+    [small_col7, small_row2], // RB
+    [small_col3, small_row2], // CB
+    [small_col5, small_row2], // CB
+    [small_col1, small_row2], // LB
+    [small_col7, small_row5], // RM
+    [small_col4, small_row5], // CM
+    [small_col7, small_row5], // CM
+    [small_col8, small_row5], // RW
+    [small_col3, small_row8], // ST
+    [small_col5, small_row8], // ST
+  ],
+  "4-3-1-2": [
+    [small_col4, small_row0], // GK
+    [small_col7, small_row2], // RB
+    [small_col3, small_row2], // CB
+    [small_col5, small_row2], // CB
+    [small_col1, small_row2], // LB
+    [small_col2, small_row5], // CM
+    [small_col4, small_row5], // CM
+    [small_col6, small_row5], // CM
+    [small_col4, small_row6], // CAM
+    [small_col3, small_row8], // ST
+    [small_col5, small_row8], // ST
+  ],
+  "4-3-2-1": [
+    [small_col4, small_row0], // GK
+    [small_col7, small_row2], // RB
+    [small_col3, small_row2], // CB
+    [small_col5, small_row2], // CB
+    [small_col1, small_row2], // LB
+    [small_col2, small_row5], // CM
+    [small_col4, small_row5], // CM
+    [small_col6, small_row5], // CM
+    [small_col2, small_row7], // CF
+    [small_col6, small_row7], // CF
+    [small_col4, small_row8], // ST
+  ],
+  "4-3-3": [
+    [small_col4, small_row1], // GK
+    [small_col7, small_row3], // RB
+    [small_col3, small_row3], // CB
+    [small_col5, small_row3], // CB
+    [small_col1, small_row3], // LB
+    [small_col2, small_row5], // CM
+    [small_col4, small_row5], // CM
+    [small_col6, small_row5], // CM
+    [small_col6, small_row7], // RW
+    [small_col4, small_row7], // ST
+    [small_col2, small_row7], // LW
+  ],
+  "4-3-3a": [
+    [small_col4, small_row0], // GK
+    [small_col7, small_row2], // RB
+    [small_col3, small_row2], // CB
+    [small_col5, small_row2], // CB
+    [small_col1, small_row2], // LB
+    [small_col2, small_row5], // CDM
+    [small_col4, small_row5], // CM
+    [small_col6, small_row5], // CM
+    [small_col6, small_row7], // RW
+    [small_col4, small_row7], // ST
+    [small_col2, small_row7], // LW
+  ],
+  "4-3-3b": [
+    [small_col4, small_row0], // GK
+    [small_col7, small_row2], // RB
+    [small_col3, small_row2], // CB
+    [small_col5, small_row2], // CB
+    [small_col1, small_row2], // LB
+    [small_col2, small_row5], // CDM
+    [small_col6, small_row5], // CDM
+    [small_col4, small_row5], // CM
+    [small_col6, small_row7], // RW
+    [small_col4, small_row7], // ST
+    [small_col2, small_row7], // LW
+  ],
+  "4-3-3c": [
+    [small_col4, small_row0], // GK
+    [small_col7, small_row2], // RB
+    [small_col3, small_row2], // CB
+    [small_col5, small_row2], // CB
+    [small_col1, small_row2], // LB
+    [small_col2, small_row5], // CM
+    [small_col4, small_row5], // CM
+    [small_col6, small_row5], // CAM
+    [small_col6, small_row7], // RW
+    [small_col4, small_row7], // ST
+    [small_col2, small_row7], // LW
+  ],
+  "4-4-1-1": [
+    [small_col4, small_row0], // GK
+    [small_col7, small_row2], // RB
+    [small_col3, small_row2], // CB
+    [small_col5, small_row2], // CB
+    [small_col1, small_row2], // LB
+    [small_col7, small_row5], // RM
+    [small_col3, small_row5], // CM
+    [small_col5, small_row5], // CM
+    [small_col1, small_row5], // LM
+    [small_col4, small_row6], // CF
+    [small_col4, small_row8], // ST
+  ],
+  "4-4-1-1a": [
+    [small_col4, small_row0], // GK
+    [small_col7, small_row2], // RB
+    [small_col3, small_row2], // CB
+    [small_col5, small_row2], // CB
+    [small_col1, small_row2], // LB
+    [small_col7, small_row5], // RM
+    [small_col3, small_row5], // CM
+    [small_col5, small_row5], // CM
+    [small_col1, small_row5], // LM
+    [small_col4, small_row6], // CAM
+    [small_col4, small_row8], // ST
+  ],
+  "4-4-2": [
+    [small_col4, small_row0], // GK
+    [small_col7, small_row2], // RB
+    [small_col3, small_row2], // CB
+    [small_col5, small_row2], // CB
+    [small_col1, small_row2], // LB
+    [small_col7, small_row5], // RM
+    [small_col3, small_row5], // CM
+    [small_col5, small_row5], // CM
+    [small_col1, small_row5], // LM
+    [small_col3, small_row8], // ST
+    [small_col5, small_row8], // ST
+  ],
+  "4-4-2a": [
+    [small_col4, small_row0], // GK
+    [small_col7, small_row2], // RB
+    [small_col3, small_row2], // CB
+    [small_col5, small_row2], // CB
+    [small_col1, small_row2], // LB
+    [small_col7, small_row5], // RM
+    [small_col3, small_row4], // CM
+    [small_col5, small_row4], // CM
+    [small_col1, small_row5], // LM
+    [small_col3, small_row8], // ST
+    [small_col5, small_row8], // ST
+  ],
+  "4-5-1": [
+    [small_col4, small_row0], // GK
+    [small_col7, small_row2], // RB
+    [small_col3, small_row2], // CB
+    [small_col5, small_row2], // CB
+    [small_col1, small_row2], // LB
+    [small_col7, small_row5], // RM
+    [small_col4, small_row5], // CM
+    [small_col2, small_row7], // CAM
+    [small_col6, small_row7], // CAM
+    [small_col1, small_row5], // LM
+    [small_col4, small_row8], // ST
+  ],
+  "4-5-1a": [
+    [small_col4, small_row0], // GK
+    [small_col7, small_row2], // RB
+    [small_col3, small_row2], // CB
+    [small_col5, small_row2], // CB
+    [small_col1, small_row2], // LB
+    [small_col7, small_row5], // RM
+    [small_col3, small_row5], // CM
+    [small_col5, small_row5], // CM
+    [small_col1, small_row5], // LM
+    [small_col4, small_row8], // ST
+  ],
+  "5-2-1-2": [
+    [small_col4, small_row0], // GK
+    [small_col1, small_row2], // CB
+    [small_col3, small_row2], // CB
+    [small_col5, small_row2], // CB
+    [small_col7, small_row2], // RB
+    [small_col1, small_row4], // LB
+    [small_col2, small_row6], // CM
+    [small_col6, small_row6], // CM
+    [small_col4, small_row7], // CAM
+    [small_col3, small_row8], // ST
+    [small_col5, small_row8], // ST
+  ],
+  "5-2-2-1": [
+    [small_col4, small_row0], // GK
+    [small_col1, small_row2], // CB
+    [small_col3, small_row2], // CB
+    [small_col5, small_row2], // CB
+    [small_col7, small_row2], // RB
+    [small_col1, small_row4], // LB
+    [small_col2, small_row6], // CM
+    [small_col6, small_row6], // CM
+    [small_col6, small_row7], // RW
+    [small_col4, small_row7], // ST
+    [small_col2, small_row7], // LW
+  ],
+  "5-2-3": [
+    [small_col4, small_row0], // GK
+    [small_col1, small_row2], // CB
+    [small_col3, small_row2], // CB
+    [small_col5, small_row2], // CB
+    [small_col7, small_row2], // RB
+    [small_col1, small_row4], // LB
+    [small_col2, small_row6], // CM
+    [small_col6, small_row6], // CM
+    [small_col6, small_row7], // RW
+    [small_col4, small_row7], // ST
+    [small_col2, small_row7], // LW
+  ],
+  "5-3-2": [
+    [small_col4, small_row1], // GK
+    [small_col0, small_row3], // CB
+    [small_col2, small_row3], // CB
+    [small_col4, small_row3], // CB
+    [small_col6, small_row3], // RB
+    [small_col8, small_row3], // LB
+    [small_col2, small_row5], // CDM
+    [small_col4, small_row5], // CM
+    [small_col6, small_row5], // CM
+    [small_col3, small_row7], // ST
+    [small_col5, small_row7], // ST
+  ],
+  "5-4-1a": [
+    [small_col4, small_row1], // GK
+    [small_col0, small_row3], // CB
+    [small_col2, small_row3], // CB
+    [small_col4, small_row3], // CB
+    [small_col6, small_row3], // RB
+    [small_col8, small_row3], // LB
+    [small_col7, small_row5], // RM
+    [small_col3, small_row5], // CM
+    [small_col5, small_row5], // CM
+    [small_col1, small_row5], // LM
+    [small_col4, small_row7], // ST
   ],
 };

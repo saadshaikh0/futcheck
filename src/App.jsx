@@ -78,7 +78,7 @@ function App() {
                     <Route path="/players" element={<AllPlayersWrapper />} />
                   </Routes>
 
-                  <Footer />
+                  {/* <Footer /> */}
                 </Router>
               </div>
             </QueryClientProvider>

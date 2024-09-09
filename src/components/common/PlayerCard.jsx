@@ -13,6 +13,7 @@ const PlayerCard = ({
   isDisabled = true,
   isHover = false,
   isHome = false,
+  isSuperMini = false,
 }) => {
   const {
     id,
@@ -272,7 +273,9 @@ const PlayerCard = ({
             id="playstyle_container"
             className={classNames(
               "absolute left-[9.8%] top-[57.2%] transform -translate-y-1/2 -translate-x-1/2 z-2   text-transparent",
-              isHome
+              isSuperMini
+                ? "hidden"
+                : isHome
                 ? "text-[0.9em] scale-125:text-[0.8em]"
                 : "text-[0.9em] scale-125:text-[0.7em]"
             )}
@@ -363,7 +366,9 @@ const PlayerCard = ({
           <div
             className={classNames(
               "absolute  flex justify-center items-center  gap-[0.4em] ",
-              isMini
+              isSuperMini
+                ? "flex-col bg-white bg-opacity-10 top-[8%] right-[8%] py-2"
+                : isMini
                 ? `flex-col bg-white bg-opacity-10 top-[10.8%] right-[10%] py-4`
                 : "top-[81.8%] w-full"
             )}
@@ -372,7 +377,9 @@ const PlayerCard = ({
               src={nation_url}
               class={classNames(
                 "object-contain",
-                isMini
+                isSuperMini
+                  ? "max-h-[0.5em] max-w-[0.6em]"
+                  : isMini
                   ? " max-h-[1em] max-w-[1.2em]"
                   : "max-h-[1.3em] max-w-[1.7em] scale-125:max-h-[1em] scale-125:max-w-[1em]"
               )}
@@ -382,7 +389,9 @@ const PlayerCard = ({
               src={league_url}
               class={classNames(
                 "object-contain",
-                isMini
+                isSuperMini
+                  ? "max-h-[0.5em] max-w-[0.6em]"
+                  : isMini
                   ? "hidden max-h-[1em] max-w-[1em]"
                   : "max-h-[1.3em] max-w-[1.7em] scale-125:max-h-[1em] scale-125:max-w-[1em]"
               )}
@@ -392,7 +401,9 @@ const PlayerCard = ({
               src={`https://www.ea.com/ea-sports-fc/ultimate-team/web-app/content/24B23FDE-7835-41C2-87A2-F453DFDB2E82/2024/fut/items/images/mobile/clubs/dark/${teamid}.png`}
               class={classNames(
                 "object-contain",
-                isMini
+                isSuperMini
+                  ? "max-h-[0.5em] max-w-[0.6em]"
+                  : isMini
                   ? " max-h-[1em] max-w-[1.2em]"
                   : "max-h-[1.3em] max-w-[1.7em] scale-125:max-h-[1em] scale-125:max-w-[1em]"
               )}

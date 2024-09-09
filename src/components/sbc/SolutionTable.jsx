@@ -13,6 +13,54 @@ import { useSelector } from "react-redux";
 
 const columnHelper = createColumnHelper();
 
+const mini_columns = [
+  columnHelper.accessor("number", {
+    enableSorting: false,
+    header: "Solution",
+    id: "number",
+    cell: (info) => <>{info.getValue().split(" ")[1]}</>,
+    footer: (info) => info.column.id,
+  }),
+  columnHelper.accessor((row) => row.league, {
+    id: "league",
+    cell: (info) => (
+      <div className="flex gap-2 py-4 ml-2 items-center justify-start">
+        <img
+          className="w-7 "
+          src={`https://www.ea.com/ea-sports-fc/ultimate-team/web-app/content/24B23FDE-7835-41C2-87A2-F453DFDB2E82/2024/fut/items/images/mobile/leagueLogos/dark/${info.row.original.leagueid}.png`}
+        />{" "}
+      </div>
+    ),
+    header: () => <span>League</span>,
+  }),
+  columnHelper.accessor("nation", {
+    id: "nation",
+    header: () => "Nation",
+    cell: (info) => (
+      <div className="flex gap-2 py-4 items-center justify-start ml-2">
+        <img
+          className="w-7 "
+          src={`https://www.ea.com/ea-sports-fc/ultimate-team/web-app/content/24B23FDE-7835-41C2-87A2-F453DFDB2E82/2024/fut/items/images/mobile/flags/list/${info.row.original.nationid}.png`}
+        />{" "}
+      </div>
+    ),
+  }),
+
+  columnHelper.accessor("cost", {
+    id: "cost",
+    header: "Total Cost",
+    enableSorting: true,
+    cell: (info) => (
+      <>
+        <span className="flex items-center gap-2 text-md ">
+          <img className="w-5" src={CoinsImg} />
+          {info.getValue()}
+        </span>
+      </>
+    ),
+  }),
+];
+
 const columns = [
   columnHelper.accessor("number", {
     enableSorting: false,
@@ -69,12 +117,13 @@ function SolutionTable({
   challengeSolutions,
   UpdateSquad,
   selectedSolutionId,
+  isSuperMini,
 }) {
   const [data, setData] = React.useState([]);
   const { nationIdMap, leagueIdMap } = useSelector((state) => state.app);
   const table = useReactTable({
     data,
-    columns,
+    columns: isSuperMini ? mini_columns : columns,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
   });

@@ -22,6 +22,7 @@ import { useDispatch } from "react-redux";
 import NewSbcCard from "./sbc/NewSbcCard";
 import PlayerCard from "./common/PlayerCard";
 import LatestPlayers from "./hometabs/latestPlayers";
+import MarqueeSbcCard from "./common/MarqueeSbcCard";
 
 const tabs = ["RECENT", "HOT", "IN PACKS"];
 const NewHomePage = () => {
@@ -71,7 +72,7 @@ const NewHomePage = () => {
   const players = selectedTab == "RECENT" ? latest_players : top_rated_players;
   return (
     <div
-      className="home-page relative min-h-[calc(100vh-4rem)] w-full bg-fixed  "
+      className="home-page relative min-h-[calc(100vh-4rem)] flex-grow  w-full bg-fixed  "
       style={{
         background: `url(${FOOTBALL_STADIUM_IMAGE}) `,
         backgroundAttachment: "fixed",
@@ -79,7 +80,7 @@ const NewHomePage = () => {
     >
       <div className={`absolute inset-0 bg-black  opacity-70`}></div>
 
-      <div className="w-full h-full overflow-auto absolute z-10">
+      <div className="w-full h-full  absolute z-10">
         <div
           className="text-xl md:text-4xl text-center font-bold pt-10 z-100 grid grid-cols-3 "
           style={{ color: "white" }}
@@ -149,46 +150,56 @@ const NewHomePage = () => {
         <div className="mt-4 px-4 md:hidden">
           <LatestPlayers players={players} />
         </div>
-        {/* <div className="w-full bg-white mt-10 px-10 py-5">
-          <h2 className="text-center text-black font-bold text-4xl">
-            AI Powered SBC Solutions
-          </h2>
-          <div className="grid grid-cols-2 mt-10 gap-5">
-            <div>
-              <p className="text-2xl font-medium">
-                At Futcheck, we leverage cutting-edge AI algorithms to
-                revolutionize the way you complete Squad Building Challenges
-                (SBCs). Our advanced system meticulously analyzes player data,
-                market trends, and squad requirements to formulate the most
-                cost-effective squad solutions. This ensures you can swiftly and
-                effortlessly complete SBCs without the usual hassle and expense.
-                Say goodbye to the tedious task of scouring the market for the
-                best deals; our AI does the heavy lifting for you, allowing you
-                to focus on enjoying the game. Experience the convenience and
-                efficiency of AI-powered SBC solutions, exclusively at Futcheck.
-              </p>
-              <div className="flex justify-center">
-                <p className="text-center mt-10 px-3 py-2 cursor-pointer rounded-md bg-black text-white">
-                  Show All SBCs
-                </p>
+        <div className="w-full bg-gray-950 mt-10 px-10 py-5 text-white">
+          <h2 className="text-center  font-bold text-4xl">Latest SBCs</h2>
+          <div className=" mt-5 gap-5">
+            <div className="p-5 px-0 overflow-hidden w-full  h-[35vh] bg-gray-950 rounded-md relative">
+              <div className="marquee  text-white   gap-8">
+                {sbcs
+
+                  .filter((sbc) => {
+                    return (
+                      (sbc.endTimeStamp &&
+                        new Date(sbc.endTimeStamp) >= currentTimestamp) ||
+                      sbc.endTime == 0
+                    );
+                  })
+                  .slice(0, 5)
+                  .map((sbc, index) => {
+                    return (
+                      <div className=" ">
+                        <MarqueeSbcCard data={sbc} />
+                      </div>
+                    );
+                  })}
+                {sbcs
+
+                  .filter((sbc) => {
+                    return (
+                      (sbc.endTimeStamp &&
+                        new Date(sbc.endTimeStamp) >= currentTimestamp) ||
+                      sbc.endTime == 0
+                    );
+                  })
+                  .slice(0, 5)
+                  .map((sbc, index) => {
+                    return (
+                      <div className="">
+                        <MarqueeSbcCard data={sbc} />
+                      </div>
+                    );
+                  })}
               </div>
             </div>
-            <div className="p-5 grid grid-cols-2 gap-4 overflow-auto h-[40vh] bg-gray-950 rounded-md scrollbar-thin">
-              {sbcs
-                .filter((sbc) => {
-                  return (
-                    (sbc.endTimeStamp &&
-                      new Date(sbc.endTimeStamp) >= currentTimestamp) ||
-                    sbc.endTime == 0
-                  );
-                })
-                .map((sbc) => {
-                  return <NewSbcCard data={sbc} />;
-                })}
+          </div>
+          <div className="flex justify-center items-center ">
+            <div className="bg-white text-black px-4 py-2 mt-5 font-bold rounded-lg cursor-pointer">
+              {" "}
+              Show All SBCs
             </div>
           </div>
         </div>
-        <div
+        {/* <div
           className="w-full  relative pb-10"
           style={{
             background: `url(${MY_CLUB_BG}) `,
