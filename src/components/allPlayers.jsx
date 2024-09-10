@@ -74,7 +74,7 @@ const AllPlayers = () => {
   };
   return (
     <div className="relative w-full md:w-4/5 mx-auto mt-5 md:mt-10 px-5">
-      <div>
+      <div className="mb-4">
         <h2 className="text-white text-xl  md:text-3xl font-medium">
           EAFC 24 Players Database
         </h2>
@@ -141,7 +141,7 @@ const AllPlayers = () => {
         )}
 
         <div className="hidden md:block">
-          <div className="text-white h-full flex flex-col gap-3 bg-slate-800  mt-2 px-4 py-2 rounded">
+          <div className="text-white h-full flex flex-col gap-3 bg-slate-800   px-4 py-2 rounded">
             {userInfo && (
               <label class="grid grid-cols-[1fr_1fr] gap-4">
                 <div className="text-white font-bold">My Club</div>
