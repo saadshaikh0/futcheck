@@ -14,6 +14,7 @@ const PlayerCard = ({
   isHover = false,
   isHome = false,
   isSuperMini = false,
+  isAllPlayers = false,
 }) => {
   const {
     id,
@@ -55,6 +56,7 @@ const PlayerCard = ({
       to={`/player/${id}/${name?.replace(/\s+/g, "-")}`}
     >
       <div
+        key={id}
         className={classNames(
           isHover
             ? "flex group hover:scale-150 hover:z-20 hover:relative flex-col w-full items-center"
@@ -95,6 +97,8 @@ const PlayerCard = ({
                 ? "text-[0.8em] top-[80%] "
                 : isHome
                 ? "text-[1.4em] scale-125:text-[1.2em] top-[67%] "
+                : isAllPlayers
+                ? "text-[1em] scale-125:text-[1.2em] top-[67%] "
                 : "text-[1.4em] scale-125:text-[1em] top-[67%] "
             )}
           >
@@ -102,7 +106,7 @@ const PlayerCard = ({
           </div>
           {!isMini && (
             <div
-              className={`flex flex-row absolute top-[72%] w-[68.8%] font-bold left-1/2 transform -translate-x-1/2 justify-between`}
+              className={`flex flex-row absolute top-[71%] w-[68.8%] font-bold left-1/2 transform -translate-x-1/2 justify-between`}
             >
               <div className="relative">
                 <div
@@ -110,6 +114,8 @@ const PlayerCard = ({
                     "font-cruyff-condensed-medium  leading-none mb-[0.2em] text-center",
                     isHome
                       ? "scale-125:text-[0.78em] text-[0.78em]"
+                      : isAllPlayers
+                      ? "scale-125:text-[0.78em] text-[0.6em]"
                       : "scale-125:text-[0.5em] text-[0.78em]"
                   )}
                 >
@@ -120,6 +126,8 @@ const PlayerCard = ({
                     "font-cruyff-condensed-numbers-medium  leading-none text-center relative",
                     isHome
                       ? "text-[1.2em] scale-125:text-[1em]"
+                      : isAllPlayers
+                      ? "text-[0.7em] scale-125:text-[0.6em]"
                       : "text-[1.2em] scale-125:text-[0.8em]"
                   )}
                 >
@@ -132,6 +140,8 @@ const PlayerCard = ({
                     "font-cruyff-condensed-medium  leading-none mb-[0.2em] text-center",
                     isHome
                       ? "scale-125:text-[0.78em] text-[0.78em]"
+                      : isAllPlayers
+                      ? "scale-125:text-[0.78em] text-[0.6em]"
                       : "scale-125:text-[0.5em] text-[0.78em]"
                   )}
                 >
@@ -142,6 +152,8 @@ const PlayerCard = ({
                     "font-cruyff-condensed-numbers-medium  leading-none text-center relative",
                     isHome
                       ? "text-[1.2em] scale-125:text-[1em]"
+                      : isAllPlayers
+                      ? "text-[0.7em] scale-125:text-[0.6em]"
                       : "text-[1.2em] scale-125:text-[0.8em]"
                   )}
                 >
@@ -154,6 +166,8 @@ const PlayerCard = ({
                     "font-cruyff-condensed-medium  leading-none mb-[0.2em] text-center",
                     isHome
                       ? "scale-125:text-[0.78em] text-[0.78em]"
+                      : isAllPlayers
+                      ? "scale-125:text-[0.78em] text-[0.6em]"
                       : "scale-125:text-[0.5em] text-[0.78em]"
                   )}
                 >
@@ -164,6 +178,8 @@ const PlayerCard = ({
                     "font-cruyff-condensed-numbers-medium  leading-none text-center relative",
                     isHome
                       ? "text-[1.2em] scale-125:text-[1em]"
+                      : isAllPlayers
+                      ? "text-[0.7em] scale-125:text-[0.6em]"
                       : "text-[1.2em] scale-125:text-[0.8em]"
                   )}
                 >
@@ -176,6 +192,8 @@ const PlayerCard = ({
                     "font-cruyff-condensed-medium  leading-none mb-[0.2em] text-center",
                     isHome
                       ? "scale-125:text-[0.78em] text-[0.78em]"
+                      : isAllPlayers
+                      ? "scale-125:text-[0.78em] text-[0.6em]"
                       : "scale-125:text-[0.5em] text-[0.78em]"
                   )}
                 >
@@ -186,6 +204,8 @@ const PlayerCard = ({
                     "font-cruyff-condensed-numbers-medium  leading-none text-center relative",
                     isHome
                       ? "text-[1.2em] scale-125:text-[1em]"
+                      : isAllPlayers
+                      ? "text-[0.7em] scale-125:text-[0.6em]"
                       : "text-[1.2em] scale-125:text-[0.8em]"
                   )}
                 >
@@ -198,6 +218,8 @@ const PlayerCard = ({
                     "font-cruyff-condensed-medium  leading-none mb-[0.2em] text-center",
                     isHome
                       ? "scale-125:text-[0.78em] text-[0.78em]"
+                      : isAllPlayers
+                      ? "scale-125:text-[0.78em] text-[0.6em]"
                       : "scale-125:text-[0.5em] text-[0.78em]"
                   )}
                 >
@@ -208,6 +230,8 @@ const PlayerCard = ({
                     "font-cruyff-condensed-numbers-medium  leading-none text-center relative",
                     isHome
                       ? "text-[1.2em] scale-125:text-[1em]"
+                      : isAllPlayers
+                      ? "text-[0.7em] scale-125:text-[0.6em]"
                       : "text-[1.2em] scale-125:text-[0.8em]"
                   )}
                 >
@@ -220,6 +244,8 @@ const PlayerCard = ({
                     "font-cruyff-condensed-medium  leading-none mb-[0.2em] text-center",
                     isHome
                       ? "scale-125:text-[0.78em] text-[0.78em]"
+                      : isAllPlayers
+                      ? "scale-125:text-[0.78em] text-[0.6em]"
                       : "scale-125:text-[0.5em] text-[0.78em]"
                   )}
                 >
@@ -230,6 +256,8 @@ const PlayerCard = ({
                     "font-cruyff-condensed-numbers-medium  leading-none text-center relative",
                     isHome
                       ? "text-[1.2em] scale-125:text-[1em]"
+                      : isAllPlayers
+                      ? "text-[0.7em] scale-125:text-[0.6em]"
                       : "text-[1.2em] scale-125:text-[0.8em]"
                   )}
                 >
@@ -251,6 +279,8 @@ const PlayerCard = ({
                   ? "text-[1.2em] scale-125:text-[1em]"
                   : isHome
                   ? "text-[2em] scale-125:text-[1.5em]"
+                  : isAllPlayers
+                  ? "text-[1.2em] scale-125:text-[1.5em]"
                   : "text-[2em] scale-125:text-[1em]"
               )}
             >
@@ -263,6 +293,8 @@ const PlayerCard = ({
                   ? "text-[0.6em] scale-125:text-[0.4em]"
                   : isHome
                   ? "text-[2em] scale-125:text-[0.9em]"
+                  : isAllPlayers
+                  ? "text-[0.8em] scale-125:text-[1.5em]"
                   : "text-[1em] scale-125:text-[0.8em]"
               )}
             >
@@ -277,6 +309,8 @@ const PlayerCard = ({
                 ? "hidden"
                 : isHome
                 ? "text-[0.9em] scale-125:text-[0.8em]"
+                : isAllPlayers
+                ? "text-[0.7em] scale-125:text-[0.8em] top-[48.2%]"
                 : "text-[0.9em] scale-125:text-[0.7em]"
             )}
           >
@@ -317,6 +351,8 @@ const PlayerCard = ({
                 "absolute right-[3.96%] top-[28.1%] transform -translate-y-1/2 z-2 w-[14%] text-center flex flex-col gap-[0.1em] ",
                 isHome
                   ? "text-[0.85em] scale-125:text-[0.7em]"
+                  : isAllPlayers
+                  ? "text-[0.65em] scale-125:text-[0.7em]"
                   : "text-[0.85em] scale-125:text-[0.6em]"
               )}
             >
@@ -338,6 +374,8 @@ const PlayerCard = ({
                 "absolute font-bold right-[3.96%] top-[58.2%] transform -translate-y-1/2 z-2 w-[12%] text-center flex flex-col gap-[0.1em] ",
                 isHome
                   ? "text-[0.73em] scale-125:text-[0.65em]"
+                  : isAllPlayers
+                  ? "text-[0.6em] scale-125:text-[0.65em]"
                   : "text-[0.73em] scale-125:text-[0.5em]"
               )}
             >
@@ -345,7 +383,7 @@ const PlayerCard = ({
                 {skill_moves + 1} ★
               </div>
               <div class="p-[0.1em] rounded-[0.35em] bg-[--fill-color] border-[0.09em] border-[--color] text-[--color] w-full whitespace-nowrap font-cruyff-condensed-medium  flex justify-center leading-[1]  relative">
-                {weak_foot} WF
+                {weak_foot}WF
               </div>
 
               <div class="rounded-[0.35em] p-[0.1em] bg-[--fill-color] border-[0.09em] border-[--color] text-[--color] w-full whitespace-nowrap font-cruyff-condensed-medium  flex justify-center leading-[1]  relative">
@@ -370,6 +408,8 @@ const PlayerCard = ({
                 ? "flex-col bg-white bg-opacity-10 top-[8%] right-[8%] py-2"
                 : isMini
                 ? `flex-col bg-white bg-opacity-10 top-[10.8%] right-[10%] py-4`
+                : isAllPlayers
+                ? "top-[81.8%] w-full"
                 : "top-[81.8%] w-full"
             )}
           >
@@ -379,6 +419,8 @@ const PlayerCard = ({
                 "object-contain",
                 isSuperMini
                   ? "max-h-[0.5em] max-w-[0.6em]"
+                  : isAllPlayers
+                  ? "max-h-[1em] max-w-[1em]"
                   : isMini
                   ? " max-h-[1em] max-w-[1.2em]"
                   : "max-h-[1.3em] max-w-[1.7em] scale-125:max-h-[1em] scale-125:max-w-[1em]"
@@ -391,6 +433,8 @@ const PlayerCard = ({
                 "object-contain",
                 isSuperMini
                   ? "max-h-[0.5em] max-w-[0.6em]"
+                  : isAllPlayers
+                  ? "max-h-[1em] max-w-[1em]"
                   : isMini
                   ? "hidden max-h-[1em] max-w-[1em]"
                   : "max-h-[1.3em] max-w-[1.7em] scale-125:max-h-[1em] scale-125:max-w-[1em]"
@@ -403,6 +447,8 @@ const PlayerCard = ({
                 "object-contain",
                 isSuperMini
                   ? "max-h-[0.5em] max-w-[0.6em]"
+                  : isAllPlayers
+                  ? "max-h-[1em] max-w-[1em]"
                   : isMini
                   ? " max-h-[1em] max-w-[1.2em]"
                   : "max-h-[1.3em] max-w-[1.7em] scale-125:max-h-[1em] scale-125:max-w-[1em]"

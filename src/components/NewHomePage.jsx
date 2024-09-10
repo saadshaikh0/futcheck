@@ -51,6 +51,12 @@ const NewHomePage = () => {
   const bg_color = selectedPlayer?.bg_color;
   const swiperRef = useRef(null);
 
+  const currentTimestamp = new Date();
+  const players = selectedTab == "RECENT" ? latest_players : top_rated_players;
+  useEffect(() => {
+    setSelectedPlayer(players[0]);
+  }, [players]);
+
   const goToSlide1 = () => {
     if (swiperRef.current) {
       swiperRef.current.swiper.activeIndex = 0;
@@ -68,8 +74,7 @@ const NewHomePage = () => {
     }
     setSelectedPlayer(players[newIndex]);
   };
-  const currentTimestamp = new Date();
-  const players = selectedTab == "RECENT" ? latest_players : top_rated_players;
+
   return (
     <div
       className="home-page relative min-h-[calc(100vh-4rem)] flex-grow  w-full bg-fixed  "
@@ -150,52 +155,63 @@ const NewHomePage = () => {
         <div className="mt-4 px-4 md:hidden">
           <LatestPlayers players={players} />
         </div>
-        <div className="w-full bg-gray-950 mt-10 px-10 py-5 text-white">
-          <h2 className="text-center  font-bold text-4xl">Latest SBCs</h2>
-          <div className=" mt-5 gap-5">
-            <div className="p-5 px-0 overflow-hidden w-full  h-[35vh] bg-gray-950 rounded-md relative">
-              <div className="marquee  text-white   gap-8">
-                {sbcs
+        <div
+          style={{
+            background: `url(${MY_CLUB_BG}) `,
+            backgroundSize: "cover",
+            backgroundRepeat: "no-repeat",
+          }}
+          className="w-full relative  mt-10 px-10 py-5 text-gray-200"
+        >
+          {" "}
+          <div className={`absolute inset-0 bg-black  opacity-90`}></div>
+          <div className="relative">
+            <h2 className="text-center  font-medium text-4xl">LATEST SBCS</h2>
+            <div className=" mt-5 gap-5">
+              <div className="p-5 px-0 overflow-hidden w-full  h-[35vh]  rounded-md relative">
+                <div className="marquee  text-white   gap-8">
+                  {sbcs
 
-                  .filter((sbc) => {
-                    return (
-                      (sbc.endTimeStamp &&
-                        new Date(sbc.endTimeStamp) >= currentTimestamp) ||
-                      sbc.endTime == 0
-                    );
-                  })
-                  .slice(0, 5)
-                  .map((sbc, index) => {
-                    return (
-                      <div className=" ">
-                        <MarqueeSbcCard data={sbc} />
-                      </div>
-                    );
-                  })}
-                {sbcs
+                    .filter((sbc) => {
+                      return (
+                        (sbc.endTimeStamp &&
+                          new Date(sbc.endTimeStamp) >= currentTimestamp) ||
+                        sbc.endTime == 0
+                      );
+                    })
+                    .slice(0, 5)
+                    .map((sbc, index) => {
+                      return (
+                        <div className=" ">
+                          <MarqueeSbcCard data={sbc} />
+                        </div>
+                      );
+                    })}
+                  {sbcs
 
-                  .filter((sbc) => {
-                    return (
-                      (sbc.endTimeStamp &&
-                        new Date(sbc.endTimeStamp) >= currentTimestamp) ||
-                      sbc.endTime == 0
-                    );
-                  })
-                  .slice(0, 5)
-                  .map((sbc, index) => {
-                    return (
-                      <div className="">
-                        <MarqueeSbcCard data={sbc} />
-                      </div>
-                    );
-                  })}
+                    .filter((sbc) => {
+                      return (
+                        (sbc.endTimeStamp &&
+                          new Date(sbc.endTimeStamp) >= currentTimestamp) ||
+                        sbc.endTime == 0
+                      );
+                    })
+                    .slice(0, 5)
+                    .map((sbc, index) => {
+                      return (
+                        <div className="">
+                          <MarqueeSbcCard data={sbc} />
+                        </div>
+                      );
+                    })}
+                </div>
               </div>
             </div>
-          </div>
-          <div className="flex justify-center items-center ">
-            <div className="bg-white text-black px-4 py-2 mt-5 font-bold rounded-lg cursor-pointer">
-              {" "}
-              Show All SBCs
+            <div className="flex justify-center items-center ">
+              <div className="bg-white text-black px-4 py-2 mt-5 font-bold rounded-lg cursor-pointer">
+                {" "}
+                Show All SBCs
+              </div>
             </div>
           </div>
         </div>

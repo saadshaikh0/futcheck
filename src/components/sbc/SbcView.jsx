@@ -38,7 +38,7 @@ const SbcView = () => {
           <h2 className="text-white text-2xl font-bold text-center mb-8">
             SBC Challenges
           </h2>
-          <div className="grid grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {challenges &&
               challenges.map((challenge) => (
                 <ChallengeCard challengeDetails={challenge} />

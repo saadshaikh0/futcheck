@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import PlayerCard from "./common/PlayerCard";
 import LeaguePopup from "./filterPopups/leaguePopup";
 import NationPopup from "./filterPopups/nationPopup";
-import PlaystylePopup from "./filterPopups/playstylePopup";
+import CoinsImg from "../assets/coins.png";
 import RatingPopup from "./filterPopups/ratingPopup";
 import SkillMovesPopup from "./filterPopups/skillMovesPopup";
 import TeamPopup from "./filterPopups/teamPopup";
@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setFilters, setIsClub } from "../redux/allPlayerSlice";
 import { FILTER_TEXT, WORK_RATE } from "./utils/constants";
 import FilterModal from "./filterPopups/filterModal";
+import { useHandleResize } from "./utils/hooks";
 const tabs = [
   { name: "Version", component: <VersionPopup /> },
   { name: "Rating", component: <RatingPopup /> },
@@ -31,6 +32,7 @@ const AllPlayers = () => {
   const filters = useSelector((state) => state.allPlayers.filters);
   const isClub = useSelector((state) => state.allPlayers.isClub);
   const userInfo = useSelector((state) => state.app.userInfo);
+  const isMobile = useHandleResize();
   const [modalOpen, setModalOpen] = useState(false);
   const dispatch = useDispatch();
   const {
@@ -166,8 +168,8 @@ const AllPlayers = () => {
             })}
           </div>
         </div>
-        <div>
-          <div className="md:mx-10 mt-3 grid grid-cols-3 lg:grid-cols-6 gap-1 md:gap-4">
+        <div className="bg-gray-800 ml-4 rounded-lg pb-2">
+          <div className="md:mx-10 mt-3 grid grid-cols-3 lg:grid-cols-6 gap-2 md:gap-4">
             {isLoading
               ? [...Array(24).keys()].map(() => {
                   return (
@@ -176,7 +178,24 @@ const AllPlayers = () => {
                     </div>
                   );
                 })
-              : data.players.map((player) => <PlayerCard player={player} />)}
+              : data.players.map((player) => (
+                  <div
+                    key={player.id}
+                    className="bg-gray-600 hover:bg-gray-700  rounded-lg transform transition-transform duration-100 hover:scale-105"
+                  >
+                    <PlayerCard
+                      isDisabled={false}
+                      isMini={isMobile ? true : false}
+                      isAllPlayers={isMobile ? false : true}
+                      player={player}
+                    />
+                    <div className="flex justify-center text-white font-bold gap-1 items-center">
+                      {" "}
+                      <img src={CoinsImg} className="w-3 h-3" />
+                      {player.latest_price.toLocaleString("en-us")}
+                    </div>
+                  </div>
+                ))}
           </div>
         </div>
         <div></div>
