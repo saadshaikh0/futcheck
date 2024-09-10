@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { fetchAllPlayers } from "../api/apiService";
 import { useQuery } from "@tanstack/react-query";
 import PlayerCard from "./common/PlayerCard";
@@ -35,6 +35,10 @@ const AllPlayers = () => {
   const isMobile = useHandleResize();
   const [modalOpen, setModalOpen] = useState(false);
   const dispatch = useDispatch();
+  const containerRef = useRef();
+  const prevFiltersRef = useRef(filters);
+  const [allPlayers, setAllPlayers] = useState([]);
+
   const {
     data = { players: [], total_pages: 0 },
     isLoading,
@@ -47,6 +51,7 @@ const AllPlayers = () => {
 
   const clearFilters = () => {
     dispatch(setFilters({ page: 1 }));
+    setAllPlayers([]);
   };
   const filteredObject = Object.entries(filters).filter(
     ([key, value]) =>
@@ -56,6 +61,65 @@ const AllPlayers = () => {
         value == undefined
       )
   );
+
+  useEffect(() => {
+    // Append new players only when they arrive
+    if (!isLoading && data.players.length) {
+      setAllPlayers((prevPlayers) => {
+        const existingPlayerIds = new Set(prevPlayers.map((p) => p.id)); // Set of existing player IDs
+        const newPlayers = data.players.filter(
+          (player) => !existingPlayerIds.has(player.id)
+        ); // Filter out duplicates
+        return [...prevPlayers, ...newPlayers];
+      });
+    }
+  }, [data.players]);
+
+  useEffect(() => {
+    const prevFilters = prevFiltersRef.current;
+
+    // Check if any key other than 'page' has changed
+    const hasFilterChanged = Object.keys(filters).some((key) => {
+      return key !== "page" && filters[key] !== prevFilters[key];
+    });
+
+    if (hasFilterChanged) {
+      setAllPlayers([]); // Clear allPlayers when filters change
+    }
+
+    // Update the reference to the current filters
+    prevFiltersRef.current = filters;
+  }, [filters]);
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollContainer = containerRef.current;
+      if (!scrollContainer) return;
+
+      const { scrollTop, scrollHeight, clientHeight } = scrollContainer;
+
+      // Check if the user has scrolled to the bottom of the div
+      if (scrollTop + clientHeight >= scrollHeight - 5) {
+        // Trigger the next page fetch
+        let currentPage = filters?.page ?? 1;
+        if (!isLoading && currentPage < data.total_pages) {
+          dispatch(setFilters({ ...filters, page: currentPage + 1 }));
+        }
+      }
+    };
+
+    // Add scroll event listener
+    const scrollContainer = containerRef.current;
+    if (scrollContainer) {
+      scrollContainer.addEventListener("scroll", handleScroll);
+    }
+
+    // Cleanup the event listener on component unmount
+    return () => {
+      if (scrollContainer) {
+        scrollContainer.removeEventListener("scroll", handleScroll);
+      }
+    };
+  }, [isLoading, data.total_pages, filters]);
   useEffect(() => {
     refetch();
   }, [filters, isClub]);
@@ -73,8 +137,8 @@ const AllPlayers = () => {
     }
   };
   return (
-    <div className="relative w-full md:w-4/5 mx-auto mt-5 md:mt-10 px-5">
-      <div className="mb-4">
+    <div className="relative w-full md:w-4/5 flex flex-col mx-auto mt-5 md:mt-0 px-5 h-[calc(90vh)] md:h-[calc(100vh-4rem)]">
+      <div className="mb-1">
         <h2 className="text-white text-xl  md:text-3xl font-medium">
           EAFC 24 Players Database
         </h2>
@@ -83,12 +147,12 @@ const AllPlayers = () => {
           , team etc
         </p>
       </div>
-      <div className="flex flex-col md:grid grid-cols-[1fr_5fr]">
+      <div className="flex flex-col overflow-auto md:grid grid-cols-[1fr_5fr] h-full">
         {filteredObject.length ? (
           <>
             {" "}
             <div>
-              <div className="flex gap-2 justify-between mt-2">
+              <div className="flex gap-2 justify-between my-2">
                 <button
                   onClick={clearFilters}
                   className="bg-slate-800 w-full md:w-auto my-3 md:my-0  text-white p-2 px-3 rounded"
@@ -141,7 +205,7 @@ const AllPlayers = () => {
         )}
 
         <div className="hidden md:block">
-          <div className="text-white h-full flex flex-col gap-3 bg-slate-800   px-4 py-2 rounded">
+          <div className="text-white h-full flex flex-col o gap-3 bg-slate-800   px-4 py-2 rounded">
             {userInfo && (
               <label class="grid grid-cols-[1fr_1fr] gap-4">
                 <div className="text-white font-bold">My Club</div>
@@ -168,38 +232,40 @@ const AllPlayers = () => {
             })}
           </div>
         </div>
-        <div className="bg-gray-800 ml-4 rounded-lg pb-2">
+        <div
+          ref={containerRef}
+          className="bg-gray-800 md:ml-4 rounded-lg pb-2 overflow-auto "
+        >
           <div className="md:mx-10 mt-3 grid grid-cols-3 lg:grid-cols-6 gap-2 md:gap-4">
-            {isLoading
-              ? [...Array(24).keys()].map(() => {
-                  return (
-                    <div class="animate-pulse flex justify-center items-center space-x-4">
-                      <div class="rounded bg-slate-200 h-20 w-20 md:h-40 md:w-40"></div>
-                    </div>
-                  );
-                })
-              : data.players.map((player) => (
-                  <div
-                    key={player.id}
-                    className="bg-gray-600 hover:bg-gray-700  rounded-lg transform transition-transform duration-100 hover:scale-105"
-                  >
-                    <PlayerCard
-                      isDisabled={false}
-                      isMini={isMobile ? true : false}
-                      isAllPlayers={isMobile ? false : true}
-                      player={player}
-                    />
-                    <div className="flex justify-center text-white font-bold gap-1 items-center">
-                      {" "}
-                      <img src={CoinsImg} className="w-3 h-3" />
-                      {player.latest_price.toLocaleString("en-us")}
-                    </div>
+            {allPlayers.map((player) => (
+              <div
+                key={player.id}
+                className="bg-gray-600 hover:bg-gray-700 rounded-lg transform transition-transform duration-100 hover:scale-105"
+              >
+                <PlayerCard
+                  isDisabled={false}
+                  isMini={isMobile ? true : false}
+                  isAllPlayers={isMobile ? false : true}
+                  player={player}
+                />
+                <div className="flex justify-center text-white font-bold gap-1 items-center">
+                  <img src={CoinsImg} className="w-3 h-3" alt="coins" />
+                  {player?.latest_price?.toLocaleString("en-us")}
+                </div>
+              </div>
+            ))}
+            {isLoading &&
+              [...Array(24).keys()].map(() => {
+                return (
+                  <div class="animate-pulse flex justify-center items-center space-x-4">
+                    <div class="rounded bg-slate-200 h-20 w-20 md:h-40 md:w-40"></div>
                   </div>
-                ))}
+                );
+              })}
           </div>
         </div>
         <div></div>
-        <div className="flex justify-center gap-4 mt-5">
+        <div className="flex justify-center gap-4 mt-5 hidden">
           <button
             onClick={() => {
               let currentPage = filters?.page ?? 1;
