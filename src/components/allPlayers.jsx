@@ -214,7 +214,9 @@ const AllPlayers = () => {
                     type="checkbox"
                     value=""
                     onChange={(e) => {
+                      dispatch(setFilters({ page: 1 }));
                       dispatch(setIsClub(e.target.checked));
+                      setAllPlayers([]);
                     }}
                     class="sr-only peer"
                   />

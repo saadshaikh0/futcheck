@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import CoinsImg from "../../assets/coins.png";
 import { ClockIcon } from "@heroicons/react/20/solid";
 import VolatilityChart from "./VolatilityChart";
+import { calculateMomentum, getBestWindowToBuyAndSell } from "./dashboardUtils";
+import PlayerPriceGraph from "./playerPriceGraph";
+import AvgPriceGraph from "./avgPriceGraph";
 
 const calculateCV = (stdDev, meanPrice) => {
   return stdDev / meanPrice || 0;
@@ -11,7 +14,9 @@ const calculateInsights = (data) => {
   if (!data) {
     return;
   }
-
+  const calculatedMomentum = calculateMomentum(data);
+  const { bestBuyWindow, bestSellWindow, minAvgPrice, maxAvgPrice } =
+    getBestWindowToBuyAndSell(data);
   const hourlyPrices = Array(24)
     .fill()
     .map(() => []);
@@ -78,23 +83,19 @@ const calculateInsights = (data) => {
   const allTimeLow = Math.min(...allPrices);
 
   return {
-    bestBuyHour,
-    bestSellHour,
-    bestBuyPrice,
-    bestSellPrice,
+    bestBuyWindow,
+    bestSellWindow,
+    minAvgPrice,
+    maxAvgPrice,
     meanPrice,
     standardDeviation,
     variance,
     cv,
+
+    calculatedMomentum,
     allTimeHigh,
     allTimeLow,
-    averageDailyRange: averagePrices.map((avg, hour) => ({
-      hour,
-      range:
-        hourlyPrices[hour].length > 0
-          ? Math.max(...hourlyPrices[hour]) - Math.min(...hourlyPrices[hour])
-          : 0,
-    })),
+    averagePrices,
   };
 };
 const formatHour = (hour) => {
@@ -143,43 +144,41 @@ const formatHour = (hour) => {
 
 const SalesCard = ({ data }) => {
   const now = new Date();
-  const lastDaysData = data.filter((record) => {
-    const recordDate = new Date(record.time);
-    const diffTime = Math.abs(now - recordDate);
-    const diffDays = diffTime / (1000 * 60 * 60 * 24);
-    return diffDays <= 7;
-  });
-  const insights = calculateInsights(lastDaysData);
+  // const lastDaysData = data.filter((record) => {
+  //   const recordDate = new Date(record.time);
+  //   const diffTime = Math.abs(now - recordDate);
+  //   const diffDays = diffTime / (1000 * 60 * 60 * 24);
+  //   return diffDays <= 7;
+  // });
+  const insights = calculateInsights(data);
   return (
     <div className="h-[40vh] scale-125:md:h-[50vh] ">
       <div className="font-bold p-2">Insights</div>
 
       <div className="no-scrollbar  py-2 px-5 flex-grow h-[60%]">
         <div className="flex flex-col gap-1 h-full ">
-          <div className="flex justify-between">
+          {/* <div className="flex justify-between">
             <div className="text-gray-400 font-medium">Best Hour to Buy</div>
             <div className="flex gap-1 items-center">
-              <ClockIcon className="w-4 h-4" />{" "}
-              {formatHour(insights.bestBuyHour)}
+              <ClockIcon className="w-4 h-4" /> {insights.bestBuyWindow}
               <span className="flex gap-1 items-center text-gray-400">
                 {" "}
                 (<img src={CoinsImg} className="w-3 h-3" />
-                {insights.bestBuyPrice?.toLocaleString("en-us")})
+                {insights.minAvgPrice?.toLocaleString("en-us")})
               </span>
             </div>
           </div>
           <div className="flex justify-between">
             <div className="text-gray-400 font-medium">Best Hour to Sell</div>
             <div className="flex gap-1 items-center">
-              <ClockIcon className="w-4 h-4" />{" "}
-              {formatHour(insights.bestSellHour)}
+              <ClockIcon className="w-4 h-4" /> {insights.bestSellWindow}
               <span className="flex gap-1 items-center text-gray-400">
                 {" "}
                 (<img src={CoinsImg} className="w-3 h-3" />
-                {insights.bestSellPrice?.toLocaleString("en-us")})
+                {insights.maxAvgPrice?.toLocaleString("en-us")})
               </span>
             </div>
-          </div>
+          </div> */}
 
           <div className="flex justify-between">
             <div className="text-gray-400 font-medium">
@@ -190,16 +189,21 @@ const SalesCard = ({ data }) => {
                 <img src={CoinsImg} className="w-4 h-4" />{" "}
                 {insights.allTimeLow?.toLocaleString("en-us")}
               </div>
-              <span className="font-bold px-1">/</span>
+              <span className="font-bold px-1">-</span>
               <div className="flex  items-center">
                 <img src={CoinsImg} className="w-4 h-4" />{" "}
                 {insights.allTimeHigh?.toLocaleString("en-us")}
               </div>
             </div>
           </div>
-
+          <div className="flex justify-between text-white">
+            <span> Momentum</span> <span>{insights.calculatedMomentum}</span>
+          </div>
+          <div className="my-4">Last 7 days Average Hourly Price</div>
           {/* <p>cv : {insights.cv}</p> */}
-          <VolatilityChart cv={insights.cv * 100} />
+          {/* <VolatilityChart cv={insights.cv * 100} /> */}
+
+          <AvgPriceGraph data={insights.averagePrices} />
         </div>
       </div>
     </div>
