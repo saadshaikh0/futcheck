@@ -94,16 +94,18 @@ const Navbar = () => {
         class="flex flex-wrap h-[4rem]  sm:justify-start sm:flex-nowrap relative z-50 w-full bg-black text-sm py-3 sm:py-0 sm:pb-2"
       >
         <nav
-          class="relative w-4/5 mx-auto px-4 pt-2 sm:flex sm:items-center sm:justify-between sm:px-6 lg:px-8"
+          class="relative w-4/5 mx-auto  pt-2 sm:flex sm:items-center sm:justify-between  "
           aria-label="Global"
         >
           <div class="flex items-center   grow justify-between gap-4">
             <Link to="/">
-              <div className="flex gap-2 items-center mr-6">
+              <div className="flex gap-2 items-center md:mr-6">
                 <div>
                   <img src={FutcheckLogo} width={35} className="rounded-md" />
                 </div>
-                <div className="text-white font-bold text-xl">FUTCHECK</div>
+                <div className="text-white hidden md:block font-bold text-xl">
+                  FUTCHECK
+                </div>
               </div>
             </Link>
             <div ref={ref} className="grow">

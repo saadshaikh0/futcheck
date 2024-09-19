@@ -4,7 +4,12 @@ import store from "./redux/store";
 import { Provider } from "react-redux";
 import Footer from "./components/common/Footer";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useLocation,
+} from "react-router-dom";
 import HomePage from "./components/homepage";
 import PlayerViewWrapper from "./components/playerViewWrapper";
 import ReactGA from "react-ga4";
@@ -29,6 +34,8 @@ ReactGA.initialize("G-RD6LGLC1LD");
 const queryClient = new QueryClient();
 
 function App() {
+  const location = useLocation();
+
   return (
     <>
       <Helmet>
@@ -42,44 +49,38 @@ function App() {
           <GoogleOAuthProvider clientId="55917895097-n505fctm2fkegjjfc66bhcrq4vtsvol3.apps.googleusercontent.com">
             <QueryClientProvider client={queryClient}>
               <div className="App scrollbar-thin">
-                <Router>
-                  <Header />
-                  {/* <Ads adClient="ca-pub-4560319877250034" adSlot="1044013921" /> */}
-                  <Routes>
-                    {/* <Route exact path="/" element={<HomePage />} /> */}
-                    <Route exact path="/" element={<NewHomePage />} />
-                    {/* <Route
+                <Header />
+                {/* <Ads adClient="ca-pub-4560319877250034" adSlot="1044013921" /> */}
+                <Routes>
+                  {/* <Route exact path="/" element={<HomePage />} /> */}
+                  <Route exact path="/" element={<NewHomePage />} />
+                  {/* <Route
                       exact
                       path="/new_homepage"
                       element={<NewHomePage />}
                     /> */}
-                    <Route path="/tos" element={<Tos />} />
-                    <Route path="/policy" element={<Policy />} />
-                    <Route
-                      path="/fc_combinations/"
-                      element={<Combinations />}
-                    />
-                    <Route
-                      path="/squad-builder/"
-                      element={<SquadBuilderWrapper />}
-                    />
-                    <Route path="/my-club/" element={<ClubWrapper />} />
-                    <Route
-                      path="/challenge-solution/:challengeId/:solutionId"
-                      element={<ChallengeSolutions />}
-                    />
-                    <Route path="/sbc/:sbcId" element={<SbcViewWrapper />} />
-                    <Route path="/sbc/" element={<SbcWrapper />} />
+                  <Route path="/tos" element={<Tos />} />
+                  <Route path="/policy" element={<Policy />} />
+                  <Route path="/fc_combinations/" element={<Combinations />} />
+                  <Route
+                    path="/squad-builder/"
+                    element={<SquadBuilderWrapper />}
+                  />
+                  <Route path="/my-club/" element={<ClubWrapper />} />
+                  <Route
+                    path="/challenge-solution/:challengeId/:solutionId"
+                    element={<ChallengeSolutions />}
+                  />
+                  <Route path="/sbc/:sbcId" element={<SbcViewWrapper />} />
+                  <Route path="/sbc/" element={<SbcWrapper />} />
 
-                    <Route
-                      path="/player/:playerId/:playerName"
-                      element={<PlayerDashboardWrapper />}
-                    />
-                    <Route path="/players" element={<AllPlayersWrapper />} />
-                  </Routes>
-
-                  <Footer  />
-                </Router>
+                  <Route
+                    path="/player/:playerId/:playerName"
+                    element={<PlayerDashboardWrapper />}
+                  />
+                  <Route path="/players" element={<AllPlayersWrapper />} />
+                </Routes>
+                {location.pathname !== "/" && <Footer />}
               </div>
             </QueryClientProvider>
           </GoogleOAuthProvider>
@@ -88,5 +89,10 @@ function App() {
     </>
   );
 }
+const Root = () => (
+  <Router>
+    <App />
+  </Router>
+);
 
-export default App;
+export default Root;

@@ -150,7 +150,7 @@ const PlayerPriceGraph = ({ data }) => {
   };
 
   return (
-    <div className="h-full flex justify-center items-center flex-col">
+    <div className="hidden md:flex h-full justify-center items-center flex-col">
       <div className="flex items-center gap-2 text-2xl">
         <LockClosedIcon className="w-6 h-6 text-white" /> Price Data not
         available right now

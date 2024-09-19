@@ -78,13 +78,16 @@ const NewHomePage = () => {
 
   return (
     <div
-      className="home-page relative min-h-[calc(100vh-4rem)] flex-grow  w-full bg-fixed  "
+      className={`home-page relative min-h-[calc(100vh-4rem)] bg-black md:bg-fixed z-10 flex-grow  w-full `}
       style={{
-        background: `url(${FOOTBALL_STADIUM_IMAGE}) `,
-        backgroundAttachment: "fixed",
+        backgroundImage:
+          window.innerWidth >= 768 ? `url(${FOOTBALL_STADIUM_IMAGE})` : "none", // Only apply on md+ screens
+        backgroundAttachment: window.innerWidth >= 768 ? "fixed" : "scroll",
       }}
     >
-      <div className={`absolute inset-0 bg-black  opacity-70`}></div>
+      <div
+        className={`absolute inset-0 bg-black bg-fixed h-full opacity-70`}
+      ></div>
 
       <div className="w-full h-full  absolute z-10">
         <div
@@ -168,7 +171,7 @@ const NewHomePage = () => {
           <div className={`absolute inset-0 bg-black  opacity-90`}></div>
           <div className="relative">
             <h2 className="text-center  font-medium text-4xl">LATEST SBCS</h2>
-            <div className=" mt-5 gap-5">
+            <div className=" mt-5 gap-5 hidden md:block">
               <div className="p-5 px-0 overflow-hidden w-full  h-[35vh]  rounded-md relative">
                 <div className="marquee  text-white   gap-8">
                   {sbcs
@@ -207,6 +210,25 @@ const NewHomePage = () => {
                     })}
                 </div>
               </div>
+            </div>
+            <div className="flex flex-col gap-5 md:hidden mt-2 ">
+              {sbcs
+
+                .filter((sbc) => {
+                  return (
+                    (sbc.endTimeStamp &&
+                      new Date(sbc.endTimeStamp) >= currentTimestamp) ||
+                    sbc.endTime == 0
+                  );
+                })
+                .slice(0, 5)
+                .map((sbc, index) => {
+                  return (
+                    <div className=" ">
+                      <NewSbcCard data={sbc} />
+                    </div>
+                  );
+                })}
             </div>
             <div className="flex justify-center items-center ">
               <Link to={"/sbc/"}>

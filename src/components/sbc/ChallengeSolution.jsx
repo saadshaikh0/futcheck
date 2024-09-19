@@ -24,6 +24,7 @@ import SolutionTable from "./SolutionTable";
 import { useHandleResize } from "../utils/hooks";
 
 const SolutionPitch = ({
+  isDisabled,
   selectedSolution,
   positions,
   solutionLeagueDetails,
@@ -82,8 +83,7 @@ const SolutionPitch = ({
                   position_abr={position_abr}
                   isSuperMini={isSuperMini}
                   player={playerData}
-                  isDisabled={false}
-                  isMini={true}
+                  isDisabled={isDisabled}
                   isHover={true}
                 />
               </div>
@@ -166,6 +166,7 @@ const ChallengeSolutions = () => {
             <div className="text-gray-600 text-sm">{description}</div>
           </div>
           <SolutionPitch
+            isDisabled={true}
             selectedSolution={selectedSolution}
             positions={positions}
             solutionLeagueDetails={solutionLeagueDetails}
@@ -202,10 +203,11 @@ const ChallengeSolutions = () => {
               </div>
             </div>
             <SolutionPitch
+              isDisabled={false}
               selectedSolution={selectedSolution}
               positions={positions}
               solutionLeagueDetails={solutionLeagueDetails}
-              isSuperMini={true}
+              isSuperMini={false}
               positionsAbbr={positionsAbbr}
             />
           </div>

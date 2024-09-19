@@ -97,7 +97,9 @@ const PlayerCard = ({
           <div
             className={classNames(
               "font-bold leading-none  absolute left-[50%] transform -translate-x-1/2 -translate-y-1/2 w-[75.2%] whitespace-nowrap overflow-hidden text-overflow-ellipsis text-center",
-              isMini
+              isSuperMini
+                ? "text-[0.7em] top-[70%]"
+                : isMini
                 ? "text-[1em] top-[70%] "
                 : isHome
                 ? "text-[1.4em] scale-125:text-[1.2em] top-[67%] "
@@ -106,7 +108,10 @@ const PlayerCard = ({
                 : "text-[1.4em] scale-125:text-[1em] top-[67%] "
             )}
           >
-            {player_name}
+            <span className="group-hover:block text-[0.5em]  md:text-sm text-wrap hidden">
+              {c_name ?? name.slice(0, 20)}
+            </span>
+            <span className="block group-hover:hidden ">{player_name}</span>
           </div>
           {!isMini && (
             <div
@@ -279,7 +284,9 @@ const PlayerCard = ({
             <div
               className={classNames(
                 "font-cruyff-condensed-numbers-bold leading-[0.91em]",
-                isMini
+                isSuperMini
+                  ? "text-[0.8em] scale-125:text-[0.7em]"
+                  : isMini
                   ? "text-[1.2em] scale-125:text-[1em]"
                   : isHome
                   ? "text-[2em] scale-125:text-[1.5em]"
@@ -422,7 +429,7 @@ const PlayerCard = ({
               class={classNames(
                 "object-contain",
                 isSuperMini
-                  ? "max-h-[1em] max-w-[1em]"
+                  ? "max-h-[0.6em] max-w-[0.6em]"
                   : isAllPlayers
                   ? "max-h-[1em] max-w-[1em]"
                   : isMini
@@ -436,7 +443,7 @@ const PlayerCard = ({
               class={classNames(
                 "object-contain",
                 isSuperMini
-                  ? "max-h-[1em] max-w-[1em]"
+                  ? "max-h-[0.6em] max-w-[0.6em]"
                   : isAllPlayers
                   ? "max-h-[1em] max-w-[1em]"
                   : isMini
@@ -450,7 +457,7 @@ const PlayerCard = ({
               class={classNames(
                 "object-contain",
                 isSuperMini
-                  ? "max-h-[1em] max-w-[1em]"
+                  ? "max-h-[0.6em] max-w-[0.6em]"
                   : isAllPlayers
                   ? "max-h-[1em] max-w-[1em]"
                   : isMini

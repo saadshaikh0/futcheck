@@ -31,7 +31,9 @@ const PlayerDashboard = () => {
     cacheTime: 1000 * 60 * 100,
     staleTime: Infinity,
   });
-  useEffect(()=>{setPlayerDetails(player)},[player.id])
+  useEffect(() => {
+    setPlayerDetails(player);
+  }, [player.id]);
   const { priceChange, percentageChange } = useMemo(() => {
     if (price_history_data.length >= 2) {
       // Extract the last two prices
@@ -60,11 +62,16 @@ const PlayerDashboard = () => {
     setPlayerDetails(player);
   };
   return (
-    <div style={{
-      background: `url(${FOOTBALL_STADIUM_IMAGE}) `,
-      // backgroundAttachment: "fixed",
-    }} className=" min-h-[calc(100vh-4rem)] ">
-            <div className={`absolute inset-0 bg-black  opacity-80`}></div>
+    <div
+      style={{
+        background: `url(${FOOTBALL_STADIUM_IMAGE}) `,
+        // backgroundAttachment: "fixed",
+      }}
+      className="relative min-h-[calc(100vh-4rem)] "
+    >
+      <div
+        className={`absolute inset-0 bg-fixed bg-black  opacity-70 md:opacity-80`}
+      ></div>
 
       <div className="w-[90%] relative text-center text-white mx-auto pt-3">
         {/* Mobile Version */}

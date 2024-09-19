@@ -23,9 +23,16 @@ const SBC = () => {
 
       <div className="w-4/5 h-full mx-auto pt-10 relative pb-10">
         <div className="flex-col">
-          <h2 className="text-white text-2xl font-bold">
-            FC 25 Squad Building Challenges
-          </h2>
+          <div className="flex gap-4 items-center">
+            <img
+              className="w-7"
+              src="https://cdn.futcheck.com/assets/img/fc25/misc/sbc.webp"
+            />
+            <h2 className="text-white text-2xl font-bold">
+              FC 25 Squad Building Challenges
+            </h2>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-10">
             {/* <NewSbcCard data={sbcs[6]} /> */}
             {sbcs

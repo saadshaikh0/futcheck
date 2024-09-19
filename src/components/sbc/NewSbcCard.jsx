@@ -1,6 +1,8 @@
 import React from "react";
 import {
-  buildDynamicUrl,getTimeUntilExpiration,setidUntilExpiration,
+  buildDynamicUrl,
+  getTimeUntilExpiration,
+  setidUntilExpiration,
   timeAgo,
 } from "../utils/utils";
 import { Link } from "react-router-dom";
@@ -19,7 +21,7 @@ const NewSbcCard = ({ data }) => {
   return (
     <Link to={`/sbc/${setid}`}>
       <div className="bg-[#13151D] h-full rounded-md flex flex-col items-center text-white">
-        <div className="grid grid-cols-[2fr_1fr] flex-grow ">
+        <div className="grid grid-cols-1  md:grid-cols-[2fr_1fr] flex-grow ">
           <div className="flex flex-col py-5 px-4 gap-3">
             <p className="text-white text-lg font-bold text-center">{name}</p>
             <p className="text-[#B0B0B0] flex-grow">{description}</p>
@@ -46,7 +48,7 @@ const NewSbcCard = ({ data }) => {
           </div>
           <div className="flex flex-col items-center">
             <img
-              src={buildDynamicUrl('sbc',setid)}
+              src={buildDynamicUrl("sbc", setid)}
               alt="Serie A TOTS Upgrade"
               loading="lazy"
             />
