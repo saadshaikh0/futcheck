@@ -140,7 +140,7 @@ const AllPlayers = () => {
     <div className="relative w-full md:w-4/5 flex flex-col mx-auto mt-5 md:mt-0 px-5 h-[calc(90vh)] md:h-[calc(100vh-4rem)]">
       <div className="mb-1">
         <h2 className="text-white text-xl  md:text-3xl font-medium">
-          EAFC 24 Players Database
+          EAFC 25 Players Database
         </h2>
         <p className="text-slate-400 text-md md:text-lg">
           Browse through eafc 24 players catalog and filter by rating , position

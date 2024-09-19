@@ -209,16 +209,17 @@ const NewHomePage = () => {
               </div>
             </div>
             <div className="flex justify-center items-center ">
-              <div className="bg-white text-black px-4 py-2 mt-5 font-bold rounded-lg cursor-pointer">
-                {" "}
-                Show All SBCs
-              </div>
+              <Link to={"/sbc/"}>
+                <div className="bg-white text-black px-4 py-2 mt-5 font-bold rounded-lg cursor-pointer">
+                  {" "}
+                  Show All SBCs
+                </div>
+              </Link>
             </div>
           </div>
         </div>
-        <Footer/>
+        <Footer />
       </div>
-   
     </div>
   );
 };
