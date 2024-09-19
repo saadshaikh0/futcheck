@@ -41,7 +41,7 @@ function App() {
       <Helmet>
         <meta
           name="description"
-          content="Discover the latest EAFC 24 players along with their up-to-date stats and prices on our website"
+          content="Discover the latest EAFC 25 players along with their up-to-date stats and prices on our website"
         />
       </Helmet>
       <ErrorBoundary>

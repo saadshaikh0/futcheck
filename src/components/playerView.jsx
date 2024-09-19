@@ -98,7 +98,7 @@ const PlayerView = () => {
           name="description"
           content={`Browse through ${
             c_name != "None" ? c_name : name
-          } EAFC 24 stats , price , versions and much more.`}
+          } EAFC 25 stats , price , versions and much more.`}
         />
       </Helmet>
       <div className="h-full  bg-slate-950">

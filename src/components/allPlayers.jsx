@@ -143,7 +143,7 @@ const AllPlayers = () => {
           EAFC 25 Players Database
         </h2>
         <p className="text-slate-400 text-md md:text-lg">
-          Browse through eafc 24 players catalog and filter by rating , position
+          Browse through Eafc 25 players catalog and filter by rating , position
           , team etc
         </p>
       </div>
