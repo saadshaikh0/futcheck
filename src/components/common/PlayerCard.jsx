@@ -76,14 +76,14 @@ const PlayerCard = ({
           }}
           className="block relative "
         >
-          <img src={isMini ? rarity_url : rarity_url?.replace("_s_", "_e_")} />
+          <img src={rarity_url} />
 
           <img
             className={
               !validGuid || base_id == id
                 ? isMini
-                  ? "absolute top-[11%] left-[55%] !w-[65%] h-1/2 -translate-x-1/2"
-                  : "absolute top-[11%] left-[58%] !w-[65%] h-1/2 -translate-x-1/2"
+                  ? "absolute top-[14%] left-[55%] !w-[65%] h-1/2 -translate-x-1/2"
+                  : "absolute top-[18.5%] left-[58%] !w-[65%] h-[45%] -translate-x-1/2"
                 : "absolute top-0 w-full h-full"
             }
             src={buildPlayerUrl(guid, id, base_id)}
@@ -93,6 +93,7 @@ const PlayerCard = ({
 
               setValidGuid(false);
             }}
+            alt="Player"
           />
           <div
             className={classNames(
@@ -108,8 +109,8 @@ const PlayerCard = ({
                 : "text-[1.4em] scale-125:text-[1em] top-[67%] "
             )}
           >
-            <span className="group-hover:block text-[0.5em]  md:text-sm text-wrap hidden">
-              {c_name ?? name.slice(0, 20)}
+            <span className="group-hover:block text-[0.5em] pt-3  md:text-sm text-wrap hidden">
+              {c_name ?? name?.slice(0, 20)}
             </span>
             <span className="block group-hover:hidden ">{player_name}</span>
           </div>
@@ -277,8 +278,8 @@ const PlayerCard = ({
           )}
           <div
             className={classNames(
-              "absolute transform -translate-x-1/2 font-bold text-center top-[17.2%]",
-              isMini ? "left-[24.8%]" : "left-[21.8%]"
+              "absolute transform -translate-x-1/2 font-bold text-center top-[20.2%]",
+              isMini ? "left-[24.8%]" : "left-[24.8%]"
             )}
           >
             <div
@@ -447,7 +448,7 @@ const PlayerCard = ({
                   : isAllPlayers
                   ? "max-h-[1em] max-w-[1em]"
                   : isMini
-                  ? "hidden max-h-[1em] max-w-[1em]"
+                  ? "max-h-[1em] max-w-[1em]"
                   : "max-h-[1.3em] max-w-[1.7em] scale-125:max-h-[1em] scale-125:max-w-[1em]"
               )}
               alt="League"

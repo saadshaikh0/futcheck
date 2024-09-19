@@ -58,24 +58,20 @@ export const fillZeros = (hexcode) => {
   return hexcode;
 };
 
-const BASE_URL='https://cdn.futcheck.com/assets/img/fc25'
+const BASE_URL = "https://cdn.futcheck.com/assets/img/fc25";
 export const buildChallengeImageUrl = (challengeImageId) => {
   return `https://www.ea.com/ea-sports-fc/ultimate-team/web-app/content/24B23FDE-7835-41C2-87A2-F453DFDB2E82/2024/fut/sbc/companion/challenges/images/sbc_challenge_image_${challengeImageId}.png
 `;
 };
 
 export const buildPlayerUrl = (guId, eaId, baseId) => {
-  if (!guId || baseId == eaId)
-    return `${BASE_URL}/player/${eaId}.webp`;
+  return `${BASE_URL}/player/${eaId}.webp`;
   // return `${BASE_URL}/player//${guId}/p${eaId}.png`;
 };
 
-
-
-export const buildDynamicUrl=(type,nation_id)=>{
-  return  `${BASE_URL}/${type}/${nation_id}.png`
-}
-
+export const buildDynamicUrl = (type, nation_id) => {
+  return `${BASE_URL}/${type}/${nation_id}.png`;
+};
 
 export const buildRarityUrl = ({ level, rating, id }) => {
   let level_no = level;
@@ -373,11 +369,11 @@ export const convertElgReqToFormat = (reqs) => {
   return finalArr;
 };
 
-const QUALITY_DICT={
-  3:'Gold',
-  2:'Silver',
-  1:'Bronze'
-}
+const QUALITY_DICT = {
+  3: "Gold",
+  2: "Silver",
+  1: "Bronze",
+};
 
 export const convertElgReqToStrings = (req) => {
   let u = "sbc.requirements.";
@@ -389,9 +385,8 @@ export const convertElgReqToStrings = (req) => {
   let value = req["value"];
   let i = "";
   switch (type) {
-
     case "PLAYER_QUALITY":
-      str = u+"rare."+c
+      str = u + "rare." + c;
       str = SBC_REQUIREMENTS[str];
       str = str.replace("%1", QUALITY_DICT[value]);
 
@@ -509,17 +504,25 @@ export const convertElgReqToStrings = (req) => {
       str = str
         .replace("%1", playerValue.toString())
         .replace("%2", value.toString());
+      break;
     case "PLAYER_EXACT_OVR":
       str = u + "rating.exact." + c;
       str = SBC_REQUIREMENTS[str];
       str = str
         .replace("%1", playerValue.toString())
         .replace("%2", value.toString());
-
+      break;
     case "FIRST_OWNER_PLAYERS_COUNT":
       str = u + "firstowner." + c;
       str = SBC_REQUIREMENTS[str];
       str = str.replace("%1", value.toString());
+      break;
+
+    case "PLAYER_LEVEL":
+      str = u + "rare." + c;
+      str = SBC_REQUIREMENTS[str];
+      str = str.replace("%1", playerValue.toString());
+      str += ": " + QUALITY_DICT[value];
       break;
     default:
       return "Reached default case building eligibility string: ";

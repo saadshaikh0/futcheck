@@ -123,8 +123,8 @@ const AttributeCard = ({ group_name, value, stats }) => {
         return (
           <div className="flex justify-between pr-2">
             <span>{attr[0]}</span>
-            <span className={classNames(getTextColorClass(stats[attr[1]]))}>
-              {stats[attr[1]]}
+            <span className={classNames(getTextColorClass(stats?.[attr[1]]))}>
+              {stats?.[attr[1]]}
             </span>
           </div>
         );
