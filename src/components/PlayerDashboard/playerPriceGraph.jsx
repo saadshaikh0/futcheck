@@ -19,6 +19,7 @@ import CoinsImg from "../../assets/coins.png";
 import { formatValue } from "../utils/utils";
 import classNames from "classnames";
 import { filterDataByZoomLevel } from "./dashboardUtils";
+import { LockClosedIcon } from "@heroicons/react/20/solid";
 
 const CustomYTick = (props) => {
   const { x, y, payload } = props;
@@ -148,6 +149,14 @@ const PlayerPriceGraph = ({ data }) => {
     setEndIndex(null);
   };
 
+  return (
+    <div className="h-full flex justify-center items-center flex-col">
+      <div className="flex items-center gap-2 text-2xl">
+        <LockClosedIcon className="w-6 h-6 text-white" /> Price Data not
+        available right now
+      </div>
+    </div>
+  );
   return (
     <div className="h-full flex flex-col">
       <div className="grid grid-cols-3  font-bold">

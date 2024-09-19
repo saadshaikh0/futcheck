@@ -23,6 +23,7 @@ import NewSbcCard from "./sbc/NewSbcCard";
 import PlayerCard from "./common/PlayerCard";
 import LatestPlayers from "./hometabs/latestPlayers";
 import MarqueeSbcCard from "./common/MarqueeSbcCard";
+import Footer from "./common/Footer";
 
 const tabs = ["RECENT", "HOT", "IN PACKS"];
 const NewHomePage = () => {
@@ -215,40 +216,9 @@ const NewHomePage = () => {
             </div>
           </div>
         </div>
-        {/* <div
-          className="w-full  relative pb-10"
-          style={{
-            background: `url(${MY_CLUB_BG}) `,
-            backgroundSize: "cover",
-            backgroundRepeat: "no-repeat",
-          }}
-        >
-          <div className={`absolute inset-0 bg-black  opacity-60`}></div>
-          <div className="relative">
-            <h1 className="text-center text-white text-5xl font-medium py-10">
-              MY CLUB
-            </h1>
-            <div className="grid grid-cols-[1fr] px-10">
-              <div></div>
-              <div className="text-white text-2xl font-thin">
-                Discover unparalleled insights into your club with "My Club."
-                This feature provides a comprehensive analysis of your club's
-                players, including the total value and rating distribution. "My
-                Club" also offers the ability to generate Squad Building
-                Challenge (SBC) solutions using your club players. You'll know
-                exactly which SBCs you can complete with your current squad and,
-                if not, how much more you need to invest to get there. All of
-                this is made possible through a seamless Chrome extension that
-                automatically uploads your club player details to our database,
-                ensuring you always have the most up-to-date information at your
-                fingertips. Unlock the full potential of your club, make
-                informed decisions with ease, and maximize your team's
-                performance with "My Club."
-              </div>
-            </div>
-          </div>
-        </div> */}
+        <Footer/>
       </div>
+   
     </div>
   );
 };

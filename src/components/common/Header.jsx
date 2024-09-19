@@ -20,6 +20,8 @@ import { Link } from "react-router-dom";
 import {
   Bars3Icon,
   CalculatorIcon,
+  MagnifyingGlassIcon,
+  UserIcon,
   XMarkIcon,
 } from "@heroicons/react/20/solid";
 import MobileMenuPopover from "./MobileMenuPopover";
@@ -92,15 +94,21 @@ const Navbar = () => {
         class="flex flex-wrap h-[4rem]  sm:justify-start sm:flex-nowrap relative z-50 w-full bg-black text-sm py-3 sm:py-0 sm:pb-2"
       >
         <nav
-          class="relative max-w-[85rem] w-full mx-auto px-4 pt-2 sm:flex sm:items-center sm:justify-between sm:px-6 lg:px-8"
+          class="relative w-4/5 mx-auto px-4 pt-2 sm:flex sm:items-center sm:justify-between sm:px-6 lg:px-8"
           aria-label="Global"
         >
           <div class="flex items-center   grow justify-between gap-4">
             <Link to="/">
-              <img src={FutcheckLogo} width={40} />
+              <div className="flex gap-2 items-center mr-6">
+                <div>
+                  <img src={FutcheckLogo} width={35} className="rounded-md" />
+                </div>
+                <div className="text-white font-bold text-xl">FUTCHECK</div>
+              </div>
             </Link>
             <div ref={ref} className="grow">
               <div ref={setReferenceElement} class=" relative  grow">
+                <MagnifyingGlassIcon className="absolute w-5 h-5 top-2 left-3 text-gray-400" />
                 <input
                   autoComplete="off"
                   onChange={(e) => {
@@ -111,8 +119,8 @@ const Navbar = () => {
                   type={searchMode == "rating" ? "number" : "text"}
                   id="hs-inline-leading-pricing-select-label"
                   name="inline-add-on"
-                  class="py-3 px-4 ps-4 pe-20 block w-full shadow-sm rounded-lg  text-sm focus:z-10 disabled:opacity-50 focus:border-none disabled:pointer-events-none bg-slate-900 border-gray-700 text-gray-400 focus:ring-gray-600"
-                  placeholder="Search..."
+                  class="py-2 px-4 ps-10 pe-20 block w-full shadow-sm rounded-lg  text-sm focus:z-10 disabled:opacity-50 focus:border-none disabled:pointer-events-none bg-[#1F1F1F] border-gray-700 text-gray-400 focus:ring-gray-600"
+                  placeholder="Search Players..."
                 />
                 <CustomPopover
                   styles={styles}
@@ -125,12 +133,21 @@ const Navbar = () => {
                 />
               </div>
             </div>
-            <div className="hidden md:flex gap-8 md:items-center">
+            <div className="hidden md:flex gap-6 md:items-center">
               <Link to="/players/">
-                <div className="text-white  font-bold">Players</div>
+                <div className="text-white flex gap-1 font-bold">
+                  <UserIcon className="text-white w-5" /> Players
+                </div>
               </Link>
               <Link to="/sbc/">
-                <div className="text-white  font-bold">SBCs</div>
+                <div className="text-white flex gap-2  font-bold">
+                  {" "}
+                  <img
+                    className="w-5"
+                    src="https://cdn.futcheck.com/assets/img/fc25/misc/sbc.webp"
+                  />{" "}
+                  <div className="text-white  font-bold">SBCs</div>
+                </div>
               </Link>
               {/* <Link to="/squad-builder/">
                 <div className="text-white  font-bold">Squad Builder</div>
@@ -164,9 +181,9 @@ const Navbar = () => {
                 )}
               </Popover>
             </div>
-            <div className="ml-2">
+            {/* <div className="ml-2">
               <Account />
-            </div>
+            </div> */}
           </div>
         </nav>
       </header>

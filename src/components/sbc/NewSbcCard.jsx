@@ -1,7 +1,6 @@
 import React from "react";
 import {
-  buildSbcImageUrl,
-  getTimeUntilExpiration,
+  buildDynamicUrl,getTimeUntilExpiration,setidUntilExpiration,
   timeAgo,
 } from "../utils/utils";
 import { Link } from "react-router-dom";
@@ -47,7 +46,7 @@ const NewSbcCard = ({ data }) => {
           </div>
           <div className="flex flex-col items-center">
             <img
-              src={buildSbcImageUrl(setImageId)}
+              src={buildDynamicUrl('sbc',setid)}
               alt="Serie A TOTS Upgrade"
               loading="lazy"
             />

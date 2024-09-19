@@ -7,7 +7,7 @@ const PlayerStatCard = ({ player }) => {
   const [selectedTab, setSelectedTab] = useState("stats");
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col min-h-[50vh]">
       <div className="grid grid-cols-2">
         <div
           className={classNames(

@@ -10,6 +10,7 @@ import CoinsImg from "../../assets/coins.png";
 
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
+import { buildDynamicUrl } from "../utils/utils";
 
 const columnHelper = createColumnHelper();
 
@@ -27,7 +28,7 @@ const mini_columns = [
       <div className="flex gap-2 py-4 ml-2 items-center justify-start">
         <img
           className="w-7 "
-          src={`https://www.ea.com/ea-sports-fc/ultimate-team/web-app/content/24B23FDE-7835-41C2-87A2-F453DFDB2E82/2024/fut/items/images/mobile/leagueLogos/dark/${info.row.original.leagueid}.png`}
+          src={buildDynamicUrl("league", info.row.original.leagueid)}
         />{" "}
       </div>
     ),
@@ -40,7 +41,7 @@ const mini_columns = [
       <div className="flex gap-2 py-4 items-center justify-start ml-2">
         <img
           className="w-7 "
-          src={`https://www.ea.com/ea-sports-fc/ultimate-team/web-app/content/24B23FDE-7835-41C2-87A2-F453DFDB2E82/2024/fut/items/images/mobile/flags/list/${info.row.original.nationid}.png`}
+          src={buildDynamicUrl("nation", info.row.original.nationid)}
         />{" "}
       </div>
     ),
@@ -53,8 +54,7 @@ const mini_columns = [
     cell: (info) => (
       <>
         <span className="flex items-center gap-2 text-md ">
-          <img className="w-5" src={CoinsImg} />
-          {info.getValue()}
+          <img className="w-5" src={CoinsImg} />-{/* {info.getValue()} */}
         </span>
       </>
     ),
@@ -75,7 +75,7 @@ const columns = [
       <div className="flex gap-2 py-4 ml-10 items-center justify-start">
         <img
           className="w-7 "
-          src={`https://www.ea.com/ea-sports-fc/ultimate-team/web-app/content/24B23FDE-7835-41C2-87A2-F453DFDB2E82/2024/fut/items/images/mobile/leagueLogos/dark/${info.row.original.leagueid}.png`}
+          src={buildDynamicUrl("league", info.row.original.leagueid)}
         />{" "}
         {info.getValue()}
       </div>
@@ -89,14 +89,15 @@ const columns = [
       <div className="flex gap-2 py-4 items-center justify-start ml-10">
         <img
           className="w-7 "
-          src={`https://www.ea.com/ea-sports-fc/ultimate-team/web-app/content/24B23FDE-7835-41C2-87A2-F453DFDB2E82/2024/fut/items/images/mobile/flags/list/${info.row.original.nationid}.png`}
+          src={buildDynamicUrl("nation", info.row.original.nationid)}
         />{" "}
         {info.getValue()}
       </div>
     ),
   }),
-  columnHelper.accessor("updated", {
+  columnHelper.accessor("created", {
     header: () => <span>Last Updated</span>,
+    cell: (info) => <>{info.getValue()}</>,
   }),
   columnHelper.accessor("cost", {
     id: "cost",
@@ -105,8 +106,7 @@ const columns = [
     cell: (info) => (
       <>
         <span className="flex items-center gap-2 text-md ">
-          <img className="w-5" src={CoinsImg} />
-          {info.getValue()}
+          <img className="w-5" src={CoinsImg} />-{/* {info.getValue()} */}
         </span>
       </>
     ),

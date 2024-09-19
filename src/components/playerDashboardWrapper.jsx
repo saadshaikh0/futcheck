@@ -25,7 +25,7 @@ const PlayerDashboardWrapper = () => {
     return <div>Loading</div>;
   }
   return (
-    <div className="min-h-[calc(100vh-4rem)]">
+    <div >
       <PlayerDashboard />
     </div>
   );

@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import ChallengeCard from "./ChallengeCards";
+import SBC_BACKGROUND from "../../assets/sbc_background_field.webp";
 
 const SbcView = () => {
   const sbc = useSelector((state) => state.sbc.details);
@@ -19,8 +20,16 @@ const SbcView = () => {
     repeatRefreshInterval,
   } = sbc;
   return (
-    <div className="h-full  bg-slate-950">
-      <div className="w-[90%] mx-auto pt-3">
+    <div
+      className="min-h-[calc(100vh-4rem)]"
+      style={{
+        background: `url(${SBC_BACKGROUND}) no-repeat `,
+        backgroundSize: "cover",
+        backgroundAttachment: "fixed",
+      }}
+    >
+      <div className={`fixed inset-0 bg-black  opacity-70`}></div>
+      <div className="w-[90%] relative mx-auto pt-3">
         <div className="pt-5 flex flex-col justify-center items-center">
           <p
             className="text-white
@@ -40,9 +49,14 @@ const SbcView = () => {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {challenges &&
-              challenges.map((challenge) => (
-                <ChallengeCard challengeDetails={challenge} />
-              ))}
+              [...challenges]
+                .sort((a, b) => a.priority - b.priority)
+                .map((challenge) => (
+                  <ChallengeCard
+                    challengeDetails={challenge}
+                    key={challenge.id}
+                  />
+                ))}
           </div>
         </div>
       </div>

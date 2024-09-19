@@ -12,6 +12,7 @@ const SBC = () => {
   });
   return (
     <div
+    className="min-h-[calc(100vh-4rem)]"
       style={{
         background: `url(${SBC_BACKGROUND}) no-repeat `,
         backgroundSize: "cover",

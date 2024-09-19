@@ -25,7 +25,7 @@ const tabs = [
   //   { name: "Playstyles", component: <PlaystylePopup /> },
   { name: "Skill Moves", component: <SkillMovesPopup /> },
   { name: "Weak Foot", component: <WeakFootPopup /> },
-  { name: "Work Rate", component: <WorkRatePopup /> },
+  // { name: "Work Rate", component: <WorkRatePopup /> },
 ];
 
 const AllPlayers = () => {

@@ -4,7 +4,7 @@ import CoinsImg from "../../assets/coins.png";
 import classNames from "classnames";
 import SolutionCardGraph from "./SolutionCardGraph";
 import { useDispatch, useSelector } from "react-redux";
-import { convertCostDistribution } from "../utils/utils";
+import { buildDynamicUrl, convertCostDistribution } from "../utils/utils";
 import { setSolutionLeagueDetails } from "../../redux/sbcSlice";
 
 const SolutionCard = ({ active, solution }) => {
@@ -45,7 +45,7 @@ const SolutionCard = ({ active, solution }) => {
             <p className="font-thin w-16 text-left"> Leagues</p>
             <div className="grid grid-cols-3 gap-3">
               {top_leagues.slice(0, 3)?.map((league) => {
-                const league_url = leagueIdMap[league[0]]?.guid;
+                const league_url = buildDynamicUrl('league',league[0])
                 return <img className="w-10 rounded-md" src={league_url} />;
               })}
             </div>
@@ -54,7 +54,7 @@ const SolutionCard = ({ active, solution }) => {
             <p className="font-thin w-16 text-left"> Nations</p>
             <div className="grid grid-cols-3 gap-3">
               {top_nations.slice(0, 3).map((nation) => {
-                const nation_url = nationIdMap[nation[0]]?.guid;
+                const nation_url = buildDynamicUrl('nation',nation[0])
                 return <img className="w-10 rounded-md" src={nation_url} />;
               })}
             </div>
@@ -63,7 +63,7 @@ const SolutionCard = ({ active, solution }) => {
             <p className="font-thin w-16 text-left"> Clubs</p>
             <div className="grid grid-cols-3 gap-3">
               {top_clubs.slice(0, 3).map((club) => {
-                const club_url = teamIdMap[club[0]]?.guid;
+                const club_url = buildDynamicUrl('club',club[0])
                 return <img className="w-10 rounded-md" src={club_url} />;
               })}
             </div>

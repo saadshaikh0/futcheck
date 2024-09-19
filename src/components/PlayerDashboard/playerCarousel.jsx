@@ -23,7 +23,9 @@ export default function PlayerCarousel({ player, versions, onPlayerChange }) {
     }
   };
   return (
-    <div className="w-full  md:h-[42vh] md:w-[40vw] self-center">
+    <div className="flex flex-col">
+      <div className="text-3xl font-black">{player['name']}</div>
+    <div className="w-full  md:h-[40vh] md:w-[40vw] self-center">
       <Swiper
         effect={"coverflow"}
         grabCursor={true}
@@ -53,6 +55,7 @@ export default function PlayerCarousel({ player, versions, onPlayerChange }) {
           );
         })}
       </Swiper>
+    </div>
     </div>
   );
 }

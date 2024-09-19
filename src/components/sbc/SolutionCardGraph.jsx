@@ -12,6 +12,7 @@ import {
 import CoinsImg from "../../assets/coins.png";
 import { useDispatch, useSelector } from "react-redux";
 import { setSolutionLeagueDetails } from "../../redux/sbcSlice";
+import { buildDynamicUrl } from "../utils/utils";
 // Dummy data
 const data = [
   {
@@ -113,7 +114,7 @@ const CustomTooltip = ({ active, payload, label, selectedLeagueId }) => {
               style={{ color: entry.color }}
             >
               <img
-                src={nationIdMap[entry.name].guid}
+                src={buildDynamicUrl("nation", entry.name)}
                 className="w-6 h-4 mr-2"
               />
               <div className="flex items-center ml-2 gap-1 text-gray-300">

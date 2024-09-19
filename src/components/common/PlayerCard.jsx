@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { setPlayer } from "../../redux/playerSlice";
-import { buildPlayerUrl, fillZeros } from "../utils/utils";
+import { buildDynamicUrl, buildPlayerUrl, fillZeros } from "../utils/utils";
 import CoinsImg from "../../assets/coins.png";
 import { WORK_RATE } from "../utils/constants";
 import { getTraitIcon } from "../utils/traitsvg";
@@ -15,12 +15,16 @@ const PlayerCard = ({
   isHome = false,
   isSuperMini = false,
   isAllPlayers = false,
+  position_abr = null,
+  shouldOpenInNewTab = false,
 }) => {
   const {
     id,
     base_id,
     name,
+    leagueid,
     rating,
+    nation,
     guid,
     rarity_url,
     rarity_id,
@@ -30,8 +34,7 @@ const PlayerCard = ({
     position,
     text_color,
     bg_color,
-    nation_url,
-    league_url,
+
     c_name,
     teamid,
     weak_foot,
@@ -47,13 +50,14 @@ const PlayerCard = ({
     last_updated,
   } = player;
   const [validGuid, setValidGuid] = useState(!!guid);
-  const player_name =
-    c_name != "None" ? c_name : isMini ? name.split(" ").pop() : name;
-
+  const player_name = c_name ? c_name : isMini ? name.split(" ").pop() : name;
+  const isGk = position[0] == "GK";
   return (
     <Link
       onClick={(e) => isDisabled && e.preventDefault()}
       to={`/player/${id}/${name?.replace(/\s+/g, "-")}`}
+      target={shouldOpenInNewTab ? "_blank" : "_self"}
+      rel={shouldOpenInNewTab ? "noopener noreferrer" : undefined}
     >
       <div
         key={id}
@@ -78,8 +82,8 @@ const PlayerCard = ({
             className={
               !validGuid || base_id == id
                 ? isMini
-                  ? "absolute top-[18%] left-[55%] !w-[65%] h-1/2 -translate-x-1/2"
-                  : "absolute top-[15%] left-[58%] !w-[65%] h-1/2 -translate-x-1/2"
+                  ? "absolute top-[11%] left-[55%] !w-[65%] h-1/2 -translate-x-1/2"
+                  : "absolute top-[11%] left-[58%] !w-[65%] h-1/2 -translate-x-1/2"
                 : "absolute top-0 w-full h-full"
             }
             src={buildPlayerUrl(guid, id, base_id)}
@@ -94,7 +98,7 @@ const PlayerCard = ({
             className={classNames(
               "font-bold leading-none  absolute left-[50%] transform -translate-x-1/2 -translate-y-1/2 w-[75.2%] whitespace-nowrap overflow-hidden text-overflow-ellipsis text-center",
               isMini
-                ? "text-[0.8em] top-[80%] "
+                ? "text-[1em] top-[70%] "
                 : isHome
                 ? "text-[1.4em] scale-125:text-[1.2em] top-[67%] "
                 : isAllPlayers
@@ -119,7 +123,7 @@ const PlayerCard = ({
                       : "scale-125:text-[0.5em] text-[0.78em]"
                   )}
                 >
-                  PAC
+                  {isGk ? "DIV" : "PAC"}
                 </div>
                 <div
                   className={classNames(
@@ -145,7 +149,7 @@ const PlayerCard = ({
                       : "scale-125:text-[0.5em] text-[0.78em]"
                   )}
                 >
-                  SHO
+                  {isGk ? "HAN" : "SHO"}
                 </div>
                 <div
                   className={classNames(
@@ -171,7 +175,7 @@ const PlayerCard = ({
                       : "scale-125:text-[0.5em] text-[0.78em]"
                   )}
                 >
-                  PAS
+                  {isGk ? "KIC" : "PAS"}
                 </div>
                 <div
                   className={classNames(
@@ -197,7 +201,7 @@ const PlayerCard = ({
                       : "scale-125:text-[0.5em] text-[0.78em]"
                   )}
                 >
-                  DRI
+                  {isGk ? "REF" : "DRI"}
                 </div>
                 <div
                   className={classNames(
@@ -223,7 +227,7 @@ const PlayerCard = ({
                       : "scale-125:text-[0.5em] text-[0.78em]"
                   )}
                 >
-                  DEF
+                  {isGk ? "SPD" : "DEF"}
                 </div>
                 <div
                   className={classNames(
@@ -249,7 +253,7 @@ const PlayerCard = ({
                       : "scale-125:text-[0.5em] text-[0.78em]"
                   )}
                 >
-                  PHY
+                  {isGk ? "POS" : "PHY"}
                 </div>
                 <div
                   className={classNames(
@@ -298,7 +302,7 @@ const PlayerCard = ({
                   : "text-[1em] scale-125:text-[0.8em]"
               )}
             >
-              {position[0]}
+              {position_abr ?? position[0]}
             </div>
           </div>
           <div
@@ -380,13 +384,13 @@ const PlayerCard = ({
               )}
             >
               <div class="p-[0.1em]  rounded-[0.35em] bg-[--fill-color] border-[0.09em] border-[--color] text-[--color] w-full whitespace-nowrap font-cruyff-condensed-medium  flex justify-center leading-[1]  relative">
-                {skill_moves + 1} ★
+                {skill_moves} ★
               </div>
               <div class="p-[0.1em] rounded-[0.35em] bg-[--fill-color] border-[0.09em] border-[--color] text-[--color] w-full whitespace-nowrap font-cruyff-condensed-medium  flex justify-center leading-[1]  relative">
                 {weak_foot}WF
               </div>
 
-              <div class="rounded-[0.35em] p-[0.1em] bg-[--fill-color] border-[0.09em] border-[--color] text-[--color] w-full whitespace-nowrap font-cruyff-condensed-medium  flex justify-center leading-[1]  relative">
+              {/* <div class="rounded-[0.35em] p-[0.1em] bg-[--fill-color] border-[0.09em] border-[--color] text-[--color] w-full whitespace-nowrap font-cruyff-condensed-medium  flex justify-center leading-[1]  relative">
                 <div class="grid grid-cols-2 gap-[0.2em] w-full justify-between items-center px-[0.1em]">
                   <span class="inline-block text-center">
                     {WORK_RATE[att_wr][0]}
@@ -398,7 +402,7 @@ const PlayerCard = ({
                     {WORK_RATE[def_wr][0]}
                   </span>
                 </div>
-              </div>
+              </div> */}
             </div>
           )}
           <div
@@ -414,11 +418,11 @@ const PlayerCard = ({
             )}
           >
             <img
-              src={nation_url}
+              src={buildDynamicUrl("nation", nation)}
               class={classNames(
                 "object-contain",
                 isSuperMini
-                  ? "max-h-[0.5em] max-w-[0.6em]"
+                  ? "max-h-[1em] max-w-[1em]"
                   : isAllPlayers
                   ? "max-h-[1em] max-w-[1em]"
                   : isMini
@@ -428,11 +432,11 @@ const PlayerCard = ({
               alt="Nation"
             />
             <img
-              src={league_url}
+              src={buildDynamicUrl("league", leagueid)}
               class={classNames(
                 "object-contain",
                 isSuperMini
-                  ? "max-h-[0.5em] max-w-[0.6em]"
+                  ? "max-h-[1em] max-w-[1em]"
                   : isAllPlayers
                   ? "max-h-[1em] max-w-[1em]"
                   : isMini
@@ -442,11 +446,11 @@ const PlayerCard = ({
               alt="League"
             />
             <img
-              src={`https://www.ea.com/ea-sports-fc/ultimate-team/web-app/content/24B23FDE-7835-41C2-87A2-F453DFDB2E82/2024/fut/items/images/mobile/clubs/dark/${teamid}.png`}
+              src={buildDynamicUrl("club", teamid)}
               class={classNames(
                 "object-contain",
                 isSuperMini
-                  ? "max-h-[0.5em] max-w-[0.6em]"
+                  ? "max-h-[1em] max-w-[1em]"
                   : isAllPlayers
                   ? "max-h-[1em] max-w-[1em]"
                   : isMini

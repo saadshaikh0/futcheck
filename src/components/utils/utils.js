@@ -58,6 +58,7 @@ export const fillZeros = (hexcode) => {
   return hexcode;
 };
 
+const BASE_URL='https://cdn.futcheck.com/assets/img/fc25'
 export const buildChallengeImageUrl = (challengeImageId) => {
   return `https://www.ea.com/ea-sports-fc/ultimate-team/web-app/content/24B23FDE-7835-41C2-87A2-F453DFDB2E82/2024/fut/sbc/companion/challenges/images/sbc_challenge_image_${challengeImageId}.png
 `;
@@ -65,15 +66,18 @@ export const buildChallengeImageUrl = (challengeImageId) => {
 
 export const buildPlayerUrl = (guId, eaId, baseId) => {
   if (!guId || baseId == eaId)
-    return `
-https://www.ea.com/ea-sports-fc/ultimate-team/web-app/content/24B23FDE-7835-41C2-87A2-F453DFDB2E82/2024/fut/items/images/mobile/portraits/${eaId}.png`;
-  return `https://www.ea.com/ea-sports-fc/ultimate-team/web-app/content/24B23FDE-7835-41C2-87A2-F453DFDB2E82/2024/fut/items/images/actionShot/${guId}/p${eaId}.png`;
+    return `${BASE_URL}/player/${eaId}.webp`;
+  // return `${BASE_URL}/player//${guId}/p${eaId}.png`;
 };
 
-export const buildSbcImageUrl = (imageId) => {
-  return `https://www.ea.com/ea-sports-fc/ultimate-team/web-app/content/24B23FDE-7835-41C2-87A2-F453DFDB2E82/2024/fut/sbc/companion/sets/images/sbc_set_image_${imageId}.png`;
-};
-export const buildRarityUrl = ({ guid, size, level, rating, id }) => {
+
+
+export const buildDynamicUrl=(type,nation_id)=>{
+  return  `${BASE_URL}/${type}/${nation_id}.png`
+}
+
+
+export const buildRarityUrl = ({ level, rating, id }) => {
   let level_no = level;
   if (level_no > 0) {
     if (rating >= 75) {
@@ -84,8 +88,9 @@ export const buildRarityUrl = ({ guid, size, level, rating, id }) => {
       level_no = 1;
     }
   }
-  return `https://www.ea.com/ea-sports-fc/ultimate-team/web-app/content/24B23FDE-7835-41C2-87A2-F453DFDB2E82/2024/fut/items/images/backgrounds/itemBGs/${guid}/cards_bg_${size}_1_${id}_${level_no}.png`;
+  return `${BASE_URL}/card/l_${level_no}_r_${id}.png`;
 };
+
 export const decimalToHex = (decimal) => {
   // Convert decimal to hexadecimal using toString() method with radix 16
   var hex = decimal.toString(16);
@@ -175,8 +180,6 @@ export const useFetchUserInfo = () => {
 export const addRarityUrl = (data, type = "s") => {
   let updatedData = data.map((player) => {
     player.rarity_url = buildRarityUrl({
-      guid: player.guid_no,
-      size: type,
       level: player.levels,
       rating: player.rating,
       id: player.rarity,
@@ -370,6 +373,12 @@ export const convertElgReqToFormat = (reqs) => {
   return finalArr;
 };
 
+const QUALITY_DICT={
+  3:'Gold',
+  2:'Silver',
+  1:'Bronze'
+}
+
 export const convertElgReqToStrings = (req) => {
   let u = "sbc.requirements.";
   let c = "scope" + req["scope"];
@@ -380,6 +389,13 @@ export const convertElgReqToStrings = (req) => {
   let value = req["value"];
   let i = "";
   switch (type) {
+
+    case "PLAYER_QUALITY":
+      str = u+"rare."+c
+      str = SBC_REQUIREMENTS[str];
+      str = str.replace("%1", QUALITY_DICT[value]);
+
+      break;
     case "ALL_PLAYERS_CHEMISTRY_POINTS":
       str = u + "team.player-chemistry-points." + c;
       str = SBC_REQUIREMENTS[str];

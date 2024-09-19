@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import PlayerCarousel from "./playerCarousel";
 import PlayerStatsGraph from "./playerStatsGraph";
 import PlayerStatCard from "./playerStatCard";
@@ -6,6 +6,8 @@ import InfoCard from "./InfoCard";
 import PlaystyleCard from "../PlayerViewCards/PlaystyleCard";
 import PriceCard from "./priceCard";
 import StatsCard from "../PlayerViewCards/StatsCard";
+import FOOTBALL_STADIUM_IMAGE from "../../assets/my_club_background.webp";
+
 import PlayerPriceGraph from "./playerPriceGraph";
 import SalesCard from "./SalesCard";
 import { useQuery } from "@tanstack/react-query";
@@ -29,7 +31,7 @@ const PlayerDashboard = () => {
     cacheTime: 1000 * 60 * 100,
     staleTime: Infinity,
   });
-
+  useEffect(()=>{setPlayerDetails(player)},[player.id])
   const { priceChange, percentageChange } = useMemo(() => {
     if (price_history_data.length >= 2) {
       // Extract the last two prices
@@ -58,8 +60,13 @@ const PlayerDashboard = () => {
     setPlayerDetails(player);
   };
   return (
-    <div className=" h-full  bg-gray-950">
-      <div className="w-[90%]  text-center text-white mx-auto pt-3">
+    <div style={{
+      background: `url(${FOOTBALL_STADIUM_IMAGE}) `,
+      // backgroundAttachment: "fixed",
+    }} className=" min-h-[calc(100vh-4rem)] ">
+            <div className={`absolute inset-0 bg-black  opacity-80`}></div>
+
+      <div className="w-[90%] relative text-center text-white mx-auto pt-3">
         {/* Mobile Version */}
         <div className="md:hidden flex flex-col gap-5">
           <PlayerCarousel
@@ -74,32 +81,32 @@ const PlayerDashboard = () => {
               percentageChange={percentageChange}
             />
           </div>
-          <div className="bg-gray-900 rounded-md">
+          <div className="bg-[#151515] rounded-md">
             <PlaystyleCard
               playstyles={playerDetails.playstyles}
               iconPlaystyles={playerDetails.playstyle_plus}
             />
           </div>
-          <div className="bg-gray-900 rounded-md flex-grow">
+          <div className="bg-[#151515] rounded-md flex-grow">
             <PlayerStatCard player={playerDetails} />
           </div>
-          <div className="bg-gray-900 rounded-md flex-grow">
+          <div className="bg-[#151515] rounded-md flex-grow">
             <PlayerPriceGraph data={price_history_data} />
           </div>
-          <div className="bg-gray-900 rounded-md pb-3 flex-grow">
+          <div className="bg-[#151515] rounded-md pb-3 flex-grow">
             <SalesCard data={price_history_data} />
           </div>
         </div>
         {/* Desktop Version */}
         <div className="hidden md:grid grid-cols-[1fr_2fr_1fr] gap-5 h-full">
           <div className="flex flex-col gap-4">
-            <div className="bg-gray-900 rounded-md">
+            <div className="bg-[#151515] rounded-md">
               <PlaystyleCard
                 playstyles={playerDetails.playstyles}
                 iconPlaystyles={playerDetails.playstyle_plus}
               />
             </div>
-            <div className="bg-gray-900 rounded-md flex-grow">
+            <div className="bg-[#151515] rounded-md flex-grow">
               <PlayerStatCard player={playerDetails} />
             </div>
           </div>
@@ -109,17 +116,17 @@ const PlayerDashboard = () => {
               versions={playerVersions}
               onPlayerChange={onPlayerChange}
             />
-            <div className="bg-gray-900 rounded-md flex-grow">
+            <div className="bg-[#151515] rounded-md flex-grow">
               <PlayerPriceGraph data={price_history_data} />
             </div>
           </div>
           <div className="flex flex-col gap-4 h-full">
             <div className="flex flex-col gap-2 h-[42vh]">
-              <div className="bg-gray-900 rounded-md pb-2">
+              <div className="bg-[#151515] rounded-md pb-2">
                 <h2 className="font-bold pt-2">Stats Graph</h2>
                 <PlayerStatsGraph player={playerDetails} />
               </div>
-              <div className="rounded-md">
+              <div className="rounded-md h-full">
                 <PriceCard
                   player={playerDetails}
                   priceChange={priceChange}
@@ -127,7 +134,7 @@ const PlayerDashboard = () => {
                 />
               </div>
             </div>
-            <div className="bg-gray-900 rounded-md pb-3 flex-grow">
+            <div className="bg-[#151515] rounded-md pb-3 flex-grow">
               <SalesCard data={price_history_data} />
             </div>
           </div>

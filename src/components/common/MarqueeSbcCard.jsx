@@ -1,6 +1,6 @@
 import React from "react";
 import {
-  buildSbcImageUrl,
+  buildDynamicUrl,
   getTimeUntilExpiration,
   timeAgo,
 } from "../utils/utils";
@@ -48,7 +48,7 @@ const MarqueeSbcCard = ({ data }) => {
           </div>
           <div className="flex w-full flex-col items-center">
             <img
-              src={buildSbcImageUrl(setImageId)}
+              src={buildDynamicUrl('sbc',setid)}
               alt="Serie A TOTS Upgrade"
               loading="lazy"
             />

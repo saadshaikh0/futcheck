@@ -1,9 +1,10 @@
 import React from "react";
+import { buildDynamicUrl } from "../utils/utils";
 
 const PlaystyleCard = ({ playstyles = [], iconPlaystyles = [] }) => {
   if (!playstyles || playstyles.length == 0) {
     return (
-      <div className="h-full w-full flex justify-center items-center">
+      <div className=" w-full flex justify-center items-center h-[10vh]">
         <div className="text-white font-bold ">
           Player does not possess any playstyle.
         </div>
@@ -33,10 +34,8 @@ const PlaystyleCard = ({ playstyles = [], iconPlaystyles = [] }) => {
                 ></path>
               </svg>
               <img
-                className="w-[45px] h-[40px] absolute top-0"
-                src={`
-https://www.ea.com/ea-sports-fc/ultimate-team/web-app/images/traits/icontrait${playstyle}.png
-`}
+                className="w-[35px] h-[35px] absolute left-[2px] top-0"
+                src={buildDynamicUrl('playstyle',playstyle)}
               />
             </div>
           );
@@ -61,10 +60,8 @@ https://www.ea.com/ea-sports-fc/ultimate-team/web-app/images/traits/icontrait${p
                 ></path>
               </svg>
               <img
-                className="w-[45px] h-[40px] absolute top-0"
-                src={`
-https://www.ea.com/ea-sports-fc/ultimate-team/web-app/images/traits/icontrait${playstyle}.png
-`}
+                className="w-[35px] h-[35px] absolute left-[2px] top-0"
+                src={buildDynamicUrl('playstyle',playstyle)}
               />
             </div>
           );

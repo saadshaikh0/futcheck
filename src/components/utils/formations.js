@@ -644,22 +644,23 @@ export const FORMATIONS_POSITIONS = {
     [col3, row2], // CB
     [col5, row2], // CB
     [col1, row2], // LB
-    [col7, row5], // RM
-    [col3, row5], // CM
-    [col5, row5], // CM
-    [col1, row5], // LM
+    [col7, row7], // RM
+    [col4, row5], // CM
+    [col6, row5], // CM
+    [col2, row5], // CM
+    [col1, row7], // LM
     [col4, row8], // ST
   ],
   "5-2-1-2": [
     [col4, row0], // GK
-    [col1, row2], // CB
-    [col3, row2], // CB
-    [col5, row2], // CB
-    [col7, row2], // RB
+    [col2, row2], // CB
+    [col4, row2], // CB
+    [col6, row2], // CB
+    [col7, row4], // RB
     [col1, row4], // LB
     [col2, row6], // CM
     [col6, row6], // CM
-    [col4, row7], // CAM
+    [col4, row6], // CAM
     [col3, row8], // ST
     [col5, row8], // ST
   ],
@@ -1051,6 +1052,7 @@ export const FORMATIONS_POSITIONS_SMALL = {
     [small_col1, small_row2], // LB
     [small_col7, small_row5], // RM
     [small_col3, small_row5], // CM
+    [small_col3, small_row5],
     [small_col5, small_row5], // CM
     [small_col1, small_row5], // LM
     [small_col4, small_row8], // ST

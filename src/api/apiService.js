@@ -94,8 +94,6 @@ export const fetchAllRarities = async () => {
   );
   data.forEach((promo) => {
     promo.rarity_url = buildRarityUrl({
-      guid: promo.guid_no,
-      size: "s",
       level: promo.levels,
       rating: 99,
       id: promo.id,
@@ -275,8 +273,11 @@ export const fetchSbcsData = async () => {
       timeout: 60000,
     });
     let data = response.data.data;
+    let filteredData = data.filter(
+      (item) => !item.name.includes("Foundation") && !item.name.includes("Upgrade")
+    );
 
-    return data;
+    return filteredData;
   } catch (error) {
     console.error("Error fetching Players:", error);
     throw error;

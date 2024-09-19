@@ -1,6 +1,6 @@
 import React from "react";
 import {
-  buildChallengeImageUrl,
+  buildDynamicUrl,
   convertElgReqToFormat,
   convertElgReqToStrings,
 } from "../utils/utils";
@@ -14,9 +14,8 @@ const ChallengeCard = ({ challengeDetails }) => {
     name,
     description,
     cost,
-    challengeImageId,
     eligibilityRequirements,
-    id,
+    
   } = challengeDetails;
 
   const dispatch = useDispatch();
@@ -41,7 +40,7 @@ const ChallengeCard = ({ challengeDetails }) => {
           <a href="/24/squad-builder/5bedfe18-5eec-452f-a645-9d48b236fe1e/">
             {" "}
             <img
-              src={buildChallengeImageUrl(challengeImageId)}
+              src={buildDynamicUrl('challenge',challengeId)}
               alt="89 Rated Squad"
               loading="lazy"
             />

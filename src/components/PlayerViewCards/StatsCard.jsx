@@ -129,12 +129,12 @@ const AttributeCard = ({ group_name, value, stats }) => {
           </div>
         );
       })}
-      {group_name == "pace" && (
+      {/* {group_name == "pace" && (
         <div className="flex flex-col pt-5 text-center">
           <div className="font-bold bg-gray-600">AcceleRATE</div>
           <div className="bg-black font-medium">Mostly Explosive</div>
         </div>
-      )}
+      )} */}
     </div>
   );
 };
@@ -143,11 +143,11 @@ const StatsCard = ({ stats, attributes }) => {
   return (
     <div className="text-white px-4 ">
       <h2 className="text-md py-3 justify-center font-bold flex items-center gap-3">
-        Apply Chemistry{" "}
+        {/* Apply Chemistry{" "}
         <div className="rounded-full cursor-pointer bg-gray-700">
           {" "}
           <ChevronDoubleRightIcon className="w-6 h-6 " />
-        </div>
+        </div> */}
       </h2>
 
       <div className="grid grid-cols-[1fr_1fr] lg:grid-cols-[1fr_1fr] gap-3 lg:gap-5">

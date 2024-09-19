@@ -1,6 +1,6 @@
 import React from "react";
 import {
-  buildSbcImageUrl,
+  buildDynamicUrl,
   getTimeUntilExpiration,
   timeAgo,
 } from "../utils/utils";
@@ -37,7 +37,7 @@ const SbcCard = ({ data }) => {
             <a href="/sbc/upgrades/24-880-serie-a-tots-upgrade/">
               {" "}
               <img
-                src={buildSbcImageUrl(setImageId)}
+                src={buildDynamicUrl('sbc',setid)}
                 alt="Serie A TOTS Upgrade"
                 loading="lazy"
               />

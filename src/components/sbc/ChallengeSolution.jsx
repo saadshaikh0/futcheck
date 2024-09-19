@@ -14,6 +14,7 @@ import { useQuery } from "@tanstack/react-query";
 import PlayerCard from "../common/PlayerCard";
 import {
   FORMATIONS_POSITIONS,
+  FORMATIONS_POSITIONS_ABBR,
   FORMATIONS_POSITIONS_SMALL,
 } from "../utils/formations";
 import SolutionCard from "./SolutionCard";
@@ -27,6 +28,7 @@ const SolutionPitch = ({
   positions,
   solutionLeagueDetails,
   isSuperMini,
+  positionsAbbr,
 }) => {
   return (
     <div
@@ -48,14 +50,20 @@ const SolutionPitch = ({
       <div className="flex w-full flex-wrap relative h-full">
         {selectedSolution &&
           selectedSolution.details.squad.map((player, index) => {
-            let left = positions[index][0];
-            let bottom = positions[index][1];
+            let left = positions[index]?.[0] ?? 0;
+            let bottom = positions[index]?.[1] ?? 0;
+            console.log(index, left, bottom);
             let player_position_index =
               selectedSolution.details.player_position_index;
             let playerIndex = selectedSolution.details.squad.findIndex(
               (d) => d.id === player_position_index[index]
             );
+
+            let position_abr = positionsAbbr?.[index];
             let playerData = selectedSolution.details.squad[playerIndex];
+            position_abr = playerData?.position?.includes(position_abr)
+              ? position_abr
+              : null;
             return (
               <div
                 key={playerData.id}
@@ -70,8 +78,11 @@ const SolutionPitch = ({
                 style={{ left, bottom }}
               >
                 <PlayerCard
+                  shouldOpenInNewTab={true}
+                  position_abr={position_abr}
                   isSuperMini={isSuperMini}
                   player={playerData}
+                  isDisabled={false}
                   isMini={true}
                   isHover={true}
                 />
@@ -103,12 +114,18 @@ const ChallengeSolutions = () => {
     FORMATIONS_POSITIONS[formationString]
   );
 
+  const [positionsAbbr, setPositionsAbbr] = useState(
+    FORMATIONS_POSITIONS_ABBR[formationString]
+  );
   useEffect(() => {
     if (isMobile) {
-      setPositions(FORMATIONS_POSITIONS_SMALL[formationString]);
+      let position_arr = FORMATIONS_POSITIONS_SMALL[formationString];
+      setPositions(position_arr);
     } else {
-      setPositions(FORMATIONS_POSITIONS[formationString]);
+      let position_arr = FORMATIONS_POSITIONS[formationString];
+      setPositions(position_arr);
     }
+    setPositionsAbbr(FORMATIONS_POSITIONS_ABBR[formationString]);
   }, [isMobile, formationString]);
   useEffect(() => {
     async function fetchData() {
@@ -153,6 +170,7 @@ const ChallengeSolutions = () => {
             positions={positions}
             solutionLeagueDetails={solutionLeagueDetails}
             isSuperMini={true}
+            positionsAbbr={positionsAbbr}
           />
           {challengeSolutions && (
             <SolutionTable
@@ -187,6 +205,8 @@ const ChallengeSolutions = () => {
               selectedSolution={selectedSolution}
               positions={positions}
               solutionLeagueDetails={solutionLeagueDetails}
+              isSuperMini={true}
+              positionsAbbr={positionsAbbr}
             />
           </div>
         </div>

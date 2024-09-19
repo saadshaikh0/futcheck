@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import CoinsImg from "../../assets/coins.png";
-import { ClockIcon } from "@heroicons/react/20/solid";
+import { ClockIcon, LockClosedIcon } from "@heroicons/react/20/solid";
 import VolatilityChart from "./VolatilityChart";
 import { calculateMomentum, getBestWindowToBuyAndSell } from "./dashboardUtils";
 import PlayerPriceGraph from "./playerPriceGraph";
@@ -152,6 +152,15 @@ const SalesCard = ({ data }) => {
   // });
   const insights = calculateInsights(data);
   return (
+    <div className="h-full flex justify-center items-center flex-col">
+      <div className="flex items-center gap-2 text-2xl">
+        <LockClosedIcon className="w-6 h-6 text-white" /> Insights not available
+        right now
+      </div>
+    </div>
+  );
+
+  return (
     <div className="h-[40vh] scale-125:md:h-[50vh] ">
       <div className="font-bold p-2">Insights</div>
 
@@ -181,7 +190,7 @@ const SalesCard = ({ data }) => {
           </div> */}
 
           <div className="flex justify-between">
-            <div className="text-gray-400 font-medium">
+            <div className="text-gray-300 font-medium">
               All Time Low / High{" "}
             </div>
             <div className="flex">
@@ -197,7 +206,8 @@ const SalesCard = ({ data }) => {
             </div>
           </div>
           <div className="flex justify-between text-white">
-            <span> Momentum</span> <span>{insights.calculatedMomentum}</span>
+            <span className="text-gray-300 "> Momentum</span>{" "}
+            <span>{insights.calculatedMomentum}</span>
           </div>
           <div className="my-4">Last 7 days Average Hourly Price</div>
           {/* <p>cv : {insights.cv}</p> */}

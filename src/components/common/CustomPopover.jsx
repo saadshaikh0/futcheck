@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import { Popover } from "@headlessui/react";
 import { useDispatch } from "react-redux";
 import { setPlayer } from "../../redux/playerSlice";
-import { fillZeros, useOutsideClick } from "../utils/utils";
+import { buildDynamicUrl, buildPlayerUrl, fillZeros, useOutsideClick } from "../utils/utils";
 import { Link } from "react-router-dom";
 const PopoverItems = ({ closePanel, player }) => {
   const {
@@ -10,7 +10,7 @@ const PopoverItems = ({ closePanel, player }) => {
     id,
     name,
     rarity_url,
-    nation_url,
+    nation,
     rating,
     position,
     c_name,
@@ -42,17 +42,17 @@ const PopoverItems = ({ closePanel, player }) => {
             backgroundSize: "contain",
             backgroundRepeat: "no-repeat",
           }}
-          className="p-4 pl-2 pt-2"
+          className="p-4 pl-[0.2rem] pt-[0.3rem]"
         >
           <img
-            src={`https://www.ea.com/ea-sports-fc/ultimate-team/web-app/content/24B23FDE-7835-41C2-87A2-F453DFDB2E82/2024/fut/items/images/mobile/portraits/${base_id}.png`}
+            src={buildPlayerUrl(null, base_id, base_id)}
             width={40}
           />
         </div>
 
-        <img src={nation_url} width={32} />
+        <img src={buildDynamicUrl('nation',nation)} width={32} />
         <div className="grid grid-rows-2">
-          <span>{c_name != "None" ? c_name : name}</span>
+          <span>{c_name  ? c_name : name}</span>
           <div>
             <span>{position[0]}</span>
             {otherPos.length ? <span>-{otherPos.join(",")}</span> : <></>}
