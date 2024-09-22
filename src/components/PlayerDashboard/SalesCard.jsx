@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 import CoinsImg from "../../assets/coins.png";
-import { ClockIcon, LockClosedIcon } from "@heroicons/react/20/solid";
+import {
+  ArrowTrendingDownIcon,
+  ArrowTrendingUpIcon,
+  ClockIcon,
+  LockClosedIcon,
+} from "@heroicons/react/20/solid";
 import VolatilityChart from "./VolatilityChart";
 import { calculateMomentum, getBestWindowToBuyAndSell } from "./dashboardUtils";
 import PlayerPriceGraph from "./playerPriceGraph";
@@ -44,12 +49,22 @@ const calculateInsights = (data) => {
     return prices.filter((price) => price >= lowerBound && price <= upperBound);
   };
 
-  const averagePrices = hourlyPrices.map((prices) => {
+  let averagePrices = hourlyPrices.map((prices) => {
     const filteredPrices = removeOutliers(prices);
     const sum = filteredPrices.reduce((acc, price) => acc + price, 0);
     return filteredPrices.length > 0 ? sum / filteredPrices.length : null;
   });
-
+  let lastValidValue = null;
+  averagePrices = averagePrices.map((price) => {
+    if (price === null && lastValidValue !== null) {
+      // If the price is null, use the last valid non-null value
+      return lastValidValue;
+    } else if (price !== null) {
+      // If the price is valid, update the last valid value
+      lastValidValue = price;
+    }
+    return price;
+  });
   // Best time to buy and sell
   const bestBuyHour = averagePrices.indexOf(
     Math.min(...averagePrices.filter((price) => price !== null))
@@ -142,7 +157,7 @@ const formatHour = (hour) => {
 //   );
 // };
 
-const SalesCard = ({ data }) => {
+const SalesCard = ({ data, isLoading, isSbc }) => {
   const now = new Date();
   // const lastDaysData = data.filter((record) => {
   //   const recordDate = new Date(record.time);
@@ -151,14 +166,23 @@ const SalesCard = ({ data }) => {
   //   return diffDays <= 7;
   // });
   const insights = calculateInsights(data);
-  return (
-    <div className="hidden h-full md:flex justify-center items-center flex-col">
-      <div className="flex items-center gap-2 text-2xl">
-        <LockClosedIcon className="w-6 h-6 text-white" /> Insights not available
-        right now
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-full">
+        <div className="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12"></div>
       </div>
-    </div>
-  );
+    );
+  }
+  if (isSbc)
+    return (
+      <div className="hidden h-full md:flex justify-center items-center flex-col">
+        <div className="flex items-center gap-2 text-2xl">
+          <LockClosedIcon className="w-6 h-6 text-white" /> Insights not
+          available right now
+        </div>
+      </div>
+    );
 
   return (
     <div className="h-[40vh] scale-125:md:h-[50vh] ">
@@ -190,9 +214,7 @@ const SalesCard = ({ data }) => {
           </div> */}
 
           <div className="flex justify-between">
-            <div className="text-gray-300 font-medium">
-              All Time Low / High{" "}
-            </div>
+            <div className="text-gray-300 font-medium">7 Day Low / High </div>
             <div className="flex">
               <div className="flex  items-center">
                 <img src={CoinsImg} className="w-4 h-4" />{" "}
@@ -207,7 +229,17 @@ const SalesCard = ({ data }) => {
           </div>
           <div className="flex justify-between text-white">
             <span className="text-gray-300 "> Momentum</span>{" "}
-            <span>{insights.calculatedMomentum}</span>
+            <span>
+              {insights.calculatedMomentum ? (
+                <span className="flex gap-2 text-green-500">
+                  UP <ArrowTrendingUpIcon className="w-6 h-6 " />
+                </span>
+              ) : (
+                <span className="flex gap-2 text-red-500">
+                  DOWN <ArrowTrendingDownIcon className="w-6 h-6 " />
+                </span>
+              )}
+            </span>
           </div>
           <div className="my-4">Last 7 days Average Hourly Price</div>
           {/* <p>cv : {insights.cv}</p> */}

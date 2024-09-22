@@ -25,12 +25,13 @@ const PlayerDashboard = () => {
   });
 
   const [playerDetails, setPlayerDetails] = useState(player ?? []);
-  const { data: price_history_data = [] } = useQuery({
-    queryKey: ["fetchPlayerPriceHistory", playerDetails.id],
-    queryFn: () => fetchPlayerPriceHistory(playerDetails.id),
-    cacheTime: 1000 * 60 * 100,
-    staleTime: Infinity,
-  });
+  const { data: price_history_data = [], isLoading: isPriceHistoryLoading } =
+    useQuery({
+      queryKey: ["fetchPlayerPriceHistory", playerDetails.id],
+      queryFn: () => fetchPlayerPriceHistory(playerDetails.id),
+      cacheTime: 1000 * 60 * 100,
+      staleTime: Infinity,
+    });
   useEffect(() => {
     setPlayerDetails(player);
   }, [player.id]);
@@ -98,10 +99,18 @@ const PlayerDashboard = () => {
             <PlayerStatCard player={playerDetails} />
           </div>
           <div className="bg-[#151515] rounded-md flex-grow">
-            <PlayerPriceGraph data={price_history_data} />
+            <PlayerPriceGraph
+              data={price_history_data}
+              Loading={isPriceHistoryLoading}
+              isSbc={playerDetails.sbcsetid}
+            />
           </div>
           <div className="bg-[#151515] rounded-md pb-3 flex-grow">
-            <SalesCard data={price_history_data} />
+            <SalesCard
+              data={price_history_data}
+              isLoading={isPriceHistoryLoading}
+              isSbc={playerDetails.sbcsetid}
+            />
           </div>
         </div>
         {/* Desktop Version */}
@@ -124,7 +133,11 @@ const PlayerDashboard = () => {
               onPlayerChange={onPlayerChange}
             />
             <div className="bg-[#151515] rounded-md flex-grow">
-              <PlayerPriceGraph data={price_history_data} />
+              <PlayerPriceGraph
+                data={price_history_data}
+                isLoading={isPriceHistoryLoading}
+                isSbc={playerDetails.sbcsetid}
+              />
             </div>
           </div>
           <div className="flex flex-col gap-4 h-full">
@@ -142,7 +155,11 @@ const PlayerDashboard = () => {
               </div>
             </div>
             <div className="bg-[#151515] rounded-md pb-3 flex-grow">
-              <SalesCard data={price_history_data} />
+              <SalesCard
+                data={price_history_data}
+                isLoading={isPriceHistoryLoading}
+                isSbc={playerDetails.sbcsetid}
+              />
             </div>
           </div>
         </div>

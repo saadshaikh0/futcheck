@@ -51,10 +51,7 @@ export const calculateMomentum = (priceHistory) => {
   const shortEMA = calculateEMA(prices, 2); // 3-hour EMA
   const longEMA = calculateEMA(prices, 8); // 6-hour EMA
 
-  const momentum =
-    shortEMA[shortEMA.length - 1] > longEMA[longEMA.length - 1]
-      ? "Momentum Going Up"
-      : "Momentum Going Down";
+  const momentum = shortEMA[shortEMA.length - 1] > longEMA[longEMA.length - 1];
 
   return momentum;
 };

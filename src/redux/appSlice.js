@@ -9,6 +9,7 @@ const initialState = {
   leagueIdMap: {},
   teamIdMap: {},
   userInfo: null,
+  selectedTimezone: "UTC",
 };
 
 export const appSlice = createSlice({
@@ -50,6 +51,9 @@ export const appSlice = createSlice({
         return map;
       }, {});
     },
+    setSelectedTimezone: (state, action) => {
+      state.selectedTimezone = action.payload;
+    },
   },
 });
 
@@ -62,6 +66,7 @@ export const {
   setUserInfo,
   removeUserInfo,
   updateFavouritePlayers,
+  setSelectedTimezone,
 } = appSlice.actions;
 
 export default appSlice.reducer;
