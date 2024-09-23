@@ -44,18 +44,29 @@ function calculateEMA(prices, period) {
   return emaArray;
 }
 
-// Example usage inside React component
 export const calculateMomentum = (priceHistory) => {
   const prices = priceHistory.map((item) => item.price);
 
   const shortEMA = calculateEMA(prices, 2); // 3-hour EMA
   const longEMA = calculateEMA(prices, 8); // 6-hour EMA
 
-  const momentum = shortEMA[shortEMA.length - 1] > longEMA[longEMA.length - 1];
+  // Calculate the differences between the latest and previous values
+  const recentPriceDifference =
+    prices[prices.length - 1] - prices[prices.length - 2];
+  const shortEMADifference =
+    shortEMA[shortEMA.length - 1] - shortEMA[shortEMA.length - 2];
+  const longEMADifference =
+    longEMA[longEMA.length - 1] - longEMA[longEMA.length - 2];
 
-  return momentum;
+  // Determine if the momentum is going up or down based on both short and long EMA trends
+  const isMomentumUp =
+    recentPriceDifference > 0 &&
+    shortEMADifference > 0 &&
+    longEMADifference > 0 &&
+    shortEMA[shortEMA.length - 1] > longEMA[longEMA.length - 1];
+
+  return isMomentumUp; // Returns true if momentum is going up, false otherwise
 };
-
 export const getBestWindowToBuyAndSell = (priceHistory) => {
   // Define the 4-hour windows
   const windows = {
