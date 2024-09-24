@@ -123,6 +123,13 @@ const AllPlayers = () => {
   useEffect(() => {
     refetch();
   }, [filters, isClub]);
+
+  // Reset filters when the component unmounts
+  useEffect(() => {
+    return () => {
+      clearFilters();
+    };
+  }, []);
   const getValues = (key, value) => {
     if (key == "page") {
       return value;
