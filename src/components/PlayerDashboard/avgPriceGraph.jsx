@@ -9,11 +9,11 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { useSelector } from "react-redux";
-import { formatValue } from "../utils/utils";
+import { formatPrice } from "../utils/utils";
 import CoinsImg from "../../assets/coins.png";
 const CustomYTick = (props) => {
   const { x, y, payload } = props;
-  const formattedValue = formatValue(payload.value);
+  const formattedValue = formatPrice(payload.value);
   const textWidth = formattedValue.length * 6;
   const imageXPosition = -textWidth - 5;
   return (

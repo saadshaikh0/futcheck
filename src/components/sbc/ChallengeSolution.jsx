@@ -79,6 +79,7 @@ const SolutionPitch = ({
                 style={{ left, bottom }}
               >
                 <PlayerCard
+                  showPrice={true}
                   shouldOpenInNewTab={true}
                   position_abr={position_abr}
                   isSuperMini={isSuperMini}

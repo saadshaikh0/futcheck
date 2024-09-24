@@ -9,6 +9,7 @@ import { getTraitIcon } from "../utils/traitsvg";
 import classNames from "classnames";
 const PlayerCard = ({
   player,
+  showPrice = false,
   isMini = true,
   isDisabled = true,
   isHover = false,
@@ -112,8 +113,24 @@ const PlayerCard = ({
             <span className="group-hover:block text-[0.5em] pt-3  md:text-sm text-wrap hidden">
               {c_name ?? name?.slice(0, 20)}
             </span>
-            <span className="block group-hover:hidden ">{player_name}</span>
+
+            <div
+              className={classNames(
+                "flex flex-col gap-1 group-hover:hidden ",
+                showPrice ? "pt-4 gap-0 md:gap-1" : " pt-0"
+              )}
+            >
+              <div className=""> {player_name}</div>
+
+              {showPrice && (
+                <div className="flex justify-center gap-0">
+                  <img src={CoinsImg} className="w-3 h-3" alt="" />{" "}
+                  {latest_price?.toLocaleString("en-us")}
+                </div>
+              )}
+            </div>
           </div>
+
           {!isMini && (
             <div
               className={`flex flex-row absolute top-[71%] w-[68.8%] font-bold left-1/2 transform -translate-x-1/2 justify-between`}

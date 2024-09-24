@@ -16,14 +16,14 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import { setSelectedTimezone } from "../../redux/appSlice";
 import CoinsImg from "../../assets/coins.png";
-import { formatValue } from "../utils/utils";
+import { formatPrice } from "../utils/utils";
 import classNames from "classnames";
 import { filterDataByZoomLevel } from "./dashboardUtils";
 import { LockClosedIcon } from "@heroicons/react/20/solid";
 
 const CustomYTick = ({ x, y, payload, extinctLevel }) => {
   const formattedValue =
-    payload.value === extinctLevel ? "Extinct" : formatValue(payload.value);
+    payload.value === extinctLevel ? "Extinct" : formatPrice(payload.value);
   const textWidth = formattedValue.length * 6;
   const imageXPosition = -textWidth - 5;
 

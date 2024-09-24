@@ -1,6 +1,6 @@
 import React from "react";
 import CoinsImg from "../../assets/coins.png";
-import { formatValue, timeAgo } from "../utils/utils";
+import { formatPrice, timeAgo } from "../utils/utils";
 import classNames from "classnames";
 
 const PriceCard = ({ player, priceChange, percentageChange }) => {
@@ -40,7 +40,7 @@ const PriceCard = ({ player, priceChange, percentageChange }) => {
         <div>
           {!isNegative ? "+" : ""} {percentageChange}% ({" "}
           {!isNegative ? "+" : ""}
-          {formatValue(parseInt(priceChange))})
+          {formatPrice(parseInt(priceChange))})
         </div>
       </div>
       <div className="flex justify-between">

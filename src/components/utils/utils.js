@@ -559,7 +559,7 @@ export function convertFormation(input = "f433") {
 //   Portugal: 10,
 // },
 
-export const formatValue = (value) => {
+export const formatPrice = (value) => {
   const formatWithSuffix = (num, suffix) => {
     let formattedValue = num.toFixed(3);
 
