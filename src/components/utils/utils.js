@@ -606,6 +606,173 @@ export function convertCostDistribution(cost_distribution, leagueIdMap) {
   return { data, nations };
 }
 
-// Example usage:
-const result = timeAgo("2024-09-02T01:19:16.301");
-console.log(result); // Output will be something like "5 minutes ago", "1 hour ago", etc.
+export const roleMapping = [
+  {
+    id: 1,
+    name: "Goalkeeper",
+  },
+  {
+    id: 2,
+    name: "Sweeper Keeper",
+  },
+  {
+    id: 3,
+    name: "Fullback",
+  },
+  {
+    id: 4,
+    name: "Falseback",
+  },
+  {
+    id: 5,
+    name: "Wingback",
+  },
+  {
+    id: 6,
+    name: "Attacking Wingback",
+  },
+  {
+    id: 7,
+    name: "Fullback",
+  },
+  {
+    id: 8,
+    name: "Falseback",
+  },
+  {
+    id: 9,
+    name: "Wingback",
+  },
+  {
+    id: 10,
+    name: "Attacking Wingback",
+  },
+  {
+    id: 11,
+    name: "Defender",
+  },
+  {
+    id: 12,
+    name: "Stopper",
+  },
+  {
+    id: 13,
+    name: "Ball-Playing Defender",
+  },
+  {
+    id: 14,
+    name: "Holding",
+  },
+  {
+    id: 15,
+    name: "Centre-Half",
+  },
+  {
+    id: 16,
+    name: "Deep-Lying Playmaker",
+  },
+  {
+    id: 18,
+    name: "Box-To-Box",
+  },
+  {
+    id: 19,
+    name: "Holding",
+  },
+  {
+    id: 20,
+    name: "Deep-Lying Playmaker",
+  },
+  {
+    id: 21,
+    name: "Playmaker",
+  },
+  {
+    id: 22,
+    name: "Half-Winger",
+  },
+  {
+    id: 23,
+    name: "Winger",
+  },
+  {
+    id: 24,
+    name: "Wide Midfielder",
+  },
+  {
+    id: 25,
+    name: "Wide Playmaker",
+  },
+  {
+    id: 26,
+    name: "Inside Forward",
+  },
+  {
+    id: 27,
+    name: "Winger",
+  },
+  {
+    id: 28,
+    name: "Wide Midfielder",
+  },
+  {
+    id: 29,
+    name: "Wide Playmaker",
+  },
+  {
+    id: 30,
+    name: "Inside Forward",
+  },
+  {
+    id: 31,
+    name: "Playmaker",
+  },
+  {
+    id: 32,
+    name: "Shadow Striker",
+  },
+  {
+    id: 33,
+    name: "Half-Winger",
+  },
+  {
+    id: 35,
+    name: "Winger",
+  },
+  {
+    id: 36,
+    name: "Inside Forward",
+  },
+  {
+    id: 37,
+    name: "Wide Playmaker",
+  },
+  {
+    id: 38,
+    name: "Winger",
+  },
+  {
+    id: 39,
+    name: "Inside Forward",
+  },
+  {
+    id: 40,
+    name: "Wide Playmaker",
+  },
+  {
+    id: 41,
+    name: "Advanced Forward",
+  },
+  {
+    id: 42,
+    name: "Poacher",
+  },
+  {
+    id: 43,
+    name: "False 9",
+  },
+  {
+    id: 44,
+    name: "Target Forward",
+  },
+];

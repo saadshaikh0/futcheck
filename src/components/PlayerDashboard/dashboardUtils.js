@@ -47,8 +47,8 @@ function calculateEMA(prices, period) {
 export const calculateMomentum = (priceHistory) => {
   const prices = priceHistory.map((item) => item.price);
 
-  const shortEMA = calculateEMA(prices, 2); // 3-hour EMA
-  const longEMA = calculateEMA(prices, 8); // 6-hour EMA
+  const shortEMA = calculateEMA(prices, 3);
+  const longEMA = calculateEMA(prices, 8);
 
   // Calculate the differences between the latest and previous values
   const recentPriceDifference =
@@ -58,14 +58,25 @@ export const calculateMomentum = (priceHistory) => {
   const longEMADifference =
     longEMA[longEMA.length - 1] - longEMA[longEMA.length - 2];
 
-  // Determine if the momentum is going up or down based on both short and long EMA trends
+  // Check if the recent price has been stable for the last 2 hours (no significant change)
+  const isStable =
+    Math.abs(prices[prices.length - 1] - prices[prices.length - 2]) < 0.01 &&
+    Math.abs(prices[prices.length - 2] - prices[prices.length - 3]) < 0.01; // Threshold for stability
+
+  // Determine if the momentum is going up based on both short and long EMA trends
   const isMomentumUp =
+    !isStable && // Momentum can't be up if the price is stable
     recentPriceDifference > 0 &&
     shortEMADifference > 0 &&
     longEMADifference > 0 &&
     shortEMA[shortEMA.length - 1] > longEMA[longEMA.length - 1];
 
-  return isMomentumUp; // Returns true if momentum is going up, false otherwise
+  // Return "stable" if price has been stable, otherwise momentum up/down
+  if (isStable) {
+    return "stable"; // The price has been stable
+  }
+
+  return isMomentumUp ? "up" : "down"; // Return momentum up or down
 };
 export const getBestWindowToBuyAndSell = (priceHistory) => {
   // Define the 4-hour windows

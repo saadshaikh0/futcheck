@@ -4,13 +4,13 @@ import {
   ArrowTrendingDownIcon,
   ArrowTrendingUpIcon,
   ClockIcon,
+  InformationCircleIcon,
   LockClosedIcon,
 } from "@heroicons/react/20/solid";
-import VolatilityChart from "./VolatilityChart";
 import { calculateMomentum, getBestWindowToBuyAndSell } from "./dashboardUtils";
-import PlayerPriceGraph from "./playerPriceGraph";
 import AvgPriceGraph from "./avgPriceGraph";
-
+import { Tooltip } from "react-tooltip";
+import { MOMENTUM_TEXT } from "../utils/constants";
 const calculateCV = (stdDev, meanPrice) => {
   return stdDev / meanPrice || 0;
 };
@@ -190,29 +190,6 @@ const SalesCard = ({ data, isLoading, isSbc }) => {
 
       <div className="no-scrollbar  py-2 px-5 flex-grow h-[60%]">
         <div className="flex flex-col gap-1 h-full ">
-          {/* <div className="flex justify-between">
-            <div className="text-gray-400 font-medium">Best Hour to Buy</div>
-            <div className="flex gap-1 items-center">
-              <ClockIcon className="w-4 h-4" /> {insights.bestBuyWindow}
-              <span className="flex gap-1 items-center text-gray-400">
-                {" "}
-                (<img src={CoinsImg} className="w-3 h-3" />
-                {insights.minAvgPrice?.toLocaleString("en-us")})
-              </span>
-            </div>
-          </div>
-          <div className="flex justify-between">
-            <div className="text-gray-400 font-medium">Best Hour to Sell</div>
-            <div className="flex gap-1 items-center">
-              <ClockIcon className="w-4 h-4" /> {insights.bestSellWindow}
-              <span className="flex gap-1 items-center text-gray-400">
-                {" "}
-                (<img src={CoinsImg} className="w-3 h-3" />
-                {insights.maxAvgPrice?.toLocaleString("en-us")})
-              </span>
-            </div>
-          </div> */}
-
           <div className="flex justify-between">
             <div className="text-gray-300 font-medium">7 Day Low / High </div>
             <div className="flex">
@@ -228,9 +205,21 @@ const SalesCard = ({ data, isLoading, isSbc }) => {
             </div>
           </div>
           <div className="flex justify-between text-white">
-            <span className="text-gray-300 "> Momentum</span>{" "}
+            <span className="text-gray-300 flex gap-1 items-center ">
+              {" "}
+              Momentum{" "}
+              <InformationCircleIcon
+                className="text-white w-4 h-4 cursor-pointer"
+                id="momentum-info"
+              />{" "}
+              <Tooltip place="bottom" anchorSelect="#momentum-info">
+                {MOMENTUM_TEXT[insights.calculatedMomentum]}
+              </Tooltip>
+            </span>{" "}
             <span>
-              {insights.calculatedMomentum ? (
+              {insights.calculatedMomentum == "stable" ? (
+                <span className="flex gap-2 text-white">Stable</span>
+              ) : insights.calculatedMomentum == "up" ? (
                 <span className="flex gap-2 text-green-500">
                   UP <ArrowTrendingUpIcon className="w-6 h-6 " />
                 </span>

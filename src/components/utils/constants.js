@@ -21,3 +21,9 @@ export const FILTER_TEXT = {
   dwr: "Defensive WR",
   awr: "Attacking WR",
 };
+
+export const MOMENTUM_TEXT = {
+  stable: "Price has been stable for the last few hours",
+  up: "Price has been going up for the last few hours",
+  down: "Price has been going down for the last few hours",
+};
