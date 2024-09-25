@@ -13,6 +13,7 @@ import SalesCard from "./SalesCard";
 import { useQuery } from "@tanstack/react-query";
 import { fetchPlayerPriceHistory, fetchVersions } from "../../api/apiService";
 import { useSelector } from "react-redux";
+import RolesCard from "./rolesCard";
 
 const PlayerDashboard = () => {
   const player = useSelector((state) => state.player.details);
@@ -83,6 +84,12 @@ const PlayerDashboard = () => {
             onPlayerChange={onPlayerChange}
           />
           <div className="rounded-md">
+            <RolesCard
+              plusplusroles={player.plusplusroles}
+              plusroles={player.plusroles}
+            />
+          </div>
+          <div className="rounded-md">
             <PriceCard
               player={playerDetails}
               priceChange={priceChange}
@@ -143,8 +150,11 @@ const PlayerDashboard = () => {
           <div className="flex flex-col gap-4 h-full">
             <div className="flex flex-col gap-2 h-[42vh]">
               <div className="bg-[#151515] rounded-md pb-2">
-                <h2 className="font-bold pt-2">Stats Graph</h2>
-                <PlayerStatsGraph player={playerDetails} />
+                <RolesCard
+                  plusplusroles={player.plusplusroles}
+                  plusroles={player.plusroles}
+                />
+                {/* <PlayerStatsGraph player={playerDetails} /> */}
               </div>
               <div className="rounded-md h-full">
                 <PriceCard

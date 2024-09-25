@@ -606,173 +606,47 @@ export function convertCostDistribution(cost_distribution, leagueIdMap) {
   return { data, nations };
 }
 
-export const roleMapping = [
-  {
-    id: 1,
-    name: "Goalkeeper",
-  },
-  {
-    id: 2,
-    name: "Sweeper Keeper",
-  },
-  {
-    id: 3,
-    name: "Fullback",
-  },
-  {
-    id: 4,
-    name: "Falseback",
-  },
-  {
-    id: 5,
-    name: "Wingback",
-  },
-  {
-    id: 6,
-    name: "Attacking Wingback",
-  },
-  {
-    id: 7,
-    name: "Fullback",
-  },
-  {
-    id: 8,
-    name: "Falseback",
-  },
-  {
-    id: 9,
-    name: "Wingback",
-  },
-  {
-    id: 10,
-    name: "Attacking Wingback",
-  },
-  {
-    id: 11,
-    name: "Defender",
-  },
-  {
-    id: 12,
-    name: "Stopper",
-  },
-  {
-    id: 13,
-    name: "Ball-Playing Defender",
-  },
-  {
-    id: 14,
-    name: "Holding",
-  },
-  {
-    id: 15,
-    name: "Centre-Half",
-  },
-  {
-    id: 16,
-    name: "Deep-Lying Playmaker",
-  },
-  {
-    id: 18,
-    name: "Box-To-Box",
-  },
-  {
-    id: 19,
-    name: "Holding",
-  },
-  {
-    id: 20,
-    name: "Deep-Lying Playmaker",
-  },
-  {
-    id: 21,
-    name: "Playmaker",
-  },
-  {
-    id: 22,
-    name: "Half-Winger",
-  },
-  {
-    id: 23,
-    name: "Winger",
-  },
-  {
-    id: 24,
-    name: "Wide Midfielder",
-  },
-  {
-    id: 25,
-    name: "Wide Playmaker",
-  },
-  {
-    id: 26,
-    name: "Inside Forward",
-  },
-  {
-    id: 27,
-    name: "Winger",
-  },
-  {
-    id: 28,
-    name: "Wide Midfielder",
-  },
-  {
-    id: 29,
-    name: "Wide Playmaker",
-  },
-  {
-    id: 30,
-    name: "Inside Forward",
-  },
-  {
-    id: 31,
-    name: "Playmaker",
-  },
-  {
-    id: 32,
-    name: "Shadow Striker",
-  },
-  {
-    id: 33,
-    name: "Half-Winger",
-  },
-  {
-    id: 35,
-    name: "Winger",
-  },
-  {
-    id: 36,
-    name: "Inside Forward",
-  },
-  {
-    id: 37,
-    name: "Wide Playmaker",
-  },
-  {
-    id: 38,
-    name: "Winger",
-  },
-  {
-    id: 39,
-    name: "Inside Forward",
-  },
-  {
-    id: 40,
-    name: "Wide Playmaker",
-  },
-  {
-    id: 41,
-    name: "Advanced Forward",
-  },
-  {
-    id: 42,
-    name: "Poacher",
-  },
-  {
-    id: 43,
-    name: "False 9",
-  },
-  {
-    id: 44,
-    name: "Target Forward",
-  },
-];
+export const roleMapping = {
+  1: "Goalkeeper",
+  2: "Sweeper Keeper",
+  3: "Fullback",
+  4: "Falseback",
+  5: "Wingback",
+  6: "Attacking Wingback",
+  7: "Fullback",
+  8: "Falseback",
+  9: "Wingback",
+  10: "Attacking Wingback",
+  11: "Defender",
+  12: "Stopper",
+  13: "Ball-Playing Defender",
+  14: "Holding",
+  15: "Centre-Half",
+  16: "Deep-Lying Playmaker",
+  18: "Box-To-Box",
+  19: "Holding",
+  20: "Deep-Lying Playmaker",
+  21: "Playmaker",
+  22: "Half-Winger",
+  23: "Winger",
+  24: "Wide Midfielder",
+  25: "Wide Playmaker",
+  26: "Inside Forward",
+  27: "Winger",
+  28: "Wide Midfielder",
+  29: "Wide Playmaker",
+  30: "Inside Forward",
+  31: "Playmaker",
+  32: "Shadow Striker",
+  33: "Half-Winger",
+  35: "Winger",
+  36: "Inside Forward",
+  37: "Wide Playmaker",
+  38: "Winger",
+  39: "Inside Forward",
+  40: "Wide Playmaker",
+  41: "Advanced Forward",
+  42: "Poacher",
+  43: "False 9",
+  44: "Target Forward",
+};
