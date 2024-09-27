@@ -606,6 +606,32 @@ export function convertCostDistribution(cost_distribution, leagueIdMap) {
   return { data, nations };
 }
 
+export const calculateFaceStats = (stats, IN_GAME_STATS) => {
+  const calculateWeightedAverage = (statGroup) => {
+    let totalWeight = 0;
+    let weightedSum = 0;
+
+    statGroup.forEach(([name, index, weight]) => {
+      weightedSum += Math.min(99, stats[index]) * weight;
+      totalWeight += weight;
+    });
+
+    return Math.min(99, Math.round(weightedSum / totalWeight));
+  };
+
+  // Calculate weighted averages for each group in order [PAC, SHO, PAS, DRI, DEF, PHY]
+  const faceStats = [
+    calculateWeightedAverage(IN_GAME_STATS.pace), // PAC
+    calculateWeightedAverage(IN_GAME_STATS.shooting), // SHO
+    calculateWeightedAverage(IN_GAME_STATS.passing), // PAS
+    calculateWeightedAverage(IN_GAME_STATS.dribbling), // DRI
+    calculateWeightedAverage(IN_GAME_STATS.defending), // DEF
+    calculateWeightedAverage(IN_GAME_STATS.physicality), // PHY
+  ];
+
+  return faceStats;
+};
+
 export const roleMapping = {
   1: "Goalkeeper",
   2: "Sweeper Keeper",

@@ -1,12 +1,66 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { setPlayer } from "../../redux/playerSlice";
-import { buildDynamicUrl, buildPlayerUrl, fillZeros } from "../utils/utils";
+import {
+  buildDynamicUrl,
+  buildPlayerUrl,
+  calculateFaceStats,
+  fillZeros,
+} from "../utils/utils";
 import CoinsImg from "../../assets/coins.png";
-import { WORK_RATE } from "../utils/constants";
+import { IN_GAME_STATS, WORK_RATE } from "../utils/constants";
 import { getTraitIcon } from "../utils/traitsvg";
 import classNames from "classnames";
+import { applyChemStyle } from "../PlayerViewCards/StatsCard";
+
+const AttributeDisplay = ({
+  label,
+  value,
+  isHome,
+  isAllPlayers,
+  isHighlighted,
+  statDifference,
+}) => {
+  return (
+    <div
+      className={classNames("relative", isHighlighted ? "text-green-600" : "")}
+    >
+      <div
+        className={classNames(
+          "font-cruyff-condensed-medium leading-none mb-[0.2em] text-center",
+          isHome
+            ? "scale-125:text-[0.78em] text-[0.78em]"
+            : isAllPlayers
+            ? "scale-125:text-[0.78em] text-[0.6em]"
+            : "scale-125:text-[0.5em] text-[0.78em]"
+        )}
+      >
+        {label}
+      </div>
+      <div
+        className={classNames(
+          "font-cruyff-condensed-numbers-medium leading-none text-center relative",
+          isHome
+            ? "text-[1.2em] scale-125:text-[1em]"
+            : isAllPlayers
+            ? "text-[0.7em] scale-125:text-[0.6em]"
+            : "text-[1.2em] scale-125:text-[0.8em]"
+        )}
+      >
+        {value}
+        {statDifference > 0 ? (
+          <span className="text-xs absolute -bottom-3 left-1">
+            +{statDifference}
+          </span>
+        ) : (
+          ""
+        )}
+      </div>
+    </div>
+  );
+};
+
 const PlayerCard = ({
   player,
   showPrice = false,
@@ -52,7 +106,39 @@ const PlayerCard = ({
   } = player;
   const [validGuid, setValidGuid] = useState(!!guid);
   const player_name = c_name ? c_name : isMini ? name.split(" ").pop() : name;
+  const selectedChemStyle = useSelector(
+    (state) => state.player.selectedChemStyle
+  );
+  const selectedChemistryPoints = useSelector(
+    (state) => state.player.selectedChemistryPoints
+  );
+  const [statDifference, setStatDifference] = useState(null);
   const isGk = position[0] == "GK";
+
+  const labels = isGk
+    ? ["DIV", "HAN", "KIC", "REF", "SPD", "POS"]
+    : ["PAC", "SHO", "PAS", "DRI", "DEF", "PHY"];
+  useEffect(() => {
+    if (selectedChemStyle && selectedChemistryPoints) {
+      const modifiedStats = applyChemStyle(
+        stats,
+        selectedChemStyle,
+        selectedChemistryPoints
+      );
+      const modifiedFaceStats = calculateFaceStats(
+        modifiedStats,
+        IN_GAME_STATS
+      );
+      console.log("In Player Card", modifiedFaceStats);
+      const tempStatDifference = attributes.map(
+        (attribute, index) => modifiedFaceStats[index] - attribute
+      );
+
+      setStatDifference(tempStatDifference);
+    } else {
+      setStatDifference([0, 0, 0, 0, 0, 0]);
+    }
+  }, [selectedChemStyle, selectedChemistryPoints, stats, attributes]);
   return (
     <Link
       onClick={(e) => isDisabled && e.preventDefault()}
@@ -135,162 +221,21 @@ const PlayerCard = ({
             <div
               className={`flex flex-row absolute top-[71%] w-[68.8%] font-bold left-1/2 transform -translate-x-1/2 justify-between`}
             >
-              <div className="relative">
-                <div
-                  className={classNames(
-                    "font-cruyff-condensed-medium  leading-none mb-[0.2em] text-center",
-                    isHome
-                      ? "scale-125:text-[0.78em] text-[0.78em]"
-                      : isAllPlayers
-                      ? "scale-125:text-[0.78em] text-[0.6em]"
-                      : "scale-125:text-[0.5em] text-[0.78em]"
-                  )}
-                >
-                  {isGk ? "DIV" : "PAC"}
-                </div>
-                <div
-                  className={classNames(
-                    "font-cruyff-condensed-numbers-medium  leading-none text-center relative",
-                    isHome
-                      ? "text-[1.2em] scale-125:text-[1em]"
-                      : isAllPlayers
-                      ? "text-[0.7em] scale-125:text-[0.6em]"
-                      : "text-[1.2em] scale-125:text-[0.8em]"
-                  )}
-                >
-                  {attributes[0]}
-                </div>
-              </div>
-              <div className="relative">
-                <div
-                  className={classNames(
-                    "font-cruyff-condensed-medium  leading-none mb-[0.2em] text-center",
-                    isHome
-                      ? "scale-125:text-[0.78em] text-[0.78em]"
-                      : isAllPlayers
-                      ? "scale-125:text-[0.78em] text-[0.6em]"
-                      : "scale-125:text-[0.5em] text-[0.78em]"
-                  )}
-                >
-                  {isGk ? "HAN" : "SHO"}
-                </div>
-                <div
-                  className={classNames(
-                    "font-cruyff-condensed-numbers-medium  leading-none text-center relative",
-                    isHome
-                      ? "text-[1.2em] scale-125:text-[1em]"
-                      : isAllPlayers
-                      ? "text-[0.7em] scale-125:text-[0.6em]"
-                      : "text-[1.2em] scale-125:text-[0.8em]"
-                  )}
-                >
-                  {attributes[1]}
-                </div>
-              </div>
-              <div className="relative">
-                <div
-                  className={classNames(
-                    "font-cruyff-condensed-medium  leading-none mb-[0.2em] text-center",
-                    isHome
-                      ? "scale-125:text-[0.78em] text-[0.78em]"
-                      : isAllPlayers
-                      ? "scale-125:text-[0.78em] text-[0.6em]"
-                      : "scale-125:text-[0.5em] text-[0.78em]"
-                  )}
-                >
-                  {isGk ? "KIC" : "PAS"}
-                </div>
-                <div
-                  className={classNames(
-                    "font-cruyff-condensed-numbers-medium  leading-none text-center relative",
-                    isHome
-                      ? "text-[1.2em] scale-125:text-[1em]"
-                      : isAllPlayers
-                      ? "text-[0.7em] scale-125:text-[0.6em]"
-                      : "text-[1.2em] scale-125:text-[0.8em]"
-                  )}
-                >
-                  {attributes[2]}
-                </div>
-              </div>
-              <div className="relative">
-                <div
-                  className={classNames(
-                    "font-cruyff-condensed-medium  leading-none mb-[0.2em] text-center",
-                    isHome
-                      ? "scale-125:text-[0.78em] text-[0.78em]"
-                      : isAllPlayers
-                      ? "scale-125:text-[0.78em] text-[0.6em]"
-                      : "scale-125:text-[0.5em] text-[0.78em]"
-                  )}
-                >
-                  {isGk ? "REF" : "DRI"}
-                </div>
-                <div
-                  className={classNames(
-                    "font-cruyff-condensed-numbers-medium  leading-none text-center relative",
-                    isHome
-                      ? "text-[1.2em] scale-125:text-[1em]"
-                      : isAllPlayers
-                      ? "text-[0.7em] scale-125:text-[0.6em]"
-                      : "text-[1.2em] scale-125:text-[0.8em]"
-                  )}
-                >
-                  {attributes[3]}
-                </div>
-              </div>
-              <div className="relative">
-                <div
-                  className={classNames(
-                    "font-cruyff-condensed-medium  leading-none mb-[0.2em] text-center",
-                    isHome
-                      ? "scale-125:text-[0.78em] text-[0.78em]"
-                      : isAllPlayers
-                      ? "scale-125:text-[0.78em] text-[0.6em]"
-                      : "scale-125:text-[0.5em] text-[0.78em]"
-                  )}
-                >
-                  {isGk ? "SPD" : "DEF"}
-                </div>
-                <div
-                  className={classNames(
-                    "font-cruyff-condensed-numbers-medium  leading-none text-center relative",
-                    isHome
-                      ? "text-[1.2em] scale-125:text-[1em]"
-                      : isAllPlayers
-                      ? "text-[0.7em] scale-125:text-[0.6em]"
-                      : "text-[1.2em] scale-125:text-[0.8em]"
-                  )}
-                >
-                  {attributes[4]}
-                </div>
-              </div>
-              <div className="relative">
-                <div
-                  className={classNames(
-                    "font-cruyff-condensed-medium  leading-none mb-[0.2em] text-center",
-                    isHome
-                      ? "scale-125:text-[0.78em] text-[0.78em]"
-                      : isAllPlayers
-                      ? "scale-125:text-[0.78em] text-[0.6em]"
-                      : "scale-125:text-[0.5em] text-[0.78em]"
-                  )}
-                >
-                  {isGk ? "POS" : "PHY"}
-                </div>
-                <div
-                  className={classNames(
-                    "font-cruyff-condensed-numbers-medium  leading-none text-center relative",
-                    isHome
-                      ? "text-[1.2em] scale-125:text-[1em]"
-                      : isAllPlayers
-                      ? "text-[0.7em] scale-125:text-[0.6em]"
-                      : "text-[1.2em] scale-125:text-[0.8em]"
-                  )}
-                >
-                  {attributes[5]}
-                </div>
-              </div>
+              {attributes.map((attribute, index) => (
+                <AttributeDisplay
+                  key={index}
+                  label={labels[index]}
+                  value={
+                    statDifference?.[index] > 0
+                      ? statDifference[index] + attribute
+                      : attribute
+                  }
+                  isHome={isHome}
+                  isAllPlayers={isAllPlayers}
+                  isHighlighted={statDifference?.[index] > 0}
+                  statDifference={statDifference?.[index]}
+                />
+              ))}
             </div>
           )}
           <div

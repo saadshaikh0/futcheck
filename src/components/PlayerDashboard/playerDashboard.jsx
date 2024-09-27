@@ -6,7 +6,7 @@ import InfoCard from "./InfoCard";
 import PlaystyleCard from "../PlayerViewCards/PlaystyleCard";
 import PriceCard from "./priceCard";
 import StatsCard from "../PlayerViewCards/StatsCard";
-import FOOTBALL_STADIUM_IMAGE from "../../assets/my_club_background.webp";
+import CLUB_IMAGE from "../../assets/my_club_background.webp";
 
 import PlayerPriceGraph from "./playerPriceGraph";
 import SalesCard from "./SalesCard";
@@ -66,13 +66,13 @@ const PlayerDashboard = () => {
   return (
     <div
       style={{
-        background: `url(${FOOTBALL_STADIUM_IMAGE}) `,
+        background: `url(${CLUB_IMAGE}) `,
         // backgroundAttachment: "fixed",
       }}
       className="relative min-h-[calc(100vh-4rem)] "
     >
       <div
-        className={`absolute inset-0 bg-fixed bg-black  opacity-70 md:opacity-80`}
+        className={`absolute inset-0 bg-fixed bg-black  opacity-80 md:opacity-90`}
       ></div>
 
       <div className="w-[90%] relative text-center text-white mx-auto pt-3">
