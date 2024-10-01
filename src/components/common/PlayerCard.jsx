@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { setPlayer } from "../../redux/playerSlice";
@@ -21,31 +21,25 @@ const AttributeDisplay = ({
   isAllPlayers,
   isHighlighted,
   statDifference,
+  attributeNameFontSize,
+  attributeValueFontSize,
 }) => {
   return (
     <div
       className={classNames("relative", isHighlighted ? "text-green-600" : "")}
     >
       <div
+        style={{ fontSize: attributeNameFontSize }}
         className={classNames(
-          "font-cruyff-condensed-medium leading-none mb-[0.2em] text-center",
-          isHome
-            ? "scale-125:text-[0.78em] text-[0.78em]"
-            : isAllPlayers
-            ? "scale-125:text-[0.78em] text-[0.6em]"
-            : "scale-125:text-[0.5em] text-[0.78em]"
+          "font-cruyff-condensed-medium leading-none mb-[0.2em] text-center"
         )}
       >
         {label}
       </div>
       <div
+        style={{ fontSize: attributeValueFontSize }}
         className={classNames(
-          "font-cruyff-condensed-numbers-medium leading-none text-center relative",
-          isHome
-            ? "text-[1.2em] scale-125:text-[1em]"
-            : isAllPlayers
-            ? "text-[0.7em] scale-125:text-[0.6em]"
-            : "text-[1.2em] scale-125:text-[0.8em]"
+          "font-cruyff-condensed-numbers-medium leading-none text-center relative"
         )}
       >
         {value}
@@ -82,8 +76,7 @@ const PlayerCard = ({
     nation,
     guid,
     rarity_url,
-    rarity_id,
-    futwiz_id,
+
     attributes,
     playstyle_plus,
     position,
@@ -94,15 +87,10 @@ const PlayerCard = ({
     teamid,
     weak_foot,
     skill_moves,
-    att_wr,
-    def_wr,
-    playstyles,
+
     stats,
-    guid_no,
-    levels,
-    colors,
+
     latest_price,
-    last_updated,
   } = player;
   const [validGuid, setValidGuid] = useState(!!guid);
   const player_name = c_name ? c_name : isMini ? name.split(" ").pop() : name;
@@ -118,6 +106,48 @@ const PlayerCard = ({
   const labels = isGk
     ? ["DIV", "HAN", "KIC", "REF", "SPD", "POS"]
     : ["PAC", "SHO", "PAS", "DRI", "DEF", "PHY"];
+
+  // State variables for font sizes
+  const cardRef = useRef(null);
+  const [attributeNameFontSize, setAttributeNameFontSize] = useState("14px");
+  const [attributeValueFontSize, setAttributeValueFontSize] = useState("16px");
+  const [ratingFontSize, setRatingFontSize] = useState("18px");
+  const [positionFontSize, setPositionFontSize] = useState("14px");
+  const [skillMovesFontSize, setSkillMovesFontSize] = useState("14px");
+  const [playerNameFontSize, setPlayerNameFontSize] = useState("30px");
+  const [playStyleFontSize, setPlayStyleFontSize] = useState("30px");
+
+  useEffect(() => {
+    const cardElement = cardRef.current;
+
+    if (cardElement) {
+      const updateFontSizes = () => {
+        const cardWidth = cardElement.offsetWidth;
+        setAttributeNameFontSize(`${cardWidth * 0.05}px`);
+        setAttributeValueFontSize(`${cardWidth * 0.075}px`);
+        setRatingFontSize(`${cardWidth * 0.1}px`);
+        setPositionFontSize(`${cardWidth * 0.08}px`);
+        setSkillMovesFontSize(`${cardWidth * 0.065}px`);
+        setPlayerNameFontSize(`${cardWidth * 0.1}px`);
+        setPlayStyleFontSize(
+          isMini || isSuperMini
+            ? `${cardWidth * 0.1}px`
+            : `${cardWidth * 0.07}px`
+        );
+      };
+
+      updateFontSizes();
+
+      const resizeObserver = new ResizeObserver(() => {
+        updateFontSizes();
+      });
+      resizeObserver.observe(cardElement);
+
+      return () => {
+        resizeObserver.disconnect();
+      };
+    }
+  }, []);
   useEffect(() => {
     if (selectedChemStyle && selectedChemistryPoints) {
       const modifiedStats = applyChemStyle(
@@ -153,6 +183,7 @@ const PlayerCard = ({
             ? "flex group hover:scale-150 hover:z-20 hover:relative flex-col w-full items-center"
             : ""
         )}
+        ref={cardRef}
         style={{ color: text_color }}
       >
         <div
@@ -183,27 +214,25 @@ const PlayerCard = ({
             alt="Player"
           />
           <div
+            style={{ fontSize: playerNameFontSize }}
             className={classNames(
-              "font-bold leading-none  absolute left-[50%] transform -translate-x-1/2 -translate-y-1/2 w-[75.2%] whitespace-nowrap overflow-hidden text-overflow-ellipsis text-center",
-              isSuperMini
-                ? "text-[0.7em] top-[70%]"
-                : isMini
-                ? "text-[1em] top-[70%] "
-                : isHome
-                ? "text-[1.4em] scale-125:text-[1.2em] top-[67%] "
-                : isAllPlayers
-                ? "text-[1em] scale-125:text-[1.2em] top-[67%] "
-                : "text-[1.4em] scale-125:text-[1em] top-[67%] "
+              "font-bold leading-none top-[67.5%] absolute left-[50%] transform -translate-x-1/2 -translate-y-1/2 w-[75.2%] whitespace-nowrap overflow-hidden text-overflow-ellipsis text-center"
             )}
           >
-            <span className="group-hover:block text-[0.5em] pt-3  md:text-sm text-wrap hidden">
+            <span
+              className={classNames(
+                " text-[0.5em] pt-3  md:text-sm text-wrap hidden",
+                isHover ? "group-hover:block" : ""
+              )}
+            >
               {c_name ?? name?.slice(0, 20)}
             </span>
 
             <div
               className={classNames(
-                "flex flex-col gap-1 group-hover:hidden ",
-                showPrice ? "pt-4 gap-0 md:gap-1" : " pt-0"
+                "flex flex-col gap-1 ",
+                showPrice ? "pt-4 gap-0 md:gap-1" : " pt-0",
+                isHover ? " group-hover:hidden" : ""
               )}
             >
               <div className=""> {player_name}</div>
@@ -219,10 +248,12 @@ const PlayerCard = ({
 
           {!isMini && (
             <div
-              className={`flex flex-row absolute top-[71%] w-[68.8%] font-bold left-1/2 transform -translate-x-1/2 justify-between`}
+              className={`flex flex-row absolute top-[71%] w-[68.8%] gap-1 font-bold left-1/2 transform -translate-x-1/2 justify-between`}
             >
               {attributes.map((attribute, index) => (
                 <AttributeDisplay
+                  attributeNameFontSize={attributeNameFontSize}
+                  attributeValueFontSize={attributeValueFontSize}
                   key={index}
                   label={labels[index]}
                   value={
@@ -240,36 +271,22 @@ const PlayerCard = ({
           )}
           <div
             className={classNames(
-              "absolute transform -translate-x-1/2 font-bold text-center top-[20.2%]",
+              "absolute transform -translate-x-1/2 font-bold text-center flex flex-col gap-0.5 top-[20.2%]",
               isMini ? "left-[24.8%]" : "left-[24.8%]"
             )}
           >
             <div
+              style={{ fontSize: ratingFontSize }}
               className={classNames(
-                "font-cruyff-condensed-numbers-bold leading-[0.91em]",
-                isSuperMini
-                  ? "text-[0.8em] scale-125:text-[0.7em]"
-                  : isMini
-                  ? "text-[1.2em] scale-125:text-[1em]"
-                  : isHome
-                  ? "text-[2em] scale-125:text-[1.5em]"
-                  : isAllPlayers
-                  ? "text-[1.2em] scale-125:text-[1.5em]"
-                  : "text-[2em] scale-125:text-[1em]"
+                "font-cruyff-condensed-numbers-bold leading-[0.91em]"
               )}
             >
               {rating}
             </div>
             <div
+              style={{ fontSize: positionFontSize }}
               className={classNames(
-                "font-cruyff-condensed-medium leading-none  -mt-[0.07em]",
-                isMini
-                  ? "text-[0.6em] scale-125:text-[0.4em]"
-                  : isHome
-                  ? "text-[2em] scale-125:text-[0.9em]"
-                  : isAllPlayers
-                  ? "text-[0.8em] scale-125:text-[1.5em]"
-                  : "text-[1em] scale-125:text-[0.8em]"
+                "font-cruyff-condensed-medium leading-none  -mt-[0.07em]"
               )}
             >
               {position_abr ?? position[0]}
@@ -278,15 +295,11 @@ const PlayerCard = ({
           <div
             id="playstyle_container"
             className={classNames(
-              "absolute left-[9.8%] top-[57.2%] transform -translate-y-1/2 -translate-x-1/2 z-2   text-transparent",
-              isSuperMini
-                ? "hidden"
-                : isHome
-                ? "text-[0.9em] scale-125:text-[0.8em]"
-                : isAllPlayers
-                ? "text-[0.7em] scale-125:text-[0.8em] top-[48.2%]"
-                : "text-[0.9em] scale-125:text-[0.7em]"
+              "absolute left-[9.8%]  top-[57.2%] transform -translate-y-1/2 -translate-x-1/2 z-2   text-transparent"
             )}
+            style={{
+              fontSize: playStyleFontSize,
+            }}
           >
             {playstyle_plus.map((playstyle) => {
               return (
@@ -321,18 +334,14 @@ const PlayerCard = ({
 
           {!isMini && (
             <div
+              style={{ fontSize: skillMovesFontSize }}
               className={classNames(
-                "absolute right-[3.96%] top-[28.1%] transform -translate-y-1/2 z-2 w-[14%] text-center flex flex-col gap-[0.1em] ",
-                isHome
-                  ? "text-[0.85em] scale-125:text-[0.7em]"
-                  : isAllPlayers
-                  ? "text-[0.65em] scale-125:text-[0.7em]"
-                  : "text-[0.85em] scale-125:text-[0.6em]"
+                "absolute right-[3.96%] top-[28.1%] transform -translate-y-1/2 z-2 text-center flex flex-col gap-[0.1em] "
               )}
             >
               {position.slice(1).map((pos) => (
                 <div
-                  class={`rounded-[0.35em] font-medium border-[0.09em] border-[--color] text-[--color] w-full whitespace-nowrap font-cruyff-condensed-medium  flex justify-center leading-[1] pb-[0.04em]  relative`}
+                  class={`rounded-[0.35em] px-1 font-medium border-[0.09em] border-[--color] text-[--color] w-full whitespace-nowrap font-cruyff-condensed-medium  flex justify-center leading-[1] pb-[0.04em]  relative`}
                   style={{
                     backgroundColor: bg_color,
                   }}
@@ -344,13 +353,9 @@ const PlayerCard = ({
           )}
           {!isMini && (
             <div
+              style={{ fontSize: skillMovesFontSize }}
               className={classNames(
-                "absolute font-bold right-[3.96%] top-[58.2%] transform -translate-y-1/2 z-2 w-[12%] text-center flex flex-col gap-[0.1em] ",
-                isHome
-                  ? "text-[0.73em] scale-125:text-[0.65em]"
-                  : isAllPlayers
-                  ? "text-[0.6em] scale-125:text-[0.65em]"
-                  : "text-[0.73em] scale-125:text-[0.5em]"
+                "absolute font-bold right-[3.96%] top-[58.2%] transform -translate-y-1/2 z-2  text-center flex flex-col gap-[0.1em] "
               )}
             >
               <div class="p-[0.1em]  rounded-[0.35em] bg-[--fill-color] border-[0.09em] border-[--color] text-[--color] w-full whitespace-nowrap font-cruyff-condensed-medium  flex justify-center leading-[1]  relative">
@@ -359,45 +364,25 @@ const PlayerCard = ({
               <div class="p-[0.1em] rounded-[0.35em] bg-[--fill-color] border-[0.09em] border-[--color] text-[--color] w-full whitespace-nowrap font-cruyff-condensed-medium  flex justify-center leading-[1]  relative">
                 {weak_foot}WF
               </div>
-
-              {/* <div class="rounded-[0.35em] p-[0.1em] bg-[--fill-color] border-[0.09em] border-[--color] text-[--color] w-full whitespace-nowrap font-cruyff-condensed-medium  flex justify-center leading-[1]  relative">
-                <div class="grid grid-cols-2 gap-[0.2em] w-full justify-between items-center px-[0.1em]">
-                  <span class="inline-block text-center">
-                    {WORK_RATE[att_wr][0]}
-                  </span>
-                  <span class="absolute top-[43%] left-1/2 transform -translate-y-1/2 -translate-x-1/2">
-                    ·
-                  </span>
-                  <span class="inline-block text-center">
-                    {WORK_RATE[def_wr][0]}
-                  </span>
-                </div>
-              </div> */}
             </div>
           )}
           <div
             className={classNames(
-              "absolute  flex justify-center items-center  gap-[0.4em] ",
+              "absolute  flex justify-center   gap-[0.4em] ",
               isSuperMini
-                ? "flex-col bg-white bg-opacity-10 top-[8%] right-[8%] py-2"
+                ? "flex-col items-end  bg-white bg-opacity-10 top-[8%] right-[8%] py-2"
                 : isMini
-                ? `flex-col bg-white bg-opacity-10 top-[10.8%] right-[10%] py-4`
+                ? `flex-col items-end bg-white bg-opacity-10 top-[10.8%] right-[10%] py-4`
                 : isAllPlayers
-                ? "top-[81.8%] w-full"
-                : "top-[81.8%] w-full"
+                ? "top-[80.8%] w-full"
+                : "top-[80.8%] w-full"
             )}
           >
             <img
               src={buildDynamicUrl("nation", nation)}
               class={classNames(
                 "object-contain",
-                isSuperMini
-                  ? "max-h-[0.6em] max-w-[0.6em]"
-                  : isAllPlayers
-                  ? "max-h-[1em] max-w-[1em]"
-                  : isMini
-                  ? " max-h-[1em] max-w-[1.2em]"
-                  : "max-h-[1.3em] max-w-[1.7em] scale-125:max-h-[1em] scale-125:max-w-[1em]"
+                isMini || isSuperMini ? "max-w-[15%]" : "max-w-[10%]"
               )}
               alt="Nation"
             />
@@ -405,29 +390,18 @@ const PlayerCard = ({
               src={buildDynamicUrl("league", leagueid)}
               class={classNames(
                 "object-contain",
-                isSuperMini
-                  ? "max-h-[0.6em] max-w-[0.6em]"
-                  : isAllPlayers
-                  ? "max-h-[1em] max-w-[1em]"
-                  : isMini
-                  ? "max-h-[1em] max-w-[1em]"
-                  : "max-h-[1.3em] max-w-[1.7em] scale-125:max-h-[1em] scale-125:max-w-[1em]"
+                isMini || isSuperMini ? "max-w-[15%]" : "max-w-[10%]"
               )}
               alt="League"
             />
+
             <img
               src={buildDynamicUrl("club", teamid)}
               class={classNames(
                 "object-contain",
-                isSuperMini
-                  ? "max-h-[0.6em] max-w-[0.6em]"
-                  : isAllPlayers
-                  ? "max-h-[1em] max-w-[1em]"
-                  : isMini
-                  ? " max-h-[1em] max-w-[1.2em]"
-                  : "max-h-[1.3em] max-w-[1.7em] scale-125:max-h-[1em] scale-125:max-w-[1em]"
+                isMini || isSuperMini ? "max-w-[15%]" : "max-w-[10%]"
               )}
-              alt="Club"
+              alt=""
             />
           </div>
         </div>

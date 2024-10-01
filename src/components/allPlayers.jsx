@@ -245,7 +245,7 @@ const AllPlayers = () => {
           ref={containerRef}
           className="bg-gray-800 md:ml-4 rounded-lg pb-2 overflow-auto "
         >
-          <div className="md:mx-10 mt-3 grid grid-cols-3 lg:grid-cols-6 gap-2 md:gap-4">
+          <div className="md:mx-10 mt-3 grid grid-cols-3 lg:grid-cols-5 gap-2 md:gap-4">
             {allPlayers.map((player) => (
               <div
                 key={player.id}

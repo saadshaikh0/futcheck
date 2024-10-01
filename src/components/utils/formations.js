@@ -1123,3 +1123,34 @@ export const FORMATIONS_POSITIONS_SMALL = {
     [small_col4, small_row7], // ST
   ],
 };
+
+export const SQUAD_WIZARD_FORMATIONS = {
+  "4-3-3": [
+    {
+      position: "GK",
+      left: "50%",
+      top: "87%",
+      transform: "translate(-50%, -50%)",
+    },
+    { position: "LB", left: "10%", top: "60%" },
+    { position: "CB", left: "30%", top: "60%" },
+    { position: "CB", left: "60%", top: "60%" },
+    { position: "RB", left: "80%", top: "60%" },
+    { position: "CM", left: "20%", top: "35%" },
+    {
+      position: "CM",
+      left: "50%",
+      top: "45%",
+      transform: "translate(-50%, -50%)",
+    },
+    { position: "CM", left: "65%", top: "35%" },
+    { position: "LW", left: "15%", top: "15%" },
+    {
+      position: "ST",
+      left: "50%",
+      top: "15%",
+      transform: "translate(-50%, -50%)",
+    },
+    { position: "RW", left: "65%", top: "15%" },
+  ],
+};
