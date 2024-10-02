@@ -206,8 +206,10 @@ export const updateRarity = (data) => {
   return data;
 };
 export function getTimeUntilExpiration(endTimestamp) {
-  const now = Date.now();
-  const endTime = new Date(endTimestamp).getTime();
+  const now = Date.now() + new Date().getTimezoneOffset() * 60000; // This forces 'now' to UTC
+
+  const endTime = new Date(endTimestamp).getTime(); // This is already in UTC
+
   const timeDiff = endTime - now;
 
   if (timeDiff <= 0) {
@@ -230,9 +232,15 @@ export function getTimeUntilExpiration(endTimestamp) {
   }
 }
 export const timeAgo = (inputDate) => {
-  const currentDate = new Date();
-  const pastDate = new Date(inputDate);
-  const diffInMilliseconds = currentDate - pastDate;
+  const pastDate = new Date(inputDate); // JavaScript handles the time zone conversion automatically
+
+  // Get the current UTC date
+
+  // Convert both dates to UTC time in milliseconds
+  const pastDateUTC = pastDate.getTime(); // Converts the IST time to UTC in milliseconds
+  const now = Date.now() + new Date().getTimezoneOffset() * 60000;
+  // Calculate the difference in milliseconds
+  const diffInMilliseconds = now - pastDateUTC;
 
   const seconds = Math.floor(diffInMilliseconds / 1000);
   const minutes = Math.floor(seconds / 60);

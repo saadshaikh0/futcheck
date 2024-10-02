@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchSbcsData } from "../../api/apiService";
 import NewSbcCard from "./NewSbcCard";
 import SBC_BACKGROUND from "../../assets/sbc_background_field.webp";
-const currentTimestamp = new Date();
+const currentTimestamp = Date.now() + new Date().getTimezoneOffset() * 60000;
 const SBC = () => {
   const { data: sbcs = [] } = useQuery({
     queryKey: ["fetchSbcs"],
@@ -53,7 +53,7 @@ const SBC = () => {
                   .includes(searchTerm.toLowerCase());
                 const isNotExpired =
                   (sbc.endTimeStamp &&
-                    new Date(sbc.endTimeStamp) >= currentTimestamp) ||
+                    new Date(sbc.endTimeStamp).getTime() >= currentTimestamp) ||
                   sbc.endTime === 0;
                 return matchesSearchTerm && isNotExpired;
               })
@@ -63,7 +63,7 @@ const SBC = () => {
                   oneDayInMilliseconds;
                 const isExpiringSoon =
                   sbc.endTimeStamp &&
-                  new Date(sbc.endTimeStamp) - currentTimestamp <
+                  new Date(sbc.endTimeStamp).getTime() - currentTimestamp <
                     twoDaysInMilliseconds;
                 return (
                   <div key={sbc.id} className="relative">

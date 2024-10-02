@@ -10,7 +10,7 @@ import CoinsImg from "../../assets/coins.png";
 
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { buildDynamicUrl } from "../utils/utils";
+import { buildDynamicUrl, timeAgo } from "../utils/utils";
 
 const columnHelper = createColumnHelper();
 
@@ -54,7 +54,8 @@ const mini_columns = [
     cell: (info) => (
       <>
         <span className="flex items-center gap-2 text-md ">
-          <img className="w-5" src={CoinsImg} />-{/* {info.getValue()} */}
+          <img className="w-5" src={CoinsImg} />
+          {info.getValue() || "-"}
         </span>
       </>
     ),
@@ -97,7 +98,7 @@ const columns = [
   }),
   columnHelper.accessor("created", {
     header: () => <span>Last Updated</span>,
-    cell: (info) => <>{info.getValue()}</>,
+    cell: (info) => <>{timeAgo(info.getValue())}</>,
   }),
   columnHelper.accessor("cost", {
     id: "cost",
@@ -106,7 +107,8 @@ const columns = [
     cell: (info) => (
       <>
         <span className="flex items-center gap-2 text-md ">
-          <img className="w-5" src={CoinsImg} />-{/* {info.getValue()} */}
+          <img className="w-5" src={CoinsImg} />
+          {info.getValue() || "-"}
         </span>
       </>
     ),
@@ -128,15 +130,6 @@ function SolutionTable({
     getSortedRowModel: getSortedRowModel(),
   });
 
-  // {
-  //   number: "Solution 3",
-  //   league: "Premier League",
-  //   nation: "Argentina",
-  //   leagueid: 13,
-  //   nationid: 52,
-  //   updated: "1 Hour Ago",
-  //   cost: "In Relationship",
-  // },
   useEffect(() => {
     let formattedData = challengeSolutions.map((solution, index) => {
       const { details } = solution;
@@ -150,7 +143,7 @@ function SolutionTable({
         nation: nationIdMap[top_nations[0][0]]?.name,
         leagueid: top_leagues[0][0],
         nationid: top_nations[0][0],
-        updated: "1 Hour Ago",
+        created: solution.created,
         cost: details.cost,
         id: solution.id,
       };
