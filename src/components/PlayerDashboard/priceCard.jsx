@@ -45,7 +45,7 @@ const PriceCard = ({ player, priceChange, percentageChange }) => {
       </div>
       <div className="flex justify-between">
         <div className="text-white font-medium">Last Updated</div>
-        <div>{timeAgo(player.last_updated)}</div>
+        <div>{timeAgo(player.last_updated, true)}</div>
       </div>
     </div>
   );
