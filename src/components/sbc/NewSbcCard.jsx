@@ -31,7 +31,7 @@ const NewSbcCard = ({ data }) => {
     <Link to={`/sbc/${setid}`}>
       <div className="bg-[#13151D] h-full rounded-md flex flex-col items-center text-white">
         <div className="grid grid-cols-1  md:grid-cols-[2fr_1fr] flex-grow ">
-          <div className="flex flex-col py-5 px-4 gap-3">
+          <div className="flex flex-col order-2 md:order-1 py-5 px-4 gap-3">
             <p className="text-white text-lg font-bold text-center">{name}</p>
             <p className="text-[#B0B0B0] flex-grow">{description}</p>
             <div className="grid grid-cols-3 text-white font-bold text-center ">
@@ -55,13 +55,14 @@ const NewSbcCard = ({ data }) => {
               </div>
             </div>
           </div>
-          <div className="flex flex-col items-center justify-center">
+          <div className="flex flex-col order-1 md:order-2 items-center justify-center">
             {playerReward ? (
               <div
                 key={playerReward.id}
                 className="flex flex-col justify-center items-center"
               >
                 <PlayerRewardWrapper id={playerReward.id} isMini={false} />
+
                 <div className="flex justify-center items-center gap-2 -mt-3 pb-2">
                   <img src={CoinsImg} className="mt-1" width={20} />
                   {totalCost.toLocaleString("en-US")}

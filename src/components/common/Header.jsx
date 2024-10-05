@@ -153,14 +153,14 @@ const Navbar = () => {
                   <div className="text-white  font-bold">SBCs</div>
                 </div>
               </Link>
-              <Link to="/squad_wizard/">
+              {/* <Link to="/squad_wizard/">
                 <div className="text-white flex gap-2  font-bold">
                   {" "}
                   <div className="text-white flex gap-1 font-bold">
                     <AcademicCapIcon className="text-white w-5" /> Squad Wizard
                   </div>
                 </div>
-              </Link>
+              </Link> */}
               {/* <Link to="/squad-builder/">
                 <div className="text-white  font-bold">Squad Builder</div>
               </Link> */}

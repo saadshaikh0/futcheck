@@ -179,6 +179,7 @@ const PlayerCard = ({
       <div
         key={id}
         className={classNames(
+          "h-full",
           isHover
             ? "flex group hover:scale-150 hover:z-20 hover:relative flex-col w-full items-center"
             : ""
@@ -192,9 +193,9 @@ const PlayerCard = ({
             "--fill-color": bg_color,
             "--text-color": text_color,
           }}
-          className="block relative "
+          className="block relative h-full "
         >
-          <img src={rarity_url} />
+          <img className="h-full w-full" src={rarity_url} />
 
           <img
             className={

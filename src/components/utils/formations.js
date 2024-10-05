@@ -262,54 +262,18 @@ export const FORMATIONS_POSITIONS_ABBR = {
     "CB",
     "CB",
     "CB",
-    "RWB",
-    "LWB",
+    "RB",
+    "LB",
     "CM",
     "CM",
     "CAM",
     "ST",
     "ST",
   ],
-  "5-2-2-1": [
-    "GK",
-    "CB",
-    "CB",
-    "CB",
-    "RWB",
-    "LWB",
-    "CM",
-    "CM",
-    "RW",
-    "ST",
-    "LW",
-  ],
-  "5-2-3": ["GK", "CB", "CB", "CB", "RWB", "LWB", "CM", "CM", "RW", "ST", "LW"],
-  "5-3-2": [
-    "GK",
-    "CB",
-    "CB",
-    "CB",
-    "RWB",
-    "LWB",
-    "CDM",
-    "CM",
-    "CM",
-    "ST",
-    "ST",
-  ],
-  "5-4-1a": [
-    "GK",
-    "CB",
-    "CB",
-    "CB",
-    "RWB",
-    "LWB",
-    "RM",
-    "CM",
-    "CM",
-    "LM",
-    "ST",
-  ],
+  "5-2-2-1": ["GK", "CB", "CB", "CB", "RB", "LB", "CM", "CM", "RW", "ST", "LW"],
+  "5-2-3": ["GK", "LB", "CB", "CB", "CB", "RB", "CM", "CM", "RW", "ST", "LW"],
+  "5-3-2": ["GK", "CB", "CB", "CB", "RB", "LB", "CDM", "CM", "CM", "ST", "ST"],
+  "5-4-1a": ["GK", "CB", "CB", "CB", "RB", "LB", "RM", "CM", "CM", "LM", "ST"],
 };
 
 export const FORMATIONS_POSITIONS = {
@@ -679,16 +643,16 @@ export const FORMATIONS_POSITIONS = {
   ],
   "5-2-3": [
     [col4, row0], // GK
+    [col0, row3], // LB
     [col2, row2], // CB
     [col4, row2], // CB
     [col6, row2], // CB
-    [col8, row2], // RB
-    [col0, row4], // LB
-    [col2, row6], // CM
-    [col6, row6], // CM
-    [col6, row7], // RW
+    [col8, row3], // RB
+    [col2, row4], // CM
+    [col6, row4], // CM
+    [col6, row6], // RW
     [col4, row7], // ST
-    [col2, row7], // LW
+    [col2, row6], // LW
   ],
   "5-3-2": [
     [col4, row1], // GK
@@ -1084,28 +1048,28 @@ export const FORMATIONS_POSITIONS_SMALL = {
     [small_col2, small_row7], // LW
   ],
   "5-2-3": [
-    [small_col4, small_row0], // GK
-    [small_col2, small_row2], // CB
-    [small_col4, small_row2], // CB
-    [small_col6, small_row2], // CB
-    [small_col8, small_row2], // RB
-    [small_col0, small_row4], // LB
-    [small_col2, small_row6], // CM
-    [small_col6, small_row6], // CM
-    [small_col6, small_row7], // RW
-    [small_col4, small_row7], // ST
-    [small_col2, small_row7], // LW
+    [small_col5, small_row0], // GK
+    [small_col3, small_row2], // CB
+    [small_col5, small_row2], // CB
+    [small_col7, small_row2], // CB
+    [small_col9, small_row3], // RB
+    [small_col1, small_row3], // LB
+    [small_col3, small_row5], // CM
+    [small_col6, small_row5], // CM
+    [small_col7, small_row7], // RW
+    [small_col5, small_row8], // ST
+    [small_col3, small_row7], // LW
   ],
   "5-3-2": [
     [small_col4, small_row1], // GK
-    [small_col2, small_row3], // CB
-    [small_col4, small_row3], // CB
+    [small_col3, small_row3], // CB
+    [small_col5, small_row3], // CB
     [small_col6, small_row3], // CB
-    [small_col8, small_row3], // RB
-    [small_col0, small_row3], // LB
-    [small_col2, small_row5], // CDM
-    [small_col4, small_row5], // CM
-    [small_col6, small_row5], // CM
+    [small_col9, small_row3], // RB
+    [small_col1, small_row3], // LB
+    [small_col3, small_row5], // CDM
+    [small_col5, small_row5], // CM
+    [small_col7, small_row5], // CM
     [small_col3, small_row7], // ST
     [small_col5, small_row7], // ST
   ],
