@@ -28,6 +28,7 @@ import SbcViewWrapper from "./components/sbcViewWrapper";
 import PlayerDashboardWrapper from "./components/playerDashboardWrapper";
 import NewHomePage from "./components/NewHomePage";
 import ChallengeSolutions from "./components/sbc/ChallengeSolution";
+import SquadWizardWrapper from "./components/squadWizardWrapper";
 
 ReactGA.initialize("G-RD6LGLC1LD");
 
@@ -73,6 +74,10 @@ function App() {
                   />
                   <Route path="/sbc/:sbcId" element={<SbcViewWrapper />} />
                   <Route path="/sbc/" element={<SbcWrapper />} />
+                  <Route
+                    path="/squad_wizard/"
+                    element={<SquadWizardWrapper />}
+                  />
 
                   <Route
                     path="/player/:playerId/:playerName"

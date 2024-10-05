@@ -8,6 +8,10 @@ export const FOOT = {
   1: "Right",
   2: "Left",
 };
+// constants.js
+export const ItemTypes = {
+  PLAYER_CARD: "playerCard",
+};
 
 export const FILTER_TEXT = {
   page: "Page No",

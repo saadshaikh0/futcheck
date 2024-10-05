@@ -141,6 +141,7 @@ export const fetchAllPlayers = async (
     weak_foot,
     awr,
     dwr,
+    name,
   },
   club
 ) => {
@@ -148,6 +149,7 @@ export const fetchAllPlayers = async (
   const queryParams = new URLSearchParams();
 
   if (page) queryParams.append("page", page);
+  if (name) queryParams.append("name", name);
   if (min_rating) queryParams.append("min_rating", min_rating);
   if (max_rating) queryParams.append("max_rating", max_rating);
   if (teamid) queryParams.append("teamid", teamid.id);
@@ -274,7 +276,8 @@ export const fetchSbcsData = async () => {
     });
     let data = response.data.data;
     let filteredData = data.filter(
-      (item) => !item.name.includes("Foundation") && !item.name.includes("Upgrade")
+      (item) =>
+        !item.name.includes("Foundation") && !item.name.includes("Upgrade")
     );
 
     return filteredData;
@@ -353,6 +356,36 @@ export const fetchPlayerPriceHistory = async (id) => {
     return response.data?.price_history || [];
   } catch (error) {
     console.error("Error fetching Challenge solutions:", error);
+    throw error;
+  }
+};
+
+export const fetchPlayerSuggestions = async (
+  budget,
+  chemistry,
+  index,
+  squad,
+  formation
+) => {
+  try {
+    let response = await instance.post(
+      `/get_player_suggestions/`,
+      {
+        budget,
+        chemistry,
+        index,
+        squad,
+        formation,
+      },
+      {
+        timeout: 60000,
+      }
+    );
+    let data = response.data;
+    data = addRarityUrl(data, "s");
+    return data;
+  } catch (error) {
+    console.error("Error fetching player suggestions:", error);
     throw error;
   }
 };

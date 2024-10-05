@@ -18,6 +18,7 @@ import { useDebounce } from "@uidotdev/usehooks";
 import FutcheckLogo from "../../assets/futcheck_logo.png";
 import { Link } from "react-router-dom";
 import {
+  AcademicCapIcon,
   Bars3Icon,
   CalculatorIcon,
   MagnifyingGlassIcon,
@@ -145,10 +146,19 @@ const Navbar = () => {
                 <div className="text-white flex gap-2  font-bold">
                   {" "}
                   <img
+                    alt=""
                     className="w-5"
                     src="https://cdn.futcheck.com/assets/img/fc25/misc/sbc.webp"
                   />{" "}
                   <div className="text-white  font-bold">SBCs</div>
+                </div>
+              </Link>
+              <Link to="/squad_wizard/">
+                <div className="text-white flex gap-2  font-bold">
+                  {" "}
+                  <div className="text-white flex gap-1 font-bold">
+                    <AcademicCapIcon className="text-white w-5" /> Squad Wizard
+                  </div>
                 </div>
               </Link>
               {/* <Link to="/squad-builder/">
