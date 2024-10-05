@@ -77,7 +77,7 @@ const NewSbcCard = ({ data }) => {
                 />
                 <div className="flex justify-center items-center gap-2 -mt-3 pb-2">
                   <img src={CoinsImg} className="mt-1" width={20} />
-                  {totalCost.toLocaleString("en-US")}
+                  {totalCost?.toLocaleString("en-US")}
                 </div>
               </>
             )}

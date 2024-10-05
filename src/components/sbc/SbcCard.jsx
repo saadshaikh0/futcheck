@@ -27,7 +27,7 @@ const SbcCard = ({ data }) => {
             <div className="self-end text-right flex gap-2">
               <div className="bg-gray-700 rounded font-bold text-sm px-2 py-1 flex items-center">
                 <span className="price-coin price-coin--size-xs mr-2"></span>
-                {totalCost.toLocaleString("en-US")}
+                {totalCost?.toLocaleString("en-US")}
               </div>
             </div>
           </div>
@@ -37,7 +37,7 @@ const SbcCard = ({ data }) => {
             <a href="/sbc/upgrades/24-880-serie-a-tots-upgrade/">
               {" "}
               <img
-                src={buildDynamicUrl('sbc',setid)}
+                src={buildDynamicUrl("sbc", setid)}
                 alt="Serie A TOTS Upgrade"
                 loading="lazy"
               />
