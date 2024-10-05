@@ -52,7 +52,7 @@ const PlayerCardSlot = ({ left, top, transform, player, index }) => {
     <div
       ref={(node) => drag(drop(node))}
       onClick={handleClick}
-      className="player-card absolute w-32 h-44"
+      className="player-card absolute"
       style={{
         left,
         top,
@@ -63,7 +63,7 @@ const PlayerCardSlot = ({ left, top, transform, player, index }) => {
       }}
     >
       {player ? (
-        <div key={player.id} className="relative group">
+        <div key={player.id} className="relative group  w-32 h-44">
           <PlayerCard player={player} isMini={false} isHover={false} />
           <div className="bg-black absolute bottom-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             <div onClick={handleRemoveClick}>
@@ -74,7 +74,7 @@ const PlayerCardSlot = ({ left, top, transform, player, index }) => {
         </div>
       ) : (
         <div
-          className="w-full h-full"
+          className="w-44 h-44"
           style={{
             background: `url(${CardSlotImage})`,
             backgroundSize: "100% 100%",

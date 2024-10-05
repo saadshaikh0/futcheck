@@ -6,10 +6,12 @@ import { fetchPlayerSuggestions } from "../../api/apiService";
 import { useDebounce } from "@uidotdev/usehooks";
 import { useSelector } from "react-redux";
 import { SQUAD_WIZARD_FORMATIONS } from "../utils/formations";
+import { calculateChemistry } from "./squadUtils";
 
 const SuggestionPlayers = ({ handlePlayerSelect }) => {
-  const [budgetInput, setBudgetInput] = useState(500000);
+  const [budgetInput, setBudgetInput] = useState(50000);
   const debouncedBudget = useDebounce(budgetInput, 1000) || 0;
+  const players = useSelector((state) => state.squadWizard.players);
 
   const handleBudgetChange = (event) => {
     setBudgetInput(Number(event.target.value));
@@ -22,6 +24,7 @@ const SuggestionPlayers = ({ handlePlayerSelect }) => {
   );
   const selectedPositionValue =
     squadPositions[selectedPositionIndex]?.position || "ST";
+  const chemistry = calculateChemistry(players, squadPositions);
 
   const {
     data: suggestedPlayers = [],
@@ -31,10 +34,18 @@ const SuggestionPlayers = ({ handlePlayerSelect }) => {
     queryKey: [
       "fetchPlayerSuggestions",
       debouncedBudget,
-      selectedPositionValue,
+      selectedPositionIndex,
+      players,
+      formation,
     ],
     queryFn: () =>
-      fetchPlayerSuggestions(debouncedBudget || 10000, selectedPositionValue),
+      fetchPlayerSuggestions(
+        debouncedBudget || 10000,
+        chemistry.totalChemistry || 0,
+        selectedPositionIndex,
+        players,
+        formation
+      ),
     enabled: !!selectedPositionValue,
   });
 
@@ -53,7 +64,7 @@ const SuggestionPlayers = ({ handlePlayerSelect }) => {
           <p>Loading suggested players...</p>
         ) : (
           suggestedPlayers
-            .sort((a, b) => b.latest_price - a.latest_price)
+            // .sort((a, b) => b.latest_price - a.latest_price)
             .map((player) => (
               <div
                 className="relative flex bg-gray-500 pb-3 flex-col items-center"
@@ -65,8 +76,9 @@ const SuggestionPlayers = ({ handlePlayerSelect }) => {
                   isMini={false}
                   isSuperMini={false}
                 />
-                <div className="bg-black px-4 rounded-md absolute bottom-1">
+                <div className="bg-black px-4 flex flex-col rounded-md absolute bottom-1">
                   {player.latest_price}
+                  {player.chemistry_diff}
                 </div>
               </div>
             ))

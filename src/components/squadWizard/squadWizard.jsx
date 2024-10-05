@@ -4,7 +4,7 @@ import PlayerCardSlot from "./PlayerCardSlot";
 import PlayerSuggestionBox from "./PlayerSuggestionBox";
 
 import { setFormation } from "../../redux/squadWizardSlice";
-import SolutionsPitch from "../../assets/solutions_pitch.jpg";
+import SolutionsPitch from "../../assets/updated-field.png";
 import SquadInsights from "./SquadInsights";
 const SquadWizard = () => {
   const dispatch = useDispatch();

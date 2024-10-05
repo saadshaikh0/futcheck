@@ -9,7 +9,7 @@ import FOOTBALL_STADIUM_IMAGE from "../../assets/sbc_background_field.webp";
 
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import SolutionsPitch from "../../assets/solutions_pitch.jpg";
+import SolutionsPitch from "../../assets/updated-field.png";
 import { useQuery } from "@tanstack/react-query";
 import PlayerCard from "../common/PlayerCard";
 import {
@@ -36,7 +36,7 @@ const SolutionPitch = ({
       className="w-full md:w-[115%] h-[55vh] md:h-[85vh] relative"
       style={{
         background: `url(${SolutionsPitch})`,
-        backgroundSize: "100% 100%",
+        backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
         backgroundPosition: "bottom",
       }}

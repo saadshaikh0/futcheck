@@ -360,10 +360,23 @@ export const fetchPlayerPriceHistory = async (id) => {
   }
 };
 
-export const fetchPlayerSuggestions = async (budget, position) => {
+export const fetchPlayerSuggestions = async (
+  budget,
+  chemistry,
+  index,
+  squad,
+  formation
+) => {
   try {
-    let response = await instance.get(
-      `/get_player_suggestions/?budget=${budget}&position=${position}`,
+    let response = await instance.post(
+      `/get_player_suggestions/`,
+      {
+        budget,
+        chemistry,
+        index,
+        squad,
+        formation,
+      },
       {
         timeout: 60000,
       }
@@ -372,7 +385,7 @@ export const fetchPlayerSuggestions = async (budget, position) => {
     data = addRarityUrl(data, "s");
     return data;
   } catch (error) {
-    console.error("Error fetching Challenge solutions:", error);
+    console.error("Error fetching player suggestions:", error);
     throw error;
   }
 };

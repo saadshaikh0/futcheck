@@ -7,6 +7,8 @@ import {
 } from "../utils/utils";
 import { Link } from "react-router-dom";
 import CoinsImg from "../../assets/coins.png";
+import PlayerRewardWrapper from "./PlayerRewardWrapper";
+
 const NewSbcCard = ({ data }) => {
   const {
     name,
@@ -17,7 +19,14 @@ const NewSbcCard = ({ data }) => {
     endTime,
     totalCost,
     setid,
+    rewards,
   } = data;
+
+  // Check if rewards is an array and contains an object with itemType 'player'
+  const playerReward =
+    Array.isArray(rewards) &&
+    rewards.find((reward) => reward.itemType === "player");
+
   return (
     <Link to={`/sbc/${setid}`}>
       <div className="bg-[#13151D] h-full rounded-md flex flex-col items-center text-white">
@@ -46,16 +55,31 @@ const NewSbcCard = ({ data }) => {
               </div>
             </div>
           </div>
-          <div className="flex flex-col items-center">
-            <img
-              src={buildDynamicUrl("sbc", setid)}
-              alt="Serie A TOTS Upgrade"
-              loading="lazy"
-            />
-            <div className="flex jusitfy-center items-center gap-2 -mt-3 pb-2">
-              <img src={CoinsImg} className="mt-1" width={20} />
-              {totalCost.toLocaleString("en-US")}
-            </div>
+          <div className="flex flex-col items-center justify-center">
+            {playerReward ? (
+              <div
+                key={playerReward.id}
+                className="flex flex-col justify-center items-center"
+              >
+                <PlayerRewardWrapper id={playerReward.id} isMini={false} />
+                <div className="flex justify-center items-center gap-2 -mt-3 pb-2">
+                  <img src={CoinsImg} className="mt-1" width={20} />
+                  {totalCost.toLocaleString("en-US")}
+                </div>
+              </div>
+            ) : (
+              <>
+                <img
+                  src={buildDynamicUrl("sbc", setid)}
+                  alt="Serie A TOTS Upgrade"
+                  loading="lazy"
+                />
+                <div className="flex justify-center items-center gap-2 -mt-3 pb-2">
+                  <img src={CoinsImg} className="mt-1" width={20} />
+                  {totalCost.toLocaleString("en-US")}
+                </div>
+              </>
+            )}
           </div>
         </div>
         <div className="bg-gray-800 w-full cursor-pointer py-2 ">
