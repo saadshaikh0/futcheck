@@ -179,7 +179,7 @@ const PlayerCard = ({
       <div
         key={id}
         className={classNames(
-          "h-full",
+          "",
           isHover
             ? "flex group hover:scale-150 hover:z-20 hover:relative flex-col w-full items-center"
             : ""

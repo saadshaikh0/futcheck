@@ -18,7 +18,7 @@ const PlayerRewardWrapper = ({ id }) => {
   }
 
   return (
-    <div className="md:max-h-[20vh]">
+    <div className="">
       <PlayerCard player={player} isMini={false} />
     </div>
   );
