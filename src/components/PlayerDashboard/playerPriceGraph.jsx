@@ -229,7 +229,7 @@ const PlayerPriceGraph = ({ data, isLoading, isSbc }) => {
           />
           <YAxis
             type="number"
-            domain={["dataMin", extinctLevel]} // Ensure Y-axis can handle extinct level
+            domain={["dataMin", "dataMax"]} // Ensure Y-axis can handle extinct level
             padding={{ bottom: 50 }}
             tick={<CustomYTick extinctLevel={extinctLevel} />}
             tickMargin={30}

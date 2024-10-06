@@ -77,7 +77,7 @@ const PlayerDashboard = () => {
 
       <div className="w-[90%] relative text-center text-white mx-auto pt-3">
         {/* Mobile Version */}
-        <div className="md:hidden flex flex-col gap-5">
+        <div key={player.id} className="md:hidden flex flex-col gap-5">
           <PlayerCarousel
             player={player}
             versions={playerVersions}
@@ -121,7 +121,10 @@ const PlayerDashboard = () => {
           </div>
         </div>
         {/* Desktop Version */}
-        <div className="hidden md:grid grid-cols-[1fr_2fr_1fr] gap-5 h-full">
+        <div
+          key={player.id}
+          className="hidden md:grid grid-cols-[1fr_2fr_1fr] gap-5 h-full"
+        >
           <div className="flex flex-col gap-4">
             <div className="bg-[#151515] rounded-md">
               <PlaystyleCard
