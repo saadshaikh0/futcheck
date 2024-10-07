@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import PlayerCardSlot from "./PlayerCardSlot";
 import PlayerSuggestionBox from "./PlayerSuggestionBox";
@@ -6,14 +6,23 @@ import PlayerSuggestionBox from "./PlayerSuggestionBox";
 import { setFormation } from "../../redux/squadWizardSlice";
 import SolutionsPitch from "../../assets/updated-field.png";
 import SquadInsights from "./SquadInsights";
+import { Popover } from "@headlessui/react";
+
+const formations = ["4-3-3", "4-4-2", "3-5-2", "5-3-2"];
 const SquadWizard = () => {
   const dispatch = useDispatch();
   const positions = useSelector((state) => state.squadWizard.positions);
   const players = useSelector((state) => state.squadWizard.players);
+  const formation = useSelector((state) => state.squadWizard.formation);
+  // const [selectedFormation, setSelectedFormation] = useState("4-3-3");
 
+  const handleFormationSelect = (formation, close) => {
+    dispatch(setFormation(formation));
+    close();
+  };
   useEffect(() => {
     // Set the initial formation
-    dispatch(setFormation("4-3-3"));
+    dispatch(setFormation("4-4-2"));
   }, [dispatch]);
 
   return (
@@ -52,6 +61,28 @@ const SquadWizard = () => {
               index={index}
             />
           ))}
+
+          <Popover className="absolute bottom-4 left-[5vw]">
+            {({ open, close }) => (
+              <>
+                <Popover.Button className="text-white font-bold text-4xl bg-blue-500 hover:bg-blue-700 py-2 px-4 rounded ">
+                  {formation}
+                </Popover.Button>
+
+                <Popover.Panel className="absolute w-full bottom-16 left-0 bg-black text-white rounded shadow-lg">
+                  {formations.map((formation) => (
+                    <div
+                      key={formation}
+                      onClick={() => handleFormationSelect(formation, close)}
+                      className="px-4 py-2 hover:bg-gray-800 cursor-pointer"
+                    >
+                      {formation}
+                    </div>
+                  ))}
+                </Popover.Panel>
+              </>
+            )}
+          </Popover>
         </div>
       </div>
     </div>

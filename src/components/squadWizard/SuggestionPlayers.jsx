@@ -6,13 +6,14 @@ import { fetchPlayerSuggestions } from "../../api/apiService";
 import { useDebounce } from "@uidotdev/usehooks";
 import { useSelector } from "react-redux";
 import { SQUAD_WIZARD_FORMATIONS } from "../utils/formations";
-import { calculateChemistry } from "./squadUtils";
+import { ChemistryPoints } from "../PlayerViewCards/StatsCard";
+import { getChemistryPoints } from "./squadUtils";
 
 const SuggestionPlayers = ({ handlePlayerSelect }) => {
   const [budgetInput, setBudgetInput] = useState(50000);
   const debouncedBudget = useDebounce(budgetInput, 1000) || 0;
   const players = useSelector((state) => state.squadWizard.players);
-
+  const chemistry = useSelector((state) => state.squadWizard.chemistry);
   const handleBudgetChange = (event) => {
     setBudgetInput(Number(event.target.value));
   };
@@ -24,7 +25,6 @@ const SuggestionPlayers = ({ handlePlayerSelect }) => {
   );
   const selectedPositionValue =
     squadPositions[selectedPositionIndex]?.position || "ST";
-  const chemistry = calculateChemistry(players, squadPositions);
 
   const {
     data: suggestedPlayers = [],
@@ -71,14 +71,25 @@ const SuggestionPlayers = ({ handlePlayerSelect }) => {
                 onClick={() => handlePlayerSelect(player)}
                 key={player.id}
               >
-                <PlayerCard
-                  player={player}
-                  isMini={false}
-                  isSuperMini={false}
-                />
+                <div className="relative">
+                  <PlayerCard
+                    player={player}
+                    isMini={false}
+                    isSuperMini={false}
+                  />
+                  <div className="absolute bottom-4">
+                    <ChemistryPoints
+                      points={getChemistryPoints(
+                        player,
+                        selectedPositionIndex,
+                        players,
+                        squadPositions
+                      )}
+                    />
+                  </div>
+                </div>
                 <div className="bg-black px-4 flex flex-col rounded-md absolute bottom-1">
                   {player.latest_price}
-                  {player.chemistry_diff}
                 </div>
               </div>
             ))

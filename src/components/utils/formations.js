@@ -1117,4 +1117,22 @@ export const SQUAD_WIZARD_FORMATIONS = {
     },
     { position: "RW", left: "65%", top: "15%" },
   ],
+  "4-4-2": [
+    {
+      position: "GK",
+      left: "50%",
+      top: "87%",
+      transform: "translate(-50%, -50%)",
+    },
+    { position: "RB", left: "80%", top: "60%" },
+    { position: "CB", left: "30%", top: "60%" },
+    { position: "CB", left: "60%", top: "60%" },
+    { position: "LB", left: "10%", top: "60%" },
+    { position: "RM", left: "70%", top: "30%" },
+    { position: "CM", left: "30%", top: "30%" },
+    { position: "CM", left: "50%", top: "30%" },
+    { position: "LM", left: "10%", top: "30%" },
+    { position: "ST", left: "30%", top: "5%" },
+    { position: "ST", left: "60%", top: "5%" },
+  ],
 };

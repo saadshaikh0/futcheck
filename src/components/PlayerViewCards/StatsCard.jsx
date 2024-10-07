@@ -86,24 +86,25 @@ const DiamondSvg = ({ isFill, isSelected }) => {
     </div>
   );
 };
-const ChemistryPoints = ({ fillArr, onSelectChemistryPoints, isSelected }) => {
+export const ChemistryPoints = ({
+  points,
+  onSelectChemistryPoints = () => {},
+  isSelected = false,
+}) => {
   return (
-    <div
-      onClick={onSelectChemistryPoints}
-      className="  cursor-pointer relative"
-    >
+    <div onClick={onSelectChemistryPoints} className="cursor-pointer relative">
       <div
         className={classNames(
-          " h-8 w-8 bg-[#151515] top-0 left-0 z-10  rounded-full shadow-lg"
+          "h-8 w-8 bg-[#151515] top-0 left-0 z-10 rounded-full shadow-lg"
         )}
       ></div>
 
-      <div className=" absolute top-[5px] left-[4px]  ">
+      <div className="absolute top-[5px] left-[4px]">
         <div className="flex flex-col justify-center items-center">
-          <DiamondSvg isFill={fillArr[1]} isSelected={isSelected} />
+          <DiamondSvg isFill={points >= 2} isSelected={isSelected} />
           <div className="flex">
-            <DiamondSvg isFill={fillArr[0]} isSelected={isSelected} />
-            <DiamondSvg isFill={fillArr[2]} isSelected={isSelected} />
+            <DiamondSvg isFill={points >= 1} isSelected={isSelected} />
+            <DiamondSvg isFill={points >= 3} isSelected={isSelected} />
           </div>
         </div>
       </div>
@@ -198,17 +199,17 @@ const ChemStyleSection = ({
         <ChemistryPoints
           onSelectChemistryPoints={() => onSelectChemistryPoints(1)}
           isSelected={selectedChemistryPoints === 1}
-          fillArr={[true, false, false]}
+          points={1}
         />
         <ChemistryPoints
           onSelectChemistryPoints={() => onSelectChemistryPoints(2)}
           isSelected={selectedChemistryPoints === 2}
-          fillArr={[true, true, false]}
+          points={2}
         />
         <ChemistryPoints
           onSelectChemistryPoints={() => onSelectChemistryPoints(3)}
           isSelected={selectedChemistryPoints === 3}
-          fillArr={[true, true, true]}
+          points={3}
         />
       </div>
       <div className="grid grid-cols-3 text-xs md:text-sm gap-2">

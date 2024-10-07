@@ -178,3 +178,19 @@ export const calculateRating = (squad) => {
 
   return finalRating;
 };
+
+export const getChemistryPoints = (
+  player,
+  selectedPositionIndex,
+  players,
+  positions
+) => {
+  // Create a copy of the players array and replace the player at the selectedPositionIndex
+  const updatedPlayers = [...players];
+  updatedPlayers[selectedPositionIndex] = player;
+
+  // Calculate chemistry with the updated players array
+  const { chemistryPoints } = calculateChemistry(updatedPlayers, positions);
+
+  return chemistryPoints[player.id] || 0;
+};

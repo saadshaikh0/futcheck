@@ -171,14 +171,14 @@ const PlayerCard = ({
   }, [selectedChemStyle, selectedChemistryPoints, stats, attributes]);
   return (
     <Link
-      key={id}
+      // key={id}
       onClick={(e) => isDisabled && e.preventDefault()}
       to={`/player/${id}/${name?.replace(/\s+/g, "-")}`}
       target={shouldOpenInNewTab ? "_blank" : "_self"}
       rel={shouldOpenInNewTab ? "noopener noreferrer" : undefined}
     >
       <div
-        key={id}
+        // key={id}
         className={classNames(
           "",
           isHover

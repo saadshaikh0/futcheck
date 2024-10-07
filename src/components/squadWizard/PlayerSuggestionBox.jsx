@@ -44,7 +44,6 @@ const PlayerSuggestionBox = () => {
         </button>
       </div>
 
-      {/* Content based on active tab */}
       {activeTab === "all" && (
         <AllPlayers handlePlayerSelect={handlePlayerSelect} />
       )}

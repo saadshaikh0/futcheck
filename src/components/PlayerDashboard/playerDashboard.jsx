@@ -77,7 +77,10 @@ const PlayerDashboard = () => {
 
       <div className="w-[90%] relative text-center text-white mx-auto pt-3">
         {/* Mobile Version */}
-        <div key={player.id} className="md:hidden flex flex-col gap-5">
+        <div
+          // key={`mobile_${player.id}`}
+          className="md:hidden flex flex-col gap-5"
+        >
           <PlayerCarousel
             player={player}
             versions={playerVersions}
