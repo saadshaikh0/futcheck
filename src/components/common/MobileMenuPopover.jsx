@@ -1,4 +1,4 @@
-import { CalculatorIcon } from "@heroicons/react/20/solid";
+import { AcademicCapIcon } from "@heroicons/react/20/solid";
 import React from "react";
 import { Link } from "react-router-dom";
 const MobileMenuPopover = () => {
@@ -11,6 +11,14 @@ const MobileMenuPopover = () => {
       <Link to="/sbc/">
         <div className="text-white flex gap-1 items-center  font-bold">
           SBCs
+        </div>
+      </Link>
+      <Link to="/squad_wizard/">
+        <div className="text-white flex gap-2  font-bold">
+          {" "}
+          <div className="text-white flex gap-1 font-bold">
+            <AcademicCapIcon className="text-white w-5" /> Squad Wizard
+          </div>
         </div>
       </Link>
     </div>
