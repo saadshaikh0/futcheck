@@ -99,23 +99,23 @@ const PlayerDashboard = () => {
               percentageChange={percentageChange}
             />
           </div>
-          <div className="bg-[#151515] rounded-md">
+          <div className="bg-charcoal rounded-md">
             <PlaystyleCard
               playstyles={playerDetails.playstyles}
               iconPlaystyles={playerDetails.playstyle_plus}
             />
           </div>
-          <div className="bg-[#151515] rounded-md flex-grow">
+          <div className="bg-charcoal rounded-md flex-grow">
             <PlayerStatCard player={playerDetails} />
           </div>
-          <div className="bg-[#151515] rounded-md flex-grow">
+          <div className="bg-charcoal rounded-md flex-grow">
             <PlayerPriceGraph
               data={price_history_data}
               Loading={isPriceHistoryLoading}
               isSbc={playerDetails.sbcsetid}
             />
           </div>
-          <div className="bg-[#151515] rounded-md pb-3 flex-grow">
+          <div className="bg-charcoal rounded-md pb-3 flex-grow">
             <SalesCard
               data={price_history_data}
               isLoading={isPriceHistoryLoading}
@@ -129,13 +129,13 @@ const PlayerDashboard = () => {
           className="hidden md:grid grid-cols-[1fr_2fr_1fr] gap-5 h-full"
         >
           <div className="flex flex-col gap-4">
-            <div className="bg-[#151515] rounded-md">
+            <div className="bg-charcoal rounded-md">
               <PlaystyleCard
                 playstyles={playerDetails.playstyles}
                 iconPlaystyles={playerDetails.playstyle_plus}
               />
             </div>
-            <div className="bg-[#151515] rounded-md flex-grow">
+            <div className="bg-charcoal rounded-md flex-grow">
               <PlayerStatCard player={playerDetails} />
             </div>
           </div>
@@ -145,7 +145,7 @@ const PlayerDashboard = () => {
               versions={playerVersions}
               onPlayerChange={onPlayerChange}
             />
-            <div className="bg-[#151515] rounded-md flex-grow">
+            <div className="bg-charcoal rounded-md flex-grow">
               <PlayerPriceGraph
                 data={price_history_data}
                 isLoading={isPriceHistoryLoading}
@@ -155,7 +155,7 @@ const PlayerDashboard = () => {
           </div>
           <div className="flex flex-col gap-4 h-full">
             <div className="flex flex-col gap-2 h-[42vh]">
-              <div className="bg-[#151515] rounded-md pb-2">
+              <div className="bg-charcoal rounded-md pb-2">
                 <RolesCard
                   plusplusroles={player.plusplusroles}
                   plusroles={player.plusroles}
@@ -170,7 +170,7 @@ const PlayerDashboard = () => {
                 />
               </div>
             </div>
-            <div className="bg-[#151515] rounded-md pb-3 flex-grow">
+            <div className="bg-charcoal rounded-md pb-3 flex-grow">
               <SalesCard
                 data={price_history_data}
                 isLoading={isPriceHistoryLoading}

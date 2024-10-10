@@ -365,7 +365,9 @@ export const fetchPlayerSuggestions = async (
   chemistry,
   index,
   squad,
-  formation
+  formation,
+  focus,
+  pageParam
 ) => {
   try {
     let response = await instance.post(
@@ -376,14 +378,16 @@ export const fetchPlayerSuggestions = async (
         index,
         squad,
         formation,
+        focus,
+        page: pageParam,
       },
       {
         timeout: 60000,
       }
     );
-    let data = response.data;
-    data = addRarityUrl(data, "s");
-    return data;
+    response.data.suggestions = addRarityUrl(response.data.suggestions, "s");
+
+    return response.data;
   } catch (error) {
     console.error("Error fetching player suggestions:", error);
     throw error;

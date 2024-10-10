@@ -1,98 +1,167 @@
-// SuggestionPlayers.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PlayerCard from "../common/PlayerCard";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { fetchPlayerSuggestions } from "../../api/apiService";
 import { useDebounce } from "@uidotdev/usehooks";
 import { useSelector } from "react-redux";
-import { SQUAD_WIZARD_FORMATIONS } from "../utils/formations";
+import { getFormationPositions } from "../utils/formations";
 import { ChemistryPoints } from "../PlayerViewCards/StatsCard";
 import { getChemistryPoints } from "./squadUtils";
+import { convertFormation } from "../utils/utils";
+import { useInView } from "react-intersection-observer";
+import DynamicRangeSlider from "./DynamicRangeSlider"; // Import the custom slider component
+import SuggestionCard from "./SuggestionCard";
 
 const SuggestionPlayers = ({ handlePlayerSelect }) => {
   const [budgetInput, setBudgetInput] = useState(50000);
+  const [focus, setFocus] = useState(0); // State for slider value
   const debouncedBudget = useDebounce(budgetInput, 1000) || 0;
+  const debouncedFocus = useDebounce(focus, 1000) || 0;
   const players = useSelector((state) => state.squadWizard.players);
   const chemistry = useSelector((state) => state.squadWizard.chemistry);
+  const [isEditing, setIsEditing] = useState(false);
+
   const handleBudgetChange = (event) => {
     setBudgetInput(Number(event.target.value));
   };
 
+  const handleSliderChange = (event) => {
+    setFocus(Number(event.target.value));
+  };
+
   const formation = useSelector((state) => state.squadWizard.formation);
-  const squadPositions = SQUAD_WIZARD_FORMATIONS[formation] || [];
+  const squadPositions = getFormationPositions(formation) || [];
   const selectedPositionIndex = useSelector(
     (state) => state.squadWizard.selectedPositionIndex
   );
   const selectedPositionValue =
     squadPositions[selectedPositionIndex]?.position || "ST";
 
+  const { ref, inView } = useInView({
+    threshold: 0.5,
+  });
+
   const {
-    data: suggestedPlayers = [],
-    isLoading: suggestedPlayersLoading,
+    data,
+    isLoading,
     error,
-  } = useQuery({
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
     queryKey: [
       "fetchPlayerSuggestions",
       debouncedBudget,
+      debouncedFocus,
       selectedPositionIndex,
       players,
       formation,
+      chemistry.totalChemistry,
     ],
-    queryFn: () =>
+    queryFn: ({ pageParam = 1 }) =>
       fetchPlayerSuggestions(
         debouncedBudget || 10000,
         chemistry.totalChemistry || 0,
         selectedPositionIndex,
         players,
-        formation
+        convertFormation(formation),
+        debouncedFocus,
+        pageParam
       ),
+    getNextPageParam: (lastPage) => {
+      const { page, total_pages } = lastPage;
+      if (page < total_pages) {
+        return page + 1;
+      } else {
+        return undefined;
+      }
+    },
     enabled: !!selectedPositionValue,
   });
 
+  const handleBlur = () => {
+    setIsEditing(false);
+  };
+
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, hasNextPage, isFetchingNextPage]);
+
   return (
-    <div className="w-full">
-      <input
-        type="number"
-        placeholder="Enter budget..."
-        value={budgetInput}
-        onChange={handleBudgetChange}
-        className="w-full p-2 mb-4 text-black rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
+    <div className="w-full overflow-auto flex flex-col">
+      <div className="mb-4 px-4 w-full">
+        <div className="flex justify-between text-white mb-2">
+          <span>Chemistry</span>
+          <span>Quality</span>
+        </div>
+        <input
+          type="range"
+          min="-1"
+          max="1"
+          step="0.1"
+          value={focus}
+          onChange={handleSliderChange}
+          className="w-full"
+        />
+      </div>
+      <div className="mb-4 px-4 w-full">
+        <label className="flex gap-2 text-white mb-2">
+          Budget:{" "}
+          {isEditing ? (
+            <input
+              type="number"
+              value={budgetInput}
+              onChange={handleBudgetChange}
+              onBlur={handleBlur}
+              min={0}
+              max={15000000}
+              className="w-full bg-transparent text-white mb-2 text-black"
+              autoFocus
+            />
+          ) : (
+            <span
+              onClick={() => setIsEditing(true)}
+              className="w-full bg-transparent text-white mb-2 cursor-pointer"
+            >
+              {parseInt(budgetInput).toLocaleString("en-us")}
+            </span>
+          )}
+        </label>
+        <DynamicRangeSlider value={budgetInput} onChange={handleBudgetChange} />
+      </div>
       {error && <p>Error loading suggestions: {error.message}</p>}
-      <div className="grid overflow-auto grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-2 w-full">
-        {suggestedPlayersLoading ? (
-          <p>Loading suggested players...</p>
+      <div className="grid overflow-auto scrollbar-none grid-cols-1 gap-2 w-full">
+        {isLoading ? (
+          <p className=" text-center w-full">Loading suggested players...</p>
         ) : (
-          suggestedPlayers
-            // .sort((a, b) => b.latest_price - a.latest_price)
-            .map((player) => (
-              <div
-                className="relative flex bg-gray-500 pb-3 flex-col items-center"
-                onClick={() => handlePlayerSelect(player)}
-                key={player.id}
-              >
-                <div className="relative">
-                  <PlayerCard
-                    player={player}
-                    isMini={false}
-                    isSuperMini={false}
-                  />
-                  <div className="absolute bottom-4">
-                    <ChemistryPoints
-                      points={getChemistryPoints(
-                        player,
-                        selectedPositionIndex,
-                        players,
-                        squadPositions
-                      )}
-                    />
-                  </div>
-                </div>
-                <div className="bg-black px-4 flex flex-col rounded-md absolute bottom-1">
-                  {player.latest_price}
-                </div>
-              </div>
-            ))
+          <>
+            {data?.pages.map((page, pageIndex) => (
+              <React.Fragment key={pageIndex}>
+                {page.suggestions.map((player, playerIndex) => {
+                  const isLastPlayer =
+                    pageIndex === data.pages.length - 1 &&
+                    playerIndex === page.suggestions.length - 1;
+                  return (
+                    <div ref={isLastPlayer ? ref : null}>
+                      <SuggestionCard
+                        player={player}
+                        handlePlayerSelect={handlePlayerSelect}
+                        points={getChemistryPoints(
+                          player,
+                          selectedPositionIndex,
+                          players,
+                          squadPositions
+                        )}
+                      />
+                    </div>
+                  );
+                })}
+              </React.Fragment>
+            ))}
+            {isFetchingNextPage && <p>Loading more players...</p>}
+          </>
         )}
       </div>
     </div>

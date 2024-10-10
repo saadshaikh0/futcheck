@@ -1,3 +1,5 @@
+import { teamChemLinks } from "../utils/constants";
+
 export const calculateChemistry = (squad, formation, manager) => {
   // Mapping of rarity IDs to names
   const RARITY_ID_TO_NAME = {
@@ -20,6 +22,48 @@ export const calculateChemistry = (squad, formation, manager) => {
   // Collect all leagues in the squad for Icon calculations
   const leaguesInSquad = new Set();
 
+  // Build parent mapping from teamChemLinks
+  const parent = {};
+
+  const teamIdsInLinks = new Set();
+
+  teamChemLinks.forEach((item) => {
+    const teamId = item.teamId;
+    teamIdsInLinks.add(teamId);
+    item.linkedTeams.forEach((linkedTeamId) => {
+      teamIdsInLinks.add(linkedTeamId);
+    });
+  });
+
+  // Initialize parent mapping for all teamIds in teamIdsInLinks
+  teamIdsInLinks.forEach((teamId) => {
+    parent[teamId] = teamId;
+  });
+
+  // Define find and union functions
+  function find(teamId) {
+    if (parent[teamId] !== teamId) {
+      parent[teamId] = find(parent[teamId]); // Path compression
+    }
+    return parent[teamId];
+  }
+
+  function union(teamId1, teamId2) {
+    const parent1 = find(teamId1);
+    const parent2 = find(teamId2);
+    if (parent1 !== parent2) {
+      parent[parent1] = parent2;
+    }
+  }
+
+  // Process teamChemLinks to build unions
+  teamChemLinks.forEach((item) => {
+    const teamId = item.teamId;
+    item.linkedTeams.forEach((linkedTeamId) => {
+      union(teamId, linkedTeamId);
+    });
+  });
+
   // Iterate over the players and their positions
   for (let i = 0; i < formation.length; i++) {
     const player = squad[i];
@@ -32,23 +76,31 @@ export const calculateChemistry = (squad, formation, manager) => {
 
       const rarityName = RARITY_ID_TO_NAME[player.rarity];
 
+      // Ensure player's teamid is in parent mapping
+      const teamId = player.teamid;
+      if (!(teamId in parent)) {
+        parent[teamId] = teamId;
+      }
+
+      const groupId = find(teamId);
+
       // Update counts based on rarity
       if (rarityName === "Hero") {
         // Heroes count normally towards league and club, double towards nation
         leagueCount[player.leagueid] = (leagueCount[player.leagueid] || 0) + 2;
-        clubCount[player.teamid] = (clubCount[player.teamid] || 0) + 1;
-        nationCount[player.nation] = (nationCount[player.nation] || 0) + 1; // Double count for nation
+        clubCount[groupId] = (clubCount[groupId] || 0) + 1;
+        nationCount[player.nation] = (nationCount[player.nation] || 0) + 2; // Double count for nation
         leaguesInSquad.add(player.leagueid);
       } else if (rarityName === "Icon") {
         // Icons count normally towards nation and club
         nationCount[player.nation] = (nationCount[player.nation] || 0) + 2;
-        clubCount[player.teamid] = (clubCount[player.teamid] || 0) + 1;
+        clubCount[groupId] = (clubCount[groupId] || 0) + 1;
         // Collect leagues for later double counting
         leaguesInSquad.add(player.leagueid);
       } else {
         // Regular players
         leagueCount[player.leagueid] = (leagueCount[player.leagueid] || 0) + 1;
-        clubCount[player.teamid] = (clubCount[player.teamid] || 0) + 1;
+        clubCount[groupId] = (clubCount[groupId] || 0) + 1;
         nationCount[player.nation] = (nationCount[player.nation] || 0) + 1;
         leaguesInSquad.add(player.leagueid);
       }
@@ -64,7 +116,7 @@ export const calculateChemistry = (squad, formation, manager) => {
     const rarityName = RARITY_ID_TO_NAME[player.rarity];
     if (rarityName === "Icon") {
       leaguesInSquad.forEach((leagueId) => {
-        leagueCount[leagueId] = (leagueCount[leagueId] || 0) + 1; // Icons add 2 to each league
+        leagueCount[leagueId] = (leagueCount[leagueId] || 0) + 1; // Icons add 1 to each league
       });
     }
   });
@@ -83,11 +135,19 @@ export const calculateChemistry = (squad, formation, manager) => {
     // Start with 0 chemistry points
     chemistryPoints[player.id] = 0;
 
+    // Ensure player's teamid is in parent mapping
+    const teamId = player.teamid;
+    if (!(teamId in parent)) {
+      parent[teamId] = teamId;
+    }
+
+    const groupId = find(teamId);
+
     if (rarityName === "Hero" || rarityName === "Icon") {
       chemistryPoints[player.id] = 3; // Full chemistry
     } else {
       // Club Chemistry
-      const clubPlayers = clubCount[player.teamid];
+      const clubPlayers = clubCount[groupId];
       if (clubPlayers >= 7) {
         incrementChemistry(player.id, 3);
       } else if (clubPlayers >= 4) {

@@ -1,27 +1,34 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { SQUAD_WIZARD_FORMATIONS } from "../components/utils/formations"; // Import formations data
+import {
+  getFormationPositions,
+  SQUAD_WIZARD_FORMATIONS,
+} from "../components/utils/formations"; // Import formations data
 import {
   calculateChemistry,
   calculateRating,
 } from "../components/squadWizard/squadUtils";
 
-const initialFormation = "4-4-2";
-const initialPositions = SQUAD_WIZARD_FORMATIONS[initialFormation] || [];
+const initialFormation = "f442";
+const initialPositions = getFormationPositions(initialFormation) || [];
 
 const initialState = {
   formation: initialFormation,
   positions: initialPositions,
   players: Array(initialPositions.length).fill(null),
-  selectedPositionIndex: null,
+  selectedPositionIndex: 0,
   loading: false,
   error: null,
   chemistry: {},
+  squadPrice: 0,
   rating: 0,
 };
 
 const updateChemistryAndRating = (state) => {
   state.chemistry = calculateChemistry(state.players, state.positions);
   state.rating = calculateRating(state.players, state.positions);
+  state.squadPrice = state.players.reduce((acc, player) => {
+    return acc + (player ? player.latest_price : 0);
+  }, 0);
 };
 
 const squadWizardSlice = createSlice({
@@ -30,7 +37,8 @@ const squadWizardSlice = createSlice({
   reducers: {
     setFormation: (state, action) => {
       state.formation = action.payload;
-      state.positions = SQUAD_WIZARD_FORMATIONS[state.formation] || [];
+      state.positions =
+        getFormationPositions(state.formation.replaceAll("-", "")) || [];
       //   state.players = Array(state.positions.length).fill(null);
       updateChemistryAndRating(state);
     },
@@ -38,6 +46,12 @@ const squadWizardSlice = createSlice({
       const { index, player } = action.payload;
       state.players[index] = player;
       updateChemistryAndRating(state);
+
+      // Find the next null position
+      const nextNullIndex = state.players.findIndex((p) => p === null);
+      if (nextNullIndex !== -1) {
+        state.selectedPositionIndex = nextNullIndex;
+      }
     },
     removePlayerAtPosition: (state, action) => {
       const index = action.payload;

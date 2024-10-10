@@ -19,13 +19,13 @@ const PlayerSuggestionBox = () => {
   };
 
   return (
-    <div className="flex max-h-full flex-col items-center p-4 bg-gray-800 rounded-lg shadow-lg">
+    <div className="flex max-h-full flex-col items-center  bg-charcoal rounded-lg shadow-lg">
       {/* Tabs */}
-      <div className="tabs flex mb-4">
+      <div className="tabs w-full flex mb-4">
         <button
           className={`tab flex-1 py-2 px-4 text-center ${
             activeTab === "all"
-              ? "bg-gray-700 text-white"
+              ? "bg-white text-black"
               : "bg-gray-600 text-gray-300"
           }`}
           onClick={() => setActiveTab("all")}
@@ -35,7 +35,7 @@ const PlayerSuggestionBox = () => {
         <button
           className={`tab flex-1 py-2 px-4 text-center ${
             activeTab === "suggestions"
-              ? "bg-gray-700 text-white"
+              ? "bg-white text-black"
               : "bg-gray-600 text-gray-300"
           }`}
           onClick={() => setActiveTab("suggestions")}
@@ -43,14 +43,15 @@ const PlayerSuggestionBox = () => {
           Suggestions
         </button>
       </div>
+      <div className=" overflow-auto flex w-full  h-full">
+        {activeTab === "all" && (
+          <AllPlayers handlePlayerSelect={handlePlayerSelect} />
+        )}
 
-      {activeTab === "all" && (
-        <AllPlayers handlePlayerSelect={handlePlayerSelect} />
-      )}
-
-      {activeTab === "suggestions" && (
-        <SuggestionPlayers handlePlayerSelect={handlePlayerSelect} />
-      )}
+        {activeTab === "suggestions" && (
+          <SuggestionPlayers handlePlayerSelect={handlePlayerSelect} />
+        )}
+      </div>
     </div>
   );
 };

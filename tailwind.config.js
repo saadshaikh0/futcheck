@@ -13,6 +13,9 @@ module.exports = {
           raw: "(min-resolution: 150dpi), (min-device-pixel-ratio: 1.50)",
         },
       },
+      colors: {
+        charcoal: "#151515",
+      },
     },
   },
 

@@ -9,7 +9,6 @@ import RatingPopup from "./filterPopups/ratingPopup";
 import SkillMovesPopup from "./filterPopups/skillMovesPopup";
 import TeamPopup from "./filterPopups/teamPopup";
 import VersionPopup from "./filterPopups/versionPopup";
-import WorkRatePopup from "./filterPopups/workRatePopup";
 import WeakFootPopup from "./filterPopups/weakfootPopup";
 import { useDispatch, useSelector } from "react-redux";
 import { setFilters, setIsClub } from "../redux/allPlayerSlice";

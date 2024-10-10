@@ -174,6 +174,7 @@ export const useFetchUserInfo = () => {
 };
 
 export const addRarityUrl = (data, type = "s") => {
+  console.log(data);
   let updatedData = data.map((player) => {
     player.rarity_url = buildRarityUrl({
       level: player.levels,

@@ -31,7 +31,24 @@ div.App {
   will-change: transform;
   animation: scroll 25s linear infinite;
 }
+.glow {
+  font-weight: bold;
+  color: #00ffff; /* Cyan color for the text */
+  box-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff, 0 0 15px #00ffff,
+    0 0 20px #00ffff;
+  animation: glow-animation 1s infinite alternate; /* Quicker animation */
+}
 
+@keyframes glow-animation {
+  from {
+    box-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff, 0 0 15px #00ffff,
+      0 0 20px #00ffff;
+  }
+  to {
+    box-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 30px #00ffff,
+      0 0 40px #00ffff;
+  }
+}
 @keyframes scroll {
   0% {
     transform: translateX(0%);

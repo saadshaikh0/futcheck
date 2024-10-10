@@ -102,7 +102,7 @@ const Navbar = () => {
             <Link to="/">
               <div className="flex gap-2 items-center md:mr-6">
                 <div>
-                  <img src={FutcheckLogo} width={35} className="rounded-md" />
+                  <img src={FutcheckLogo} width={28} className="rounded-md" />
                 </div>
                 <div className="text-white hidden md:block font-bold text-xl">
                   FUTCHECK
@@ -153,14 +153,14 @@ const Navbar = () => {
                   <div className="text-white  font-bold">SBCs</div>
                 </div>
               </Link>
-              {/* <Link to="/squad_wizard/">
+              <Link to="/squad_wizard/">
                 <div className="text-white flex gap-2  font-bold">
                   {" "}
                   <div className="text-white flex gap-1 font-bold">
                     <AcademicCapIcon className="text-white w-5" /> Squad Wizard
                   </div>
                 </div>
-              </Link> */}
+              </Link>
               {/* <Link to="/squad-builder/">
                 <div className="text-white  font-bold">Squad Builder</div>
               </Link> */}
