@@ -83,7 +83,7 @@ const PlayerCardSlot = ({ left, top, transform, player, index, position }) => {
           <div className="bg-black bg-opacity-80 text-xs font-bold z-10 flex items-center gap-1 px-1 rounded-sm text-center w-[60%] justify-center  absolute top-5 left-1/2 -translate-x-1/2">
             <img src={CoinsImg} className="w-3 h-3" alt="coins" />
 
-            {player.latest_price}
+            {player?.latest_price}
           </div>
           <div className="absolute bottom-0">
             {canPlayPosition ? (

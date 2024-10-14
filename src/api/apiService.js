@@ -142,6 +142,10 @@ export const fetchAllPlayers = async (
     awr,
     dwr,
     name,
+    order_by,
+    order_direction,
+    simple,
+    exclude_extinct,
   },
   club
 ) => {
@@ -150,6 +154,9 @@ export const fetchAllPlayers = async (
 
   if (page) queryParams.append("page", page);
   if (name) queryParams.append("name", name);
+  if (order_by) queryParams.append("order_by", order_by);
+  if (order_direction) queryParams.append("order_direction", order_direction);
+  if (simple) queryParams.append("simple", simple);
   if (min_rating) queryParams.append("min_rating", min_rating);
   if (max_rating) queryParams.append("max_rating", max_rating);
   if (teamid) queryParams.append("teamid", teamid.id);
@@ -161,12 +168,19 @@ export const fetchAllPlayers = async (
   if (club) queryParams.append("club", club);
   if (awr !== null && awr !== undefined) queryParams.append("awr", awr);
   if (dwr !== null && dwr !== undefined) queryParams.append("dwr", dwr);
+  if (exclude_extinct) queryParams.append("exclude_extinct", exclude_extinct);
 
   // Construct the URL with query parameters
   const url = `/players/?${queryParams.toString()}`;
 
   // Make the GET request
   const response = await instance.get(url);
+  if (simple) {
+    let data = response.data.data;
+    data = addRarityUrl(data, "s");
+
+    return data;
+  }
   const { players, total_pages, current_page } = response.data;
   let players_formatted = addRarityUrl(players, "s");
 
