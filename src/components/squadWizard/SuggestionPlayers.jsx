@@ -64,7 +64,7 @@ const SuggestionPlayers = ({ handlePlayerSelect }) => {
         chemistry.totalChemistry || 0,
         selectedPositionIndex,
         players,
-        convertFormation(formation),
+        formation,
         debouncedFocus,
         pageParam
       ),

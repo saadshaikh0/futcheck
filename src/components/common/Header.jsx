@@ -15,7 +15,7 @@ import {
   verifyToken,
 } from "../../api/apiService";
 import { useDebounce } from "@uidotdev/usehooks";
-import FutcheckLogo from "../../assets/futcheck_logo.png";
+import FutcheckLogo from "../../assets/football logo 5.png";
 import { Link } from "react-router-dom";
 import {
   AcademicCapIcon,
@@ -95,18 +95,22 @@ const Navbar = () => {
         class="flex flex-wrap h-[4rem]  sm:justify-start sm:flex-nowrap relative z-50 w-full bg-black text-sm py-3 sm:py-0 sm:pb-2"
       >
         <nav
-          class="relative w-4/5 mx-auto  pt-2 sm:flex sm:items-center sm:justify-between  "
+          class="relative md:w-4/5  mx-4 items-center  md:mx-auto   sm:flex sm:items-center sm:justify-between  "
           aria-label="Global"
         >
-          <div class="flex items-center   grow justify-between gap-4">
+          <div class="flex items-center   grow justify-between gap-1 md:gap-4">
             <Link to="/">
-              <div className="flex gap-2 items-center md:mr-6">
-                <div>
-                  <img src={FutcheckLogo} width={28} className="rounded-md" />
+              <div className="flex gap-2 items-center ">
+                <div className="mt-2 md:mt-7">
+                  <img
+                    src={FutcheckLogo}
+                    height={10}
+                    className="rounded-md w-28 md:w-32"
+                  />
                 </div>
-                <div className="text-white hidden md:block font-bold text-xl">
+                {/* <div className="text-white hidden md:block font-bold text-xl">
                   FUTCHECK
-                </div>
+                </div> */}
               </div>
             </Link>
             <div ref={ref} className="grow">

@@ -443,11 +443,11 @@ const positionCoordinates = {
   20: { top: "30%", left: "40%" }, // RF
   21: { top: "30%", left: "50%" }, // CF
   22: { top: "30%", left: "60%" }, // LF
-  23: { top: "10%", left: "60%" }, // RW
-  24: { top: "5%", left: "55%" }, // RS
+  23: { top: "10%", left: "65%" }, // RW
+  24: { top: "0%", left: "50%" }, // RS
   25: { top: "0%", left: "40%" }, // ST
-  26: { top: "5%", left: "30%" }, // LS
-  27: { top: "10%", left: "20%" }, // LW
+  26: { top: "0%", left: "30%" }, // LS
+  27: { top: "10%", left: "13%" }, // LW
 };
 const uniqueIdToPositionName = positions.reduce((acc, pos) => {
   acc[pos.uniqueId] = pos.typeName; // Use uniqueName if you prefer specific positions
