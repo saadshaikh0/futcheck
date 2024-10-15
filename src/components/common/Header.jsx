@@ -165,6 +165,14 @@ const Navbar = () => {
                   </div>
                 </div>
               </Link>
+              <Link to="/evolutions/">
+                <div className="text-white flex gap-2  font-bold">
+                  {" "}
+                  <div className="text-white flex gap-1 font-bold">
+                    Evolutions
+                  </div>
+                </div>
+              </Link>
               {/* <Link to="/squad-builder/">
                 <div className="text-white  font-bold">Squad Builder</div>
               </Link> */}

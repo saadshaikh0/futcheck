@@ -10,8 +10,7 @@ import {
   Routes,
   useLocation,
 } from "react-router-dom";
-import HomePage from "./components/homepage";
-import PlayerViewWrapper from "./components/playerViewWrapper";
+
 import ReactGA from "react-ga4";
 import Ads from "./components/common/Ads";
 import Tos from "./components/tos";
@@ -29,6 +28,7 @@ import PlayerDashboardWrapper from "./components/playerDashboardWrapper";
 import NewHomePage from "./components/NewHomePage";
 import ChallengeSolutions from "./components/sbc/ChallengeSolution";
 import SquadWizardWrapper from "./components/squadWizardWrapper";
+import EvolutionsWrapper from "./components/EvolutionsWrapper";
 
 ReactGA.initialize("G-RD6LGLC1LD");
 
@@ -61,6 +61,7 @@ function App() {
                       element={<NewHomePage />}
                     /> */}
                   <Route path="/tos" element={<Tos />} />
+                  <Route path="/evolutions" element={<EvolutionsWrapper />} />
                   <Route path="/policy" element={<Policy />} />
                   <Route path="/fc_combinations/" element={<Combinations />} />
                   <Route
