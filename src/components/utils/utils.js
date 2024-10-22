@@ -5,7 +5,19 @@ import { verifyToken } from "../../api/apiService";
 
 // utils.js
 import store from "../../redux/store";
-import { RARITY, RARITY_GROUP, SBC_REQUIREMENTS } from "./sbc_requirements";
+import {
+  ACADEMY_REQUIREMENTS,
+  RARITY,
+  RARITY_GROUP,
+  SBC_REQUIREMENTS,
+} from "./sbc_requirements";
+import { positions } from "./formations";
+import {
+  AcademyEligibilityAttribute,
+  AcademyStatEnum,
+  TraitMapping,
+} from "./constants";
+import { mapAttributeIdToLocString } from "../evos/EvolutionUtils";
 
 export const getNationName = (id) => {
   const state = store.getState();
@@ -26,6 +38,20 @@ export const getTeamName = (id) => {
   const teams = state.app.teams; // Adjust based on your state structure
   const team = teams.find((team) => team.id === id);
   return team ? team.name : "Unknown";
+};
+export const getRarityName = (id) => {
+  const state = store.getState();
+  const rarities = state.app.rarities; // Adjust based on your state structure
+  const rarity = rarities.find((rarity) => rarity.id === id);
+  return rarity ? rarity.name : "Unknown";
+};
+export const getPositionName = (id) => {
+  const position = positions.find((pos) => pos.uniqueId === id);
+  return position ? position.typeName : "Unknown";
+};
+
+export const getTraitName = (id) => {
+  return TraitMapping[id]?.name ?? "Unknown";
 };
 
 export const debounce = (func, delay) => {
@@ -69,8 +95,8 @@ export const buildPlayerUrl = (guId, eaId, baseId) => {
   // return `${BASE_URL}/player//${guId}/p${eaId}.png`;
 };
 
-export const buildDynamicUrl = (type, nation_id) => {
-  return `${BASE_URL}/${type}/${nation_id}.png`;
+export const buildDynamicUrl = (type, id) => {
+  return `${BASE_URL}/${type}/${id}.png`;
 };
 
 export const buildRarityUrl = ({ level, rating, id }) => {
@@ -177,19 +203,19 @@ export const addRarityUrl = (data, type = "s") => {
   console.log(data);
   let updatedData = data.map((player) => {
     player.rarity_url = buildRarityUrl({
-      level: player.levels,
+      level: player.levels || 0,
       rating: player.rating,
       id: player.rarity,
     });
     player.text_color = getTextColor({
       colors: player.colors,
       rating: player.rating,
-      level: player.levels,
+      level: player.levels || 0,
     });
     player.bg_color = getBgColor({
       colors: player.colors,
       rating: player.rating,
-      level: player.levels,
+      level: player.levels || 0,
     });
     return player;
   });
@@ -366,7 +392,6 @@ export const convertElgReqToFormat = (reqs) => {
       case "PLAYER_COUNT":
         obj["playerValue"] = eligibilityvalue;
         break;
-
       default:
         if (type && eligibilityvalue) {
           obj["type"] = type;
@@ -374,6 +399,29 @@ export const convertElgReqToFormat = (reqs) => {
         }
     }
     finalArr[eligibilityslot - 1] = obj;
+  });
+  return finalArr;
+};
+
+export const convertAcademyElgReqToFormat = (reqs) => {
+  const finalArr = [];
+  reqs.forEach((req) => {
+    const { type, eligibilitySlot, eligibilityValue } = req;
+    let obj = finalArr[eligibilitySlot - 1] ?? {};
+    switch (type) {
+      case "SCOPE":
+        obj["scope"] = eligibilityValue;
+        break;
+      case "PLAYER_ATTRIBUTE":
+        obj["type"] = eligibilityValue;
+        break;
+
+      case "ACADEMY_PLAYER_SLOTTING":
+        obj["value"] = eligibilityValue;
+        break;
+      default:
+    }
+    finalArr[eligibilitySlot - 1] = obj;
   });
   return finalArr;
 };
@@ -557,17 +605,6 @@ export function convertFormation(input = "f433") {
   return result;
 }
 
-// {
-//   league: "La Liga",
-//   image:
-//     "https://www.ea.com/ea-sports-fc/ultimate-team/web-app/content/24B23FDE-7835-41C2-87A2-F453DFDB2E82/2024/fut/items/images/mobile/leagueLogos/dark/53.png",
-//   leagueid: 53,
-//   Spain: 35,
-//   Argentina: 25,
-//   France: 15,
-//   Portugal: 10,
-// },
-
 export const formatPrice = (value) => {
   const formatWithSuffix = (num, suffix) => {
     let formattedValue = num.toFixed(3);
@@ -641,47 +678,433 @@ export const calculateFaceStats = (stats, IN_GAME_STATS) => {
   return faceStats;
 };
 
-export const roleMapping = {
-  1: "Goalkeeper",
-  2: "Sweeper Keeper",
-  3: "Fullback",
-  4: "Falseback",
-  5: "Wingback",
-  6: "Attacking Wingback",
-  7: "Fullback",
-  8: "Falseback",
-  9: "Wingback",
-  10: "Attacking Wingback",
-  11: "Defender",
-  12: "Stopper",
-  13: "Ball-Playing Defender",
-  14: "Holding",
-  15: "Centre-Half",
-  16: "Deep-Lying Playmaker",
-  18: "Box-To-Box",
-  19: "Holding",
-  20: "Deep-Lying Playmaker",
-  21: "Playmaker",
-  22: "Half-Winger",
-  23: "Winger",
-  24: "Wide Midfielder",
-  25: "Wide Playmaker",
-  26: "Inside Forward",
-  27: "Winger",
-  28: "Wide Midfielder",
-  29: "Wide Playmaker",
-  30: "Inside Forward",
-  31: "Playmaker",
-  32: "Shadow Striker",
-  33: "Half-Winger",
-  35: "Winger",
-  36: "Inside Forward",
-  37: "Wide Playmaker",
-  38: "Winger",
-  39: "Inside Forward",
-  40: "Wide Playmaker",
-  41: "Advanced Forward",
-  42: "Poacher",
-  43: "False 9",
-  44: "Target Forward",
+function combineValueStrings(arr, separator = " OR ") {
+  return arr
+    .map((val, index) => {
+      return index < arr.length - 1 ? val + separator : val;
+    })
+    .join("");
+}
+
+export const convertAcademyReqToStrings = (req) => {
+  let base = "academy.requirements.";
+  let scope = "scope" + req["scope"];
+  let str = "";
+  let type = req["type"];
+  type = AcademyEligibilityAttribute[type];
+  let value = req["value"];
+  let localized = ""; // Placeholder for the localized string, if any
+
+  const processValue = (value, callback) => {
+    if (Array.isArray(value)) {
+      return combineValueStrings(value.map(callback));
+    }
+    return callback(value);
+  };
+
+  switch (type) {
+    case "OVR":
+      str = base + "player.ovr." + scope;
+      str = ACADEMY_REQUIREMENTS[str];
+      str = str.replace("%1", value.toString());
+      break;
+
+    case "PACE":
+      str = base + "player.pace." + scope;
+      str = ACADEMY_REQUIREMENTS[str];
+      str = str.replace("%1", value.toString());
+      break;
+
+    case "SHOOTING":
+      str = base + "player.shooting." + scope;
+      str = ACADEMY_REQUIREMENTS[str];
+      str = str.replace("%1", value.toString());
+      break;
+
+    case "PASSING":
+      str = base + "player.passing." + scope;
+      str = ACADEMY_REQUIREMENTS[str];
+      str = str.replace("%1", value.toString());
+      break;
+
+    case "DRIBBLING_MAIN":
+      str = base + "player.dribbling_main." + scope;
+      str = ACADEMY_REQUIREMENTS[str];
+      str = str.replace("%1", value.toString());
+      break;
+
+    case "DEFENSE":
+      str = base + "player.defense." + scope;
+      str = ACADEMY_REQUIREMENTS[str];
+      str = str.replace("%1", value.toString());
+      break;
+
+    case "PHYSICALITY":
+      str = base + "player.physicality." + scope;
+      str = ACADEMY_REQUIREMENTS[str];
+      str = str.replace("%1", value.toString());
+      break;
+
+    case "ACCELERATION":
+      str = base + "player.acceleration." + scope;
+      str = ACADEMY_REQUIREMENTS[str];
+      str = str.replace("%1", value.toString());
+      break;
+
+    case "SPRINT_SPEED":
+      str = base + "player.sprint_speed." + scope;
+      str = ACADEMY_REQUIREMENTS[str];
+      str = str.replace("%1", value.toString());
+      break;
+
+    case "AGILITY":
+      str = base + "player.agility." + scope;
+      str = ACADEMY_REQUIREMENTS[str];
+      str = str.replace("%1", value.toString());
+      break;
+
+    case "BALANCE":
+      str = base + "player.balance." + scope;
+      str = ACADEMY_REQUIREMENTS[str];
+      str = str.replace("%1", value.toString());
+      break;
+
+    case "JUMPING":
+      str = base + "player.jumping." + scope;
+      str = ACADEMY_REQUIREMENTS[str];
+      str = str.replace("%1", value.toString());
+      break;
+
+    case "STAMINA":
+      str = base + "player.stamina." + scope;
+      str = ACADEMY_REQUIREMENTS[str];
+      str = str.replace("%1", value.toString());
+      break;
+
+    case "STRENGTH":
+      str = base + "player.strength." + scope;
+      str = ACADEMY_REQUIREMENTS[str];
+      str = str.replace("%1", value.toString());
+      break;
+
+    case "REACTIONS":
+      str = base + "player.reactions." + scope;
+      str = ACADEMY_REQUIREMENTS[str];
+      str = str.replace("%1", value.toString());
+      break;
+
+    case "AGGRESSION":
+      str = base + "player.aggression." + scope;
+      str = ACADEMY_REQUIREMENTS[str];
+      str = str.replace("%1", value.toString());
+      break;
+
+    case "COMPOSURE":
+      str = base + "player.composure." + scope;
+      str = ACADEMY_REQUIREMENTS[str];
+      str = str.replace("%1", value.toString());
+      break;
+
+    case "INTERCEPTIONS":
+      str = base + "player.interceptions." + scope;
+      str = ACADEMY_REQUIREMENTS[str];
+      str = str.replace("%1", value.toString());
+      break;
+
+    case "POSITIONING":
+      str = base + "player.positioning." + scope;
+      str = ACADEMY_REQUIREMENTS[str];
+      str = str.replace("%1", value.toString());
+      break;
+
+    case "VISION":
+      str = base + "player.vision." + scope;
+      str = ACADEMY_REQUIREMENTS[str];
+      str = str.replace("%1", value.toString());
+      break;
+
+    case "BALL_CONTROL":
+      str = base + "player.ball_control." + scope;
+      str = ACADEMY_REQUIREMENTS[str];
+      str = str.replace("%1", value.toString());
+      break;
+
+    case "CROSSING":
+      str = base + "player.crossing." + scope;
+      str = ACADEMY_REQUIREMENTS[str];
+      str = str.replace("%1", value.toString());
+      break;
+
+    case "DRIBBLING_SUB":
+      str = base + "player.dribbling_sub." + scope;
+      str = ACADEMY_REQUIREMENTS[str];
+      str = str.replace("%1", value.toString());
+      break;
+
+    case "FINISHING":
+      str = base + "player.finishing." + scope;
+      str = ACADEMY_REQUIREMENTS[str];
+      str = str.replace("%1", value.toString());
+      break;
+
+    case "FK_ACC":
+      str = base + "player.fk_acc." + scope;
+      str = ACADEMY_REQUIREMENTS[str];
+      str = str.replace("%1", value.toString());
+      break;
+
+    case "HEADING_ACC":
+      str = base + "player.heading_acc." + scope;
+      str = ACADEMY_REQUIREMENTS[str];
+      str = str.replace("%1", value.toString());
+      break;
+
+    case "LONG_PASSING":
+      str = base + "player.long_passing." + scope;
+      str = ACADEMY_REQUIREMENTS[str];
+      str = str.replace("%1", value.toString());
+      break;
+
+    case "SHORT_PASSING":
+      str = base + "player.short_passing." + scope;
+      str = ACADEMY_REQUIREMENTS[str];
+      str = str.replace("%1", value.toString());
+      break;
+
+    case "DEF_AWARENESS":
+      str = base + "player.def_awareness." + scope;
+      str = ACADEMY_REQUIREMENTS[str];
+      str = str.replace("%1", value.toString());
+      break;
+
+    case "SHOT_POWER":
+      str = base + "player.shot_power." + scope;
+      str = ACADEMY_REQUIREMENTS[str];
+      str = str.replace("%1", value.toString());
+      break;
+
+    case "LONG_SHOTS":
+      str = base + "player.long_shots." + scope;
+      str = ACADEMY_REQUIREMENTS[str];
+      str = str.replace("%1", value.toString());
+      break;
+
+    case "STANDING_TACKLE":
+      str = base + "player.standing_tackle." + scope;
+      str = ACADEMY_REQUIREMENTS[str];
+      str = str.replace("%1", value.toString());
+      break;
+
+    case "SLIDING_TACKLE":
+      str = base + "player.sliding_tackle." + scope;
+      str = ACADEMY_REQUIREMENTS[str];
+      str = str.replace("%1", value.toString());
+      break;
+
+    case "VOLLEYS":
+      str = base + "player.volleys." + scope;
+      str = ACADEMY_REQUIREMENTS[str];
+      str = str.replace("%1", value.toString());
+      break;
+
+    case "CURVE":
+      str = base + "player.curve." + scope;
+      str = ACADEMY_REQUIREMENTS[str];
+      str = str.replace("%1", value.toString());
+      break;
+
+    case "PENALTIES":
+      str = base + "player.penalties." + scope;
+      str = ACADEMY_REQUIREMENTS[str];
+      str = str.replace("%1", value.toString());
+      break;
+
+    case "WEAK_FOOT":
+      str = base + "player.weak_foot." + scope;
+      str = ACADEMY_REQUIREMENTS[str];
+      str = str.replace("%1", value.toString());
+      break;
+
+    case "SKILL_MOVES":
+      str = base + "player.skill_moves." + scope;
+      str = ACADEMY_REQUIREMENTS[str];
+      str = str.replace("%1", value.toString());
+      break;
+
+    case "DEFINITION_ID":
+      let names = processValue(value, (target) => {
+        // return getItemNameByDefId(target); // assuming you have this function
+        return "";
+      });
+      str = ACADEMY_REQUIREMENTS[base + "player.defId"];
+      str = names + ": " + str;
+      break;
+
+    case "NATION":
+      localized = processValue(value, getNationName); // assuming you have this function
+      str = "Nation: " + localized;
+      break;
+
+    case "LEAGUE":
+      localized = processValue(value, getLeagueName); // assuming you have this function
+      str = "League: " + localized;
+      break;
+
+    case "CLUB":
+      localized = processValue(value, getTeamName); // assuming you have this function
+      str = "Club: " + localized;
+      break;
+
+    case "RARITY":
+      let rarity = processValue(value, getRarityName); // assuming you have this function
+      str = ACADEMY_REQUIREMENTS[base + "rarity." + scope];
+      str += " " + rarity;
+      break;
+
+    case "RARITY_NEGATED":
+      let negatedRarity = processValue(value, getRarityName); // assuming you have this function
+      str = ACADEMY_REQUIREMENTS[base + "rarity.not." + scope];
+      str += " " + negatedRarity;
+      break;
+
+    case "POSITION":
+      let positionNames = processValue(value, getPositionName); // assuming you have this function
+      str = ACADEMY_REQUIREMENTS[base + "position." + scope];
+      str += " " + positionNames;
+      break;
+
+    case "POSITION_NEGATED":
+      let negatedPositionNames = processValue(value, getPositionName); // assuming you have this function
+      str = ACADEMY_REQUIREMENTS[base + "position.not." + scope];
+      str += " " + negatedPositionNames;
+      break;
+
+    case "POSSIBLE_POSITIONS_COUNT":
+      str = base + "player.alt_positions_count." + scope;
+      str = ACADEMY_REQUIREMENTS[str];
+      str = str.replace("%1", value.toString());
+      break;
+
+    case "UNTRADEABLE":
+      let tradeStatus = value === 1 ? "untradable" : "tradable";
+      str = ACADEMY_REQUIREMENTS[base + tradeStatus];
+      break;
+
+    case "BASE_TRAITS_COUNT":
+      str = base + "player.base-traits-count." + scope;
+      str = ACADEMY_REQUIREMENTS[str];
+      str = str.replace("%1", value.toString());
+      break;
+
+    case "ICON_TRAITS_COUNT":
+      str = base + "player.icon-traits-count." + scope;
+      str = ACADEMY_REQUIREMENTS[str];
+      str = str.replace("%1", value.toString());
+      break;
+
+    case "TOTAL_TRAITS_COUNT":
+      str = base + "player.total-traits-count." + scope;
+      str = ACADEMY_REQUIREMENTS[str];
+      str = str.replace("%1", value.toString());
+      break;
+
+    case "BASE_TRAIT_PRESENT":
+      let baseTrait = processValue(value, getTraitName); // assuming you have this function
+      str = ACADEMY_REQUIREMENTS[base + "player.base-traits-exists"];
+      str = baseTrait + ": " + str;
+      break;
+
+    case "ICON_TRAIT_PRESENT":
+      let iconTrait = processValue(value, getTraitName); // assuming you have this function
+      str = ACADEMY_REQUIREMENTS[base + "player.icon-traits-exists"];
+      str = iconTrait + ": " + str;
+      break;
+
+    case "MAX_ROLES_PP":
+      str = ACADEMY_REQUIREMENTS[base + "player.max-roles-plus-plus." + scope];
+      str = str.replace("%1", value.toString());
+      break;
+    default:
+      return "Default case encountered for requirement type: " + type;
+  }
+
+  return str;
+};
+
+export const processLevels = (levels) => {
+  const finalUpgrade = {}; // key: value, value: total count
+
+  const levelsData = levels.map((level) => {
+    // Process awards
+    const awardsData = level.awards.map((award) => {
+      const attributeName = AcademyStatEnum[award.value];
+      const attributeType = mapAttributeIdToLocString(attributeName);
+      const count = award.count;
+
+      // Update finalUpgrade (excluding value: 2 for rarity)
+      if (award.value !== 2) {
+        if (!finalUpgrade[attributeType]) {
+          finalUpgrade[attributeType] = {};
+        }
+        if (!finalUpgrade[attributeType][award.value]) {
+          finalUpgrade[attributeType][award.value] = 0;
+        }
+        finalUpgrade[attributeType][award.value] += count;
+      } else {
+        if (!finalUpgrade[attributeType]) {
+          finalUpgrade[attributeType] = {};
+        }
+        finalUpgrade[attributeType][award.value] = count;
+      }
+
+      return {
+        attributeName,
+        attributeType,
+        count,
+        value: award.value,
+        maxValue: award.maxValue || null,
+        priority: award.priority,
+      };
+    });
+
+    // Process objectives if any
+    const objectivesData = level.objectives
+      ? level.objectives.map((objective) => ({
+          name: objective.name,
+          isWeb: objective.isWeb,
+          gameArea: objective.gameArea,
+          priority: objective.priority,
+          multiplier: objective.multiplier,
+          description: objective.description,
+          objectiveId: objective.objectiveId,
+          takeMeThereLink: objective.takeMeThereLink,
+        }))
+      : [];
+
+    return {
+      level: level.level,
+      levelState: level.levelState,
+      awards: awardsData,
+      objectives: objectivesData,
+    };
+  });
+
+  // Create the final upgrade data
+  const finalUpgradeData = Object.entries(finalUpgrade).flatMap(
+    ([type, values]) =>
+      Object.entries(values).map(([value, count]) => {
+        const attributeName = AcademyStatEnum[value];
+        return {
+          attributeName,
+          attributeType: type,
+          count,
+          value: parseInt(value, 10),
+        };
+      })
+  );
+
+  return {
+    levelsData,
+    finalUpgradeData,
+  };
 };

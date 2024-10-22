@@ -12,6 +12,7 @@ import {
   fetchAllNations,
   fetchAllTeams,
   fetchPlayers,
+  fetchAllRarities,
   verifyToken,
 } from "../../api/apiService";
 import { useDebounce } from "@uidotdev/usehooks";
@@ -29,7 +30,12 @@ import MobileMenuPopover from "./MobileMenuPopover";
 import { Popover } from "@headlessui/react";
 import { useDispatch, useSelector } from "react-redux";
 import Account from "./Account";
-import { setLeagues, setNations, setTeams } from "../../redux/appSlice";
+import {
+  setLeagues,
+  setNations,
+  setRarities,
+  setTeams,
+} from "../../redux/appSlice";
 
 const Navbar = () => {
   let [referenceElement, setReferenceElement] = useState();
@@ -84,6 +90,10 @@ const Navbar = () => {
       if (app.teams?.length == 0) {
         const response = await fetchAllTeams();
         dispatch(setTeams(response));
+      }
+      if (app.rarities?.length == 0) {
+        const response = await fetchAllRarities();
+        dispatch(setRarities(response));
       }
     };
     getData();
@@ -162,6 +172,14 @@ const Navbar = () => {
                   {" "}
                   <div className="text-white flex gap-1 font-bold">
                     <AcademicCapIcon className="text-white w-5" /> Squad Wizard
+                  </div>
+                </div>
+              </Link>
+              <Link to="/evolutions/">
+                <div className="text-white flex gap-2  font-bold">
+                  {" "}
+                  <div className="text-white flex gap-1 font-bold">
+                    Evolutions
                   </div>
                 </div>
               </Link>

@@ -7,6 +7,9 @@ import {
   buildPlayerUrl,
   calculateFaceStats,
   fillZeros,
+  buildRarityUrl,
+  getTextColor,
+  getBgColor,
 } from "../utils/utils";
 import CoinsImg from "../../assets/coins.png";
 import { IN_GAME_STATS, WORK_RATE } from "../utils/constants";
@@ -23,6 +26,7 @@ const AttributeDisplay = ({
   statDifference,
   attributeNameFontSize,
   attributeValueFontSize,
+  shouldAddStatDifference,
 }) => {
   return (
     <div
@@ -42,7 +46,9 @@ const AttributeDisplay = ({
           "font-cruyff-condensed-numbers-medium leading-none text-center relative"
         )}
       >
-        {value}
+        {shouldAddStatDifference && statDifference > 0
+          ? value + statDifference
+          : value}
         {statDifference > 0 ? (
           <span className="text-xs absolute -bottom-3 left-1">
             +{statDifference}
@@ -66,6 +72,8 @@ const PlayerCard = ({
   isAllPlayers = false,
   position_abr = null,
   shouldOpenInNewTab = false,
+  statDifference: propStatDifference = null,
+  shouldAddStatDifference = true,
 }) => {
   const {
     id,
@@ -75,32 +83,28 @@ const PlayerCard = ({
     rating,
     nation,
     guid,
-    rarity_url,
-
+    rarity,
     attributes,
     playstyle_plus,
     position,
-    text_color,
-    bg_color,
-
+    evo_id,
     c_name,
     teamid,
     weak_foot,
     skill_moves,
-
     stats,
-
     latest_price,
   } = player;
+
   const [validGuid, setValidGuid] = useState(!!guid);
-  const player_name = c_name ? c_name : isMini ? name.split(" ").pop() : name;
+  const player_name = c_name ? c_name : isMini ? name?.split(" ")?.pop() : name;
   const selectedChemStyle = useSelector(
     (state) => state.player.selectedChemStyle
   );
   const selectedChemistryPoints = useSelector(
     (state) => state.player.selectedChemistryPoints
   );
-  const [statDifference, setStatDifference] = useState(null);
+  const [statDifference, setStatDifference] = useState(propStatDifference);
   const isGk = position[0] == "GK";
 
   const labels = isGk
@@ -116,6 +120,34 @@ const PlayerCard = ({
   const [skillMovesFontSize, setSkillMovesFontSize] = useState("14px");
   const [playerNameFontSize, setPlayerNameFontSize] = useState("30px");
   const [playStyleFontSize, setPlayStyleFontSize] = useState("30px");
+
+  const rarities = useSelector((state) => state.app.rarities);
+
+  const rarityObject = rarities.find((r) => r.id === rarity);
+
+  const rarity_url = rarityObject
+    ? buildRarityUrl({
+        level: rarityObject.levels || 0,
+        rating: rating,
+        id: rarity,
+      })
+    : "";
+
+  const textColor = rarityObject
+    ? getTextColor({
+        colors: rarityObject.colors,
+        rating: rating,
+        level: rarityObject.levels || 0,
+      })
+    : "#ffffff";
+
+  const bgColor = rarityObject
+    ? getBgColor({
+        colors: rarityObject.colors,
+        rating: rating,
+        level: rarityObject.levels || 0,
+      })
+    : "#ffffff";
 
   useEffect(() => {
     const cardElement = cardRef.current;
@@ -148,8 +180,9 @@ const PlayerCard = ({
       };
     }
   }, []);
+
   useEffect(() => {
-    if (selectedChemStyle && selectedChemistryPoints) {
+    if (!propStatDifference && selectedChemStyle && selectedChemistryPoints) {
       const modifiedStats = applyChemStyle(
         stats,
         selectedChemStyle,
@@ -159,26 +192,40 @@ const PlayerCard = ({
         modifiedStats,
         IN_GAME_STATS
       );
-      console.log("In Player Card", modifiedFaceStats);
       const tempStatDifference = attributes.map(
         (attribute, index) => modifiedFaceStats[index] - attribute
       );
 
+      // Add differences for rating, skill_moves, and weak_foot
+      tempStatDifference.push(
+        rating - player.rating,
+        skill_moves - player.skill_moves,
+        weak_foot - player.weak_foot
+      );
+
       setStatDifference(tempStatDifference);
-    } else {
-      setStatDifference([0, 0, 0, 0, 0, 0]);
+    } else if (!propStatDifference) {
+      setStatDifference([0, 0, 0, 0, 0, 0, 0, 0, 0]); // Include placeholders for rating, skill_moves, and weak_foot
     }
-  }, [selectedChemStyle, selectedChemistryPoints, stats, attributes]);
+  }, [
+    propStatDifference,
+    selectedChemStyle,
+    selectedChemistryPoints,
+    stats,
+    attributes,
+    rating,
+    skill_moves,
+    weak_foot,
+  ]);
+
   return (
     <Link
-      // key={id}
       onClick={(e) => isDisabled && e.preventDefault()}
       to={`/player/${id}/${name?.replace(/\s+/g, "-")}`}
       target={shouldOpenInNewTab ? "_blank" : "_self"}
       rel={shouldOpenInNewTab ? "noopener noreferrer" : undefined}
     >
       <div
-        // key={id}
         className={classNames(
           "",
           isHover
@@ -186,13 +233,13 @@ const PlayerCard = ({
             : ""
         )}
         ref={cardRef}
-        style={{ color: text_color }}
+        style={{ color: textColor }}
       >
         <div
           style={{
-            color: text_color,
-            "--fill-color": bg_color,
-            "--text-color": text_color,
+            color: textColor,
+            "--fill-color": bgColor,
+            "--text-color": textColor,
           }}
           className="block relative h-full "
         >
@@ -200,13 +247,17 @@ const PlayerCard = ({
 
           <img
             className={
-              !validGuid || base_id == id
+              !validGuid || base_id == id || evo_id
                 ? isMini
                   ? "absolute top-[14%] left-[55%] !w-[65%] h-1/2 -translate-x-1/2"
                   : "absolute top-[18.5%] left-[58%] !w-[65%] h-[45%] -translate-x-1/2"
                 : "absolute top-0 w-full h-full"
             }
-            src={buildPlayerUrl(guid, id, base_id)}
+            src={
+              evo_id
+                ? buildPlayerUrl(guid, base_id, base_id)
+                : buildPlayerUrl(guid, id, base_id)
+            }
             onError={(e) => {
               e.target.onerror = null; // Prevent infinite loop in case backup image also fails
               e.target.src = buildPlayerUrl(guid, base_id, base_id);
@@ -258,15 +309,12 @@ const PlayerCard = ({
                   attributeValueFontSize={attributeValueFontSize}
                   key={index}
                   label={labels[index]}
-                  value={
-                    statDifference?.[index] > 0
-                      ? statDifference[index] + attribute
-                      : attribute
-                  }
+                  value={attribute}
                   isHome={isHome}
                   isAllPlayers={isAllPlayers}
                   isHighlighted={statDifference?.[index] > 0}
                   statDifference={statDifference?.[index]}
+                  shouldAddStatDifference={shouldAddStatDifference}
                 />
               ))}
             </div>
@@ -280,10 +328,18 @@ const PlayerCard = ({
             <div
               style={{ fontSize: ratingFontSize }}
               className={classNames(
-                "font-cruyff-condensed-numbers-bold leading-[0.91em]"
+                "font-cruyff-condensed-numbers-bold leading-[0.91em]",
+                statDifference?.[6] > 0 ? "text-green-600" : ""
               )}
             >
-              {rating}
+              {shouldAddStatDifference && statDifference?.[6] > 0
+                ? rating + statDifference[6]
+                : rating}
+              {statDifference?.[6] > 0 && (
+                <span className="text-sm absolute -top-1 lg:top-0 -right-7">
+                  +{statDifference[6]}
+                </span>
+              )}
             </div>
             <div
               style={{ fontSize: positionFontSize }}
@@ -314,26 +370,25 @@ const PlayerCard = ({
                     role="img"
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 256 256"
-                    stroke={text_color}
+                    stroke={textColor}
                   >
                     <path
                       d="M12.813,104.953L68.157,21.862H188.143l55.045,83.091L128,235.138Z"
                       fill-opacity="1"
-                      stroke={text_color}
+                      stroke={textColor}
                       stroke-linejoin="round"
                       stroke-width="8"
-                      fill={bg_color}
+                      fill={bgColor}
                     ></path>
                   </svg>
                   <div className="playstyle_icon">
-                    {getTraitIcon(playstyle, text_color)}
+                    {getTraitIcon(playstyle, textColor)}
                   </div>
                 </div>
               );
             })}
           </div>
           {/* ALternate Positions */}
-
           {!isMini && (
             <div
               style={{ fontSize: skillMovesFontSize }}
@@ -343,9 +398,10 @@ const PlayerCard = ({
             >
               {position.slice(1).map((pos) => (
                 <div
-                  class={`rounded-[0.35em] px-1 font-medium border-[0.09em] border-[--color] text-[--color] w-full whitespace-nowrap font-cruyff-condensed-medium  flex justify-center leading-[1] pb-[0.04em]  relative`}
+                  key={pos}
+                  className={`rounded-[0.35em] px-1 font-medium border-[0.09em] border-[--color] text-[--color] w-full whitespace-nowrap font-cruyff-condensed-medium  flex justify-center leading-[1] pb-[0.04em]  relative`}
                   style={{
-                    backgroundColor: bg_color,
+                    backgroundColor: bgColor,
                   }}
                 >
                   {pos}
@@ -360,11 +416,37 @@ const PlayerCard = ({
                 "absolute font-bold right-[3.96%] top-[58.2%] transform -translate-y-1/2 z-2  text-center flex flex-col gap-[0.1em] "
               )}
             >
-              <div class="p-[0.1em]  rounded-[0.35em] bg-[--fill-color] border-[0.09em] border-[--color] text-[--color] w-full whitespace-nowrap font-cruyff-condensed-medium  flex justify-center leading-[1]  relative">
-                {skill_moves} ★
+              <div
+                className={classNames(
+                  "p-[0.1em]  rounded-[0.35em] bg-[--fill-color] border-[0.09em] border-[--color] text-[--color] w-full whitespace-nowrap font-cruyff-condensed-medium  flex justify-center leading-[1]  relative",
+                  statDifference?.[7] > 0 ? "text-green-600" : ""
+                )}
+              >
+                {shouldAddStatDifference && statDifference?.[7] > 0
+                  ? skill_moves + statDifference[7]
+                  : skill_moves}{" "}
+                ★
+                {/* {statDifference?.[7] > 0 && (
+                  <span className="text-xs absolute -bottom-3 left-1">
+                    +{statDifference[7]}
+                  </span>
+                )} */}
               </div>
-              <div class="p-[0.1em] rounded-[0.35em] bg-[--fill-color] border-[0.09em] border-[--color] text-[--color] w-full whitespace-nowrap font-cruyff-condensed-medium  flex justify-center leading-[1]  relative">
-                {weak_foot}WF
+              <div
+                className={classNames(
+                  "p-[0.1em] rounded-[0.35em] bg-[--fill-color] border-[0.09em] border-[--color] text-[--color] w-full whitespace-nowrap font-cruyff-condensed-medium  flex justify-center leading-[1]  relative",
+                  statDifference?.[8] > 0 ? "text-green-600" : ""
+                )}
+              >
+                {shouldAddStatDifference && statDifference?.[8] > 0
+                  ? weak_foot + statDifference[8]
+                  : weak_foot}
+                WF
+                {statDifference?.[8] > 0 && (
+                  <span className="text-xs absolute -bottom-3 left-1">
+                    +{statDifference[8]}
+                  </span>
+                )}
               </div>
             </div>
           )}
@@ -376,8 +458,8 @@ const PlayerCard = ({
                 : isMini
                 ? `flex-col items-end bg-white bg-opacity-10 top-[10.8%] right-[10%] py-4`
                 : isAllPlayers
-                ? "top-[80.8%] w-full"
-                : "top-[80.8%] w-full"
+                ? "top-[82.8%] w-full"
+                : "top-[82.8%] w-full"
             )}
           >
             <img

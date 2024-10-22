@@ -273,45 +273,6 @@ const AllPlayers = () => {
           </div>
         </div>
         <div></div>
-        <div className="flex justify-center gap-4 mt-5 hidden">
-          <button
-            onClick={() => {
-              let currentPage = filters?.page ?? 1;
-
-              dispatch(
-                setFilters({ ...filters, page: Math.max(currentPage - 1, 1) })
-              );
-            }}
-            className="bg-fuchsia-400 text-white px-4 py-2 rounded-md disabled:bg-gray-500"
-            disabled={data.current_page == 1}
-          >
-            Previous
-          </button>
-          <div className="bg-fuchsia-400 text-white flex gap-1 justify-center items-center p-2 rounded-md">
-            <span className="mr-1">Page</span>
-            {isLoading ? (
-              <div className="animate-pulse bg-fuchsia-200 h-4 w-4 "></div>
-            ) : (
-              <span>{data.current_page}</span>
-            )}{" "}
-            /
-            {isLoading ? (
-              <div className="animate-pulse bg-fuchsia-200 h-4 w-4 "></div>
-            ) : (
-              <span>{data.total_pages}</span>
-            )}
-          </div>
-          <button
-            onClick={() => {
-              let currentPage = filters?.page ?? 1;
-              dispatch(setFilters({ ...filters, page: currentPage + 1 }));
-            }}
-            className="bg-fuchsia-400 text-white px-4 py-2 rounded-md disabled:bg-gray-500 "
-            disabled={data.current_page == data.total_pages}
-          >
-            Next
-          </button>
-        </div>
       </div>
       {/* FAB visible only on smaller screens */}
       {modalOpen ? (

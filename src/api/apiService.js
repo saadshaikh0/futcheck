@@ -26,7 +26,6 @@ export const fetchPlayers = async (value, searchMode) => {
     }
     const response = await instance.get(searchQuery);
     let data = response.data.data;
-    data = addRarityUrl(data, "s");
     return data;
   } catch (error) {
     console.error("Error fetching users:", error);
@@ -53,7 +52,6 @@ export const fetchVersions = async (base_id, id) => {
   }
   const response = await instance.get(`/versions/?id=${base_id}&eId=${id}`);
   let data = response.data.data;
-  data = addRarityUrl(data, "s");
   return data;
 };
 
@@ -61,14 +59,12 @@ export const fetchLatestPlayers = async () => {
   const response = await instance.get(`/get_latest/`);
 
   let data = response.data.data;
-  data = addRarityUrl(data, "s");
 
   return data;
 };
 export const fetchTopRatedPlayers = async () => {
   const response = await instance.get(`/top_rated/`);
   let data = response.data.data;
-  data = addRarityUrl(data, "s");
 
   return data;
 };
@@ -85,13 +81,13 @@ export const fetchAllRarities = async () => {
   ];
   const response = await instance.get(`/get_promos/`);
   let data = response.data.data;
-  data = data.filter(
-    (rarity) =>
-      !(
-        PROMOS_TO_HIDE.includes(rarity.name.toLowerCase()) ||
-        rarity.name.toLowerCase().includes("evo")
-      )
-  );
+  // data = data.filter(
+  //   (rarity) =>
+  //     !(
+  //       PROMOS_TO_HIDE.includes(rarity.name.toLowerCase()) ||
+  //       rarity.name.toLowerCase().includes("evo")
+  //     )
+  // );
   data.forEach((promo) => {
     promo.rarity_url = buildRarityUrl({
       level: promo.levels,
@@ -177,14 +173,12 @@ export const fetchAllPlayers = async (
   const response = await instance.get(url);
   if (simple) {
     let data = response.data.data;
-    data = addRarityUrl(data, "s");
 
     return data;
   }
   const { players, total_pages, current_page } = response.data;
-  let players_formatted = addRarityUrl(players, "s");
 
-  return { players: players_formatted, total_pages, current_page };
+  return { players: players, total_pages, current_page };
 };
 export const fetchSimilarPlayers = async ({
   rating,
@@ -202,7 +196,6 @@ export const fetchSimilarPlayers = async ({
     }
   );
   let data = response.data.data;
-  data = addRarityUrl(data, "s");
 
   return data;
 };
@@ -214,7 +207,6 @@ export const fetchPlayerDetails = async (id) => {
   });
   const response = await instance.get(`/get_player/?id=${id}`);
   let data = response.data.data;
-  data = addRarityUrl(data, "e");
 
   return data;
 };
@@ -236,7 +228,6 @@ export const fetchPlayersByIds = async (payload) => {
       `/get_players/?ids=${payload.ids.join(",")}`
     );
     let data = response.data.data;
-    data = addRarityUrl(data, "s");
     return data;
   } catch (error) {
     console.error("Error fetching Players:", error);
@@ -295,6 +286,20 @@ export const fetchSbcsData = async () => {
     );
 
     return filteredData;
+  } catch (error) {
+    console.error("Error fetching Players:", error);
+    throw error;
+  }
+};
+
+export const fetchEvolutionsData = async () => {
+  try {
+    let response = await instance.get("/fetch_evo_data/", {
+      timeout: 60000,
+    });
+    let data = response.data.data;
+
+    return data;
   } catch (error) {
     console.error("Error fetching Players:", error);
     throw error;
@@ -399,11 +404,39 @@ export const fetchPlayerSuggestions = async (
         timeout: 60000,
       }
     );
-    response.data.suggestions = addRarityUrl(response.data.suggestions, "s");
 
     return response.data;
   } catch (error) {
     console.error("Error fetching player suggestions:", error);
+    throw error;
+  }
+};
+
+export const fetchEvolutionDetail = async (id) => {
+  try {
+    const response = await instance.get(`/fetch_evo_detail/?id=${id}`, {
+      timeout: 60000,
+    });
+    const data = response.data;
+    return data;
+  } catch (error) {
+    console.error("Error fetching evolution detail:", error);
+    throw error;
+  }
+};
+
+export const fetchEvolvedPlayers = async ({ id, page }) => {
+  try {
+    const response = await instance.get(
+      `/get_evolved_players/?id=${id}&page=${page}`,
+      {
+        timeout: 60000,
+      }
+    );
+    const data = response.data;
+    return data;
+  } catch (error) {
+    console.error("Error fetching evolved players:", error);
     throw error;
   }
 };

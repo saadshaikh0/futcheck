@@ -16,9 +16,13 @@ const MobileMenuPopover = () => {
       <Link to="/squad_wizard/">
         <div className="text-white flex gap-2  font-bold">
           {" "}
-          <div className="text-white flex gap-1 font-bold">
-            <AcademicCapIcon className="text-white w-5" /> Squad Wizard
-          </div>
+          <div className="text-white flex gap-1 font-bold">Squad Wizard</div>
+        </div>
+      </Link>
+      <Link to="/evolutions/">
+        <div className="text-white flex gap-2  font-bold">
+          {" "}
+          <div className="text-white flex gap-1 font-bold">Evolutions</div>
         </div>
       </Link>
     </div>
