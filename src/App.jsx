@@ -29,6 +29,7 @@ import NewHomePage from "./components/NewHomePage";
 import ChallengeSolutions from "./components/sbc/ChallengeSolution";
 import SquadWizardWrapper from "./components/squadWizardWrapper";
 import EvolutionsWrapper from "./components/EvolutionsWrapper";
+import EvolutionDetailWrapper from "./components/EvolutionDetailWrapper";
 
 ReactGA.initialize("G-RD6LGLC1LD");
 
@@ -62,6 +63,11 @@ function App() {
                     /> */}
                   <Route path="/tos" element={<Tos />} />
                   <Route path="/evolutions" element={<EvolutionsWrapper />} />
+                  <Route
+                    path="/evolution/:evolutionId"
+                    element={<EvolutionDetailWrapper />}
+                  />
+
                   <Route path="/policy" element={<Policy />} />
                   <Route path="/fc_combinations/" element={<Combinations />} />
                   <Route
