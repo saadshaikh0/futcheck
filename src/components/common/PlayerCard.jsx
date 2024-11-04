@@ -94,6 +94,7 @@ const PlayerCard = ({
     skill_moves,
     stats,
     latest_price,
+    base_base_id,
   } = player;
 
   const [validGuid, setValidGuid] = useState(!!guid);
@@ -255,7 +256,7 @@ const PlayerCard = ({
             }
             src={
               evo_id
-                ? buildPlayerUrl(guid, base_id, base_id)
+                ? buildPlayerUrl(guid, base_base_id, base_base_id)
                 : buildPlayerUrl(guid, id, base_id)
             }
             onError={(e) => {
@@ -442,11 +443,6 @@ const PlayerCard = ({
                   ? weak_foot + statDifference[8]
                   : weak_foot}
                 WF
-                {statDifference?.[8] > 0 && (
-                  <span className="text-xs absolute -bottom-3 left-1">
-                    +{statDifference[8]}
-                  </span>
-                )}
               </div>
             </div>
           )}

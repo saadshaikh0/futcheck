@@ -1,6 +1,7 @@
 import React from "react";
 import PlayerCard from "../common/PlayerCard";
-import CoinsImg from "../../assets/coins.png"; // Assuming you have a similar image for evolutions
+import CoinsImg from "../../assets/coins.png";
+import PointsImg from "../../assets/pointsIcon.png";
 import {
   convertAcademyElgReqToFormat,
   convertAcademyReqToStrings,
@@ -87,6 +88,7 @@ const EvolutionCard = ({ data }) => {
     elgReqs,
     levels,
     top_players,
+    currencies,
   } = data;
 
   const currentTimestamp = Date.now() + new Date().getTimezoneOffset() * 60000;
@@ -96,9 +98,7 @@ const EvolutionCard = ({ data }) => {
 
   const isNew =
     currentTimestamp - new Date(releaseTime).getTime() < oneDayInMilliseconds;
-  const isExpiringSoon =
-    endTimeStamp &&
-    new Date(endTimeStamp).getTime() - currentTimestamp < twoDaysInMilliseconds;
+
   const formattedReqs = convertAcademyElgReqToFormat(elgReqs);
   const reqStrings = formattedReqs.map((req) =>
     convertAcademyReqToStrings(req)
@@ -117,6 +117,9 @@ const EvolutionCard = ({ data }) => {
       upgrade.attributeType !== "trait" && upgrade.attributeType !== "roles"
   );
   const rarities = useSelector((state) => state.app.rarities);
+
+  const coins = currencies.find((currency) => currency.name === "COINS");
+  const points = currencies.find((currency) => currency.name === "POINTS");
 
   return (
     <div className="bg-[#13151D] h-full rounded-md flex flex-col items-center text-white">
@@ -146,7 +149,7 @@ const EvolutionCard = ({ data }) => {
                 {trait.length > 0 && (
                   <div className="grid grid-cols-2">
                     <div>Playstyles:</div>
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 overflow-auto">
                       {trait.map((upgrade) => {
                         const Component = getComponentByType(
                           upgrade.attributeType
@@ -227,9 +230,19 @@ const EvolutionCard = ({ data }) => {
                   : getTimeUntilExpiration(endTimeStamp)}
               </span>
             </div>
-            <div className="flex flex-col">
-              <span>Cost</span>
-              <span>{totalCost?.toLocaleString("en-US")}</span>
+            <div className="flex gap-4 absolute bottom-2 right-2">
+              {coins && (
+                <div className="flex items-center gap-1">
+                  <img className="w-4 h-4" src={CoinsImg} />{" "}
+                  {coins.funds.toLocaleString("en-US")}{" "}
+                </div>
+              )}
+              {points && (
+                <div className="flex items-center gap-1">
+                  <img className="w-4 h-4" src={PointsImg} />
+                  {points.funds.toLocaleString("en-US")}
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -244,11 +257,6 @@ const EvolutionCard = ({ data }) => {
         {isNew && (
           <span className="bg-red-500 text-white text-xs px-2 py-1 rounded">
             New
-          </span>
-        )}
-        {isExpiringSoon && (
-          <span className="bg-yellow-500 text-white text-xs px-2 py-1 rounded">
-            Expiring Soon
           </span>
         )}
       </div>

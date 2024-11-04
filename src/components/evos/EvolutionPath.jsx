@@ -5,17 +5,30 @@ import { generateIntermediatePlayers } from "./EvolutionUtils";
 import PlayerCard from "../common/PlayerCard";
 
 const EvolutionPath = ({ player, levels }) => {
-  const [basePlayer, setBasePlayer] = useState(null);
+  // const [basePlayer, setBasePlayer] = useState(null);
   const [evolutionPlayers, setEvolutionPlayers] = useState([]);
+  const numLevels = levels?.length || 0;
+  let maxWidthClass = "";
 
+  if (numLevels === 2) {
+    maxWidthClass = "lg:max-w-[25vw]";
+  } else if (numLevels === 3) {
+    maxWidthClass = "lg:max-w-[40vw]";
+  } else if (numLevels === 4) {
+    maxWidthClass = "lg:max-w-[60vw]";
+  } else {
+    maxWidthClass = "lg:max-w-full"; // Default width
+  }
   useEffect(() => {
+    setEvolutionPlayers([]);
+
     const initializeEvolutionPath = async () => {
       try {
         // Fetch the base player data
         let basePlayerData = await fetchPlayerDetails(player.base_id);
         basePlayerData = basePlayerData[0];
         basePlayerData.evo_level = 0; // Set evo_level to 0 for base player
-        setBasePlayer(basePlayerData);
+        // setBasePlayer(basePlayerData);
 
         // Process levels to extract upgrades per level
         const levelsUpgradeData = processLevels(levels);
@@ -40,16 +53,16 @@ const EvolutionPath = ({ player, levels }) => {
 
     // Cleanup function to reset state when component unmounts or dependencies change
     return () => {
-      setBasePlayer(null);
+      // setBasePlayer(null);
       setEvolutionPlayers([]);
     };
   }, [player, levels]);
 
   return (
-    <div>
-      <div className="grid grid-cols-2 md:flex gap-2">
+    <div className={`${maxWidthClass} mx-auto`}>
+      <div key={player.id} className="grid grid-cols-2 md:flex gap-2">
         {evolutionPlayers.map((playerData, index) => (
-          <div key={playerData.id}>
+          <div key={`${playerData.id}_${index}`}>
             <PlayerCard
               player={playerData}
               isMini={false}

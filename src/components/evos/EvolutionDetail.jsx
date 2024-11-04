@@ -217,12 +217,16 @@ const EvolutionDetail = () => {
           </div>
         </div>
         <div className="flex flex-col h-full min-h-0">
-          <div className="w-full md:w-4/5 mx-auto">
+          <div key={`evolution_path_${id}`} className="w-full md:w-4/5 mx-auto">
             {selectedPlayer && (
-              <EvolutionPath player={selectedPlayer} levels={levels} />
+              <EvolutionPath
+                key={selectedPlayer.id}
+                player={selectedPlayer}
+                levels={levels}
+              />
             )}
           </div>
-          <div className="flex-grow overflow-auto scrollbar-none">
+          <div key={id} className="flex-grow overflow-auto scrollbar-none">
             <EvolutionPlayers id={id} onPlayerClick={setSelectedPlayer} />
           </div>
         </div>

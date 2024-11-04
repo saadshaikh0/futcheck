@@ -1445,6 +1445,7 @@ export const AcademyEligibilityAttribute = {
   53: "BASE_TRAIT_PRESENT",
   54: "ICON_TRAIT_PRESENT",
   55: "UNTRADEABLE",
+  58: "MAX_ROLES_P",
   59: "MAX_ROLES_PP",
 };
 

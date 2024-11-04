@@ -1024,6 +1024,10 @@ export const convertAcademyReqToStrings = (req) => {
       str = ACADEMY_REQUIREMENTS[base + "player.max-roles-plus-plus." + scope];
       str = str.replace("%1", value.toString());
       break;
+    case "MAX_ROLES_P":
+      str = ACADEMY_REQUIREMENTS[base + "player.max-roles-plus." + scope];
+      str = str.replace("%1", value.toString());
+      break;
     default:
       return "Default case encountered for requirement type: " + type;
   }

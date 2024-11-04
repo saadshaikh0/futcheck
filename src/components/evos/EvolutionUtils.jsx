@@ -296,7 +296,7 @@ const processLevels = (levels) => {
   return levelsUpgradeData;
 };
 
-function applyUpgradesToPlayer(player, upgrades, currentLevel, evoId) {
+export function applyUpgradesToPlayer(player, upgrades, currentLevel, evoId) {
   const updatedPlayer = JSON.parse(JSON.stringify(player));
 
   upgrades.forEach((upgrade) => {
@@ -308,58 +308,95 @@ function applyUpgradesToPlayer(player, upgrades, currentLevel, evoId) {
       let newRating = updatedPlayer["rating"] + count;
       if (maxValue !== undefined && maxValue !== null) {
         newRating = Math.min(newRating, maxValue);
+        updatedPlayer["rating"] = Math.max(newRating, updatedPlayer["rating"]);
+      } else {
+        updatedPlayer["rating"] = newRating;
       }
-      updatedPlayer["rating"] = newRating;
     } else if (attributeType === "pace") {
       const idx = 0;
       let newValue = updatedPlayer["attributes"][idx] + count;
       if (maxValue !== undefined && maxValue !== null) {
         newValue = Math.min(newValue, maxValue);
+        updatedPlayer["attributes"][idx] = Math.max(
+          newValue,
+          updatedPlayer["attributes"][idx]
+        );
+      } else {
+        updatedPlayer["attributes"][idx] = newValue;
       }
-      updatedPlayer["attributes"][idx] = newValue;
     } else if (attributeType === "shooting") {
       const idx = 1;
       let newValue = updatedPlayer["attributes"][idx] + count;
       if (maxValue !== undefined && maxValue !== null) {
         newValue = Math.min(newValue, maxValue);
+        updatedPlayer["attributes"][idx] = Math.max(
+          newValue,
+          updatedPlayer["attributes"][idx]
+        );
+      } else {
+        updatedPlayer["attributes"][idx] = newValue;
       }
-      updatedPlayer["attributes"][idx] = newValue;
     } else if (attributeType === "passing") {
       const idx = 2;
       let newValue = updatedPlayer["attributes"][idx] + count;
       if (maxValue !== undefined && maxValue !== null) {
         newValue = Math.min(newValue, maxValue);
+        updatedPlayer["attributes"][idx] = Math.max(
+          newValue,
+          updatedPlayer["attributes"][idx]
+        );
+      } else {
+        updatedPlayer["attributes"][idx] = newValue;
       }
-      updatedPlayer["attributes"][idx] = newValue;
     } else if (attributeType === "dribbling") {
       const idx = 3;
       let newValue = updatedPlayer["attributes"][idx] + count;
       if (maxValue !== undefined && maxValue !== null) {
         newValue = Math.min(newValue, maxValue);
+        updatedPlayer["attributes"][idx] = Math.max(
+          newValue,
+          updatedPlayer["attributes"][idx]
+        );
+      } else {
+        updatedPlayer["attributes"][idx] = newValue;
       }
-      updatedPlayer["attributes"][idx] = newValue;
     } else if (attributeType === "defending") {
       const idx = 4;
       let newValue = updatedPlayer["attributes"][idx] + count;
       if (maxValue !== undefined && maxValue !== null) {
         newValue = Math.min(newValue, maxValue);
+        updatedPlayer["attributes"][idx] = Math.max(
+          newValue,
+          updatedPlayer["attributes"][idx]
+        );
+      } else {
+        updatedPlayer["attributes"][idx] = newValue;
       }
-      updatedPlayer["attributes"][idx] = newValue;
     } else if (attributeType === "physicality") {
       const idx = 5;
       let newValue = updatedPlayer["attributes"][idx] + count;
       if (maxValue !== undefined && maxValue !== null) {
         newValue = Math.min(newValue, maxValue);
+        updatedPlayer["attributes"][idx] = Math.max(
+          newValue,
+          updatedPlayer["attributes"][idx]
+        );
+      } else {
+        updatedPlayer["attributes"][idx] = newValue;
       }
-      updatedPlayer["attributes"][idx] = newValue;
     } else if (attributeType === "subattribute") {
       const idx = STAT_INDEX_MAP[attributeName];
       if (idx !== undefined) {
         let newValue = updatedPlayer["stats"][idx] + count;
         if (maxValue !== undefined && maxValue !== null) {
           newValue = Math.min(newValue, maxValue);
+          updatedPlayer["stats"][idx] = Math.max(
+            newValue,
+            updatedPlayer["stats"][idx]
+          );
+        } else {
+          updatedPlayer["stats"][idx] = newValue;
         }
-        updatedPlayer["stats"][idx] = newValue;
       } else {
         console.log("Unknown subattribute:", attributeName);
       }
@@ -369,14 +406,24 @@ function applyUpgradesToPlayer(player, upgrades, currentLevel, evoId) {
       maxValue += 1;
       if (maxValue !== undefined && maxValue !== null) {
         newValue = Math.min(newValue, maxValue);
+        updatedPlayer["skill_moves"] = Math.max(
+          newValue,
+          updatedPlayer["skill_moves"]
+        );
+      } else {
+        updatedPlayer["skill_moves"] = newValue;
       }
-      updatedPlayer["skill_moves"] = newValue;
     } else if (attributeType === "weakfoot") {
       let newValue = (updatedPlayer["weak_foot"] || 0) + count;
       if (maxValue !== undefined && maxValue !== null) {
         newValue = Math.min(newValue, maxValue);
+        updatedPlayer["weak_foot"] = Math.max(
+          newValue,
+          updatedPlayer["weak_foot"]
+        );
+      } else {
+        updatedPlayer["weak_foot"] = newValue;
       }
-      updatedPlayer["weak_foot"] = newValue;
     } else if (attributeType === "position") {
       if (!updatedPlayer["position"].includes(attributeName)) {
         updatedPlayer["position"].push(attributeName);
@@ -416,6 +463,24 @@ function applyUpgradesToPlayer(player, upgrades, currentLevel, evoId) {
 
   return updatedPlayer;
 }
+
+export function calculateStatDifference(player1, player2) {
+  const statDifference = [];
+
+  // Calculate differences for attributes
+  for (let i = 0; i < player1.attributes.length; i++) {
+    statDifference.push(player2.attributes[i] - player1.attributes[i]);
+  }
+
+  // Calculate differences for rating, skill_moves, and weak_foot
+  statDifference.push(
+    player2.rating - player1.rating,
+    (player2.skill_moves || 0) - (player1.skill_moves || 0),
+    (player2.weak_foot || 0) - (player1.weak_foot || 0)
+  );
+
+  return statDifference;
+}
 export const generateIntermediatePlayers = (
   basePlayer,
   levelsUpgradeData,
@@ -439,16 +504,9 @@ export const generateIntermediatePlayers = (
       evoId
     );
 
-    // Calculate stat differences
-    const statDifference = currentPlayer.attributes.map(
-      (attr, index) => attr - previousPlayer.attributes[index]
-    );
-
-    // Add differences for rating, skill_moves, and weak_foot
-    statDifference.push(
-      currentPlayer.rating - previousPlayer.rating,
-      currentPlayer.skill_moves - previousPlayer.skill_moves,
-      currentPlayer.weak_foot - previousPlayer.weak_foot
+    const statDifference = calculateStatDifference(
+      previousPlayer,
+      currentPlayer
     );
 
     currentPlayer.statDifference = statDifference;

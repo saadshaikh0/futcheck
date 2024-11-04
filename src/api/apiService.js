@@ -280,10 +280,7 @@ export const fetchSbcsData = async () => {
       timeout: 60000,
     });
     let data = response.data.data;
-    let filteredData = data.filter(
-      (item) =>
-        !item.name.includes("Foundation") && !item.name.includes("Upgrade")
-    );
+    let filteredData = data.filter((item) => !item.name.includes("Foundation"));
 
     return filteredData;
   } catch (error) {
@@ -437,6 +434,19 @@ export const fetchEvolvedPlayers = async ({ id, page }) => {
     return data;
   } catch (error) {
     console.error("Error fetching evolved players:", error);
+    throw error;
+  }
+};
+
+export const fetchEvoChains = async ({ page }) => {
+  try {
+    const response = await instance.get(`/get_evo_chains/?page=${page}`, {
+      timeout: 60000,
+    });
+    const data = response.data;
+    return data;
+  } catch (error) {
+    console.error("Error fetching evolution chains:", error);
     throw error;
   }
 };

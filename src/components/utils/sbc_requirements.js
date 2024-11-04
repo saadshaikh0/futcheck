@@ -125,10 +125,13 @@ export const ACADEMY_REQUIREMENTS = {
   "academy.requirements.player.balance.scope0": "Balance Min: %1",
   "academy.requirements.player.balance.scope1": "Balance Max: %1",
   "academy.requirements.player.balance.scope2": "Balance Exactly: %1",
-  "academy.requirements.player.max-roles-plus-plus.scope0": "Min Roles++ %1",
-  "academy.requirements.player.max-roles-plus-plus.scope1": "Max Roles++ %1",
+  "academy.requirements.player.max-roles-plus-plus.scope0": "Min Roles++ :%1",
+  "academy.requirements.player.max-roles-plus-plus.scope1": "Max Roles++ :%1",
   "academy.requirements.player.max-roles-plus-plus.scope2":
-    "Exactly Roles++ %1",
+    "Exactly Roles++ :%1",
+  "academy.requirements.player.max-roles-plus.scope0": "Min Roles+ : %1",
+  "academy.requirements.player.max-roles-plus.scope1": "Max Roles+ : %1",
+  "academy.requirements.player.max-roles-plus.scope2": "Exactly Roles+ : %1",
   "academy.requirements.player.ball_control.scope1": "Ball Control Max: %1",
   "academy.requirements.player.ball_control.scope2": "Ball Control Exactly: %1",
   "academy.requirements.player.base-traits-count.scope0":
