@@ -21,22 +21,29 @@ import PlayStyle from "./filterPopups/playStylePopup";
 import RoleStyle from "./filterPopups/RolePopup";
 import PositionCard from "./filterPopups/positioncardPopup";
 const tabs = [
-  { name: "Name", component: <NameInput/> },
-  { name: "Price", component:<PriceSlider/>},
+  { name: "Name", component: <NameInput /> },
+  { name: "Price", component: <PriceSlider /> },
   { name: "Version", component: <VersionPopup /> },
   { name: "Rating", component: <RatingPopup /> },
   { name: "Nation", component: <NationPopup /> },
   { name: "League", component: <LeaguePopup /> },
   { name: "Team", component: <TeamPopup /> },
   //   { name: "Playstyles", component: <PlaystylePopup /> },
-  { name: "Skill Moves", component: <SkillMovesPopup /> },
-  { name: "Weak Foot", component: <WeakFootPopup /> },
+  {
+    name: "Skill Moves",
+    component: <SkillMovesPopup />,
+    class: "flex flex-row items-center gap-4",
+  },
+  {
+    name: "Weak Foot",
+    component: <WeakFootPopup />,
+    class: "flex flex-row items-center gap-4",
+  },
   { name: "Play Style", component: <PlayStyle /> },
   { name: "Role Style", component: <RoleStyle /> },
-  { name: "Position Card", component: <PositionCard /> }
+  { name: null, component: <PositionCard /> },
 
   // { name: "Work Rate", component: <WorkRatePopup /> },
-  
 ];
 
 const AllPlayers = () => {
@@ -155,7 +162,7 @@ const AllPlayers = () => {
     }
   };
   return (
-    <div className="relative w-full md:w-4/5 flex flex-col mx-auto mt-5 md:mt-0 px-5 h-[calc(90vh)] md:h-[calc(100vh-4rem)]">
+    <div className="relative w-full md:w-4/5  flex flex-col mx-auto mt-5 md:mt-0 px-5 h-[calc(90vh)] md:h-[calc(100vh-4rem)]">
       <div className="mb-1">
         <h2 className="text-white text-xl  md:text-3xl font-medium">
           EAFC 25 Players Database
@@ -165,7 +172,7 @@ const AllPlayers = () => {
           , team etc
         </p>
       </div>
-      <div className="flex flex-col overflow-auto md:grid grid-cols-[1fr_5fr] h-full">
+      <div className="flex flex-col overflow-auto md:grid grid-cols-[2fr_7fr] ">
         {filteredObject.length ? (
           <>
             {" "}
@@ -222,8 +229,8 @@ const AllPlayers = () => {
           <></>
         )}
 
-        <div className="hidden md:block">
-          <div className="text-white h-full flex flex-col o gap-3 bg-slate-800   px-4 py-2 rounded">
+        <div className="hidden md:block overflow-auto">
+          <div className="text-white min-h-full flex flex-col o gap-3 bg-slate-800 mb-2  px-4 py-2 rounded">
             {userInfo && (
               <label class="grid grid-cols-[1fr_1fr] gap-4">
                 <div className="text-white font-bold">My Club</div>
@@ -244,8 +251,10 @@ const AllPlayers = () => {
             )}
             {tabs.map((tab) => {
               return (
-                <div>
-                  <span className="text-white pl-1">{tab.name}</span>
+                <div className={tab.class}>
+                  {tab.name && (
+                    <span className="text-white pl-1">{tab.name}</span>
+                  )}
                   <span>{tab.component}</span>
                 </div>
               );

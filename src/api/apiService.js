@@ -159,7 +159,7 @@ export const fetchAllPlayers = async (
   if (nation) queryParams.append("nation", nation.id);
   if (rarity) queryParams.append("rarity", rarity.id);
   if (leagueid) queryParams.append("leagueid", leagueid.id);
-  if (skill_moves) queryParams.append("skill_moves", skill_moves - 1);
+  if (skill_moves) queryParams.append("skill_moves", skill_moves);
   if (weak_foot) queryParams.append("weak_foot", weak_foot);
   if (club) queryParams.append("club", club);
   if (awr !== null && awr !== undefined) queryParams.append("awr", awr);
