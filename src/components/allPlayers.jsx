@@ -10,12 +10,19 @@ import SkillMovesPopup from "./filterPopups/skillMovesPopup";
 import TeamPopup from "./filterPopups/teamPopup";
 import VersionPopup from "./filterPopups/versionPopup";
 import WeakFootPopup from "./filterPopups/weakfootPopup";
+import NameInput from "./filterPopups/nameTextBoxPopup";
 import { useDispatch, useSelector } from "react-redux";
 import { setFilters, setIsClub } from "../redux/allPlayerSlice";
 import { FILTER_TEXT, WORK_RATE } from "./utils/constants";
 import FilterModal from "./filterPopups/filterModal";
 import { useHandleResize } from "./utils/hooks";
+import PriceSlider from "./filterPopups/pricePopup";
+import PlayStyle from "./filterPopups/playStylePopup";
+import RoleStyle from "./filterPopups/RolePopup";
+import PositionCard from "./filterPopups/positioncardPopup";
 const tabs = [
+  { name: "Name", component: <NameInput/> },
+  { name: "Price", component:<PriceSlider/>},
   { name: "Version", component: <VersionPopup /> },
   { name: "Rating", component: <RatingPopup /> },
   { name: "Nation", component: <NationPopup /> },
@@ -24,7 +31,12 @@ const tabs = [
   //   { name: "Playstyles", component: <PlaystylePopup /> },
   { name: "Skill Moves", component: <SkillMovesPopup /> },
   { name: "Weak Foot", component: <WeakFootPopup /> },
+  { name: "Play Style", component: <PlayStyle /> },
+  { name: "Role Style", component: <RoleStyle /> },
+  { name: "Position Card", component: <PositionCard /> }
+
   // { name: "Work Rate", component: <WorkRatePopup /> },
+  
 ];
 
 const AllPlayers = () => {
