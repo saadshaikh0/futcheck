@@ -1,36 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Dialog } from "@headlessui/react";
-import { ArrowPathIcon, XMarkIcon } from "@heroicons/react/20/solid";
-import MobileVersionPopup from "./mobileFilterPopups/versionPopup";
-import MobileRatingPopup from "./mobileFilterPopups/ratingPopup";
-import MobileNationPopup from "./mobileFilterPopups/nationPopup";
-import MobileLeaguePopup from "./mobileFilterPopups/leaguePopup";
-import MobileTeamPopup from "./mobileFilterPopups/teamPopup";
-import MobileSkillMovesPopup from "./mobileFilterPopups/skillMovesPopup";
-import MobileWeakFootPopup from "./mobileFilterPopups/weakfootPopup";
-import MobileWorkRatePopup from "./mobileFilterPopups/workRatePopup";
+import { XMarkIcon } from "@heroicons/react/20/solid";
 import { useDispatch, useSelector } from "react-redux";
 import { setFilters } from "../../redux/allPlayerSlice";
-
-const tabs = [
-  { name: "Version", value: "rarity", component: <MobileVersionPopup /> },
-  {
-    name: "Rating",
-    value: ["min_rating", "max_rating"],
-    component: <MobileRatingPopup />,
-  },
-  { name: "Nation", value: "nation", component: <MobileNationPopup /> },
-  { name: "League", value: "leagueid", component: <MobileLeaguePopup /> },
-  { name: "Team", value: "teamid", component: <MobileTeamPopup /> },
-  //   { name: "Playstyles", component: <PlaystylePopup /> },
-  {
-    name: "Skill Moves",
-    value: "skill_moves",
-    component: <MobileSkillMovesPopup />,
-  },
-  { name: "Weak Foot", value: "weak_foot", component: <MobileWeakFootPopup /> },
-  { name: null, component: <MobileWorkRatePopup /> },
-];
+import { tabs } from "./playerfilter"; // <-- Import the tabs here
 
 const FilterModal = ({ isModalOpen, setIsModalOpen }) => {
   const dispatch = useDispatch();
@@ -51,7 +24,7 @@ const FilterModal = ({ isModalOpen, setIsModalOpen }) => {
   useEffect(() => {
     setMobileFilters(globalFilters);
   }, [globalFilters]);
-  // Update filters function
+
   const updateFilters = (filterName, value) => {
     setMobileFilters((prevFilters) => ({
       ...prevFilters,
@@ -61,9 +34,7 @@ const FilterModal = ({ isModalOpen, setIsModalOpen }) => {
 
   return (
     <Dialog
-      className={
-        "fixed top-[20%] left-1/2 -translate-x-1/2 bg-white w-[90%] mx-auto rounded z-20"
-      }
+      className="fixed top-[20%] left-1/2 -translate-x-1/2 bg-white w-[90%] mx-auto rounded z-20"
       open={isModalOpen}
       onClose={() => setIsModalOpen(false)}
     >
@@ -81,41 +52,20 @@ const FilterModal = ({ isModalOpen, setIsModalOpen }) => {
               <XMarkIcon className="h-8 w-8 text-white font-bold" />
             </button>
           </div>
-          <div>
-            <div className="text-white h-[50vh] overflow-y-auto flex flex-col gap-3 bg-slate-800  mt-2 px-4 py-2 rounded">
-              {tabs.map((tab) => {
-                return (
-                  <div>
-                    {tab.name ? (
-                      <div className="flex gap-3 items-center">
-                        <span className="text-white pl-1">{tab.name}</span>
-                        <div
-                          onClick={() => {
-                            let tempFilters = { ...filters };
-                            if (typeof tab.value == "object") {
-                              tab.value.forEach(
-                                (val) => (tempFilters[val] = null)
-                              );
-                            } else {
-                              tempFilters[tab.value] = null;
-                            }
-                            setMobileFilters({ ...tempFilters });
-                          }}
-                        >
-                          <ArrowPathIcon className="w-4 h-4 text-red-600" />
-                        </div>
-                      </div>
-                    ) : (
-                      ""
-                    )}
-                    {React.cloneElement(tab.component, {
-                      filter: filters,
-                      updateFilter: updateFilters,
-                    })}
+          <div className="text-white h-[50vh] overflow-y-auto flex flex-col gap-3 bg-slate-800 mt-2 px-4 py-2 rounded">
+            {tabs.map((tab) => (
+              <div key={tab.name}>
+                {tab.name && (
+                  <div className="flex gap-3 items-center">
+                    <span className="text-white pl-1">{tab.name}</span>
                   </div>
-                );
-              })}
-            </div>
+                )}
+                {React.cloneElement(tab.component, {
+                  filter: filters,
+                  updateFilter: updateFilters,
+                })}
+              </div>
+            ))}
           </div>
           <div className="grid grid-cols-2 my-2 gap-2">
             <button
@@ -129,9 +79,10 @@ const FilterModal = ({ isModalOpen, setIsModalOpen }) => {
             </button>
             <button>Clear Filter</button>
           </div>
-        </div>{" "}
+        </div>
       </Dialog.Panel>
     </Dialog>
   );
 };
+
 export default FilterModal;
