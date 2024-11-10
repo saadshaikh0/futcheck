@@ -1,19 +1,26 @@
 import classNames from "classnames";
+import { useDispatch, useSelector } from "react-redux";
+import { setTempFilters } from "../../../redux/allPlayerSlice";
 
-const MobileSkillMovesPopup = ({ filter, updateFilter }) => {
+const MobileSkillMovesPopup = () => {
+  const { tempFilters: filters } = useSelector((state) => state.allPlayers);
+  const dispatch = useDispatch();
+
   return (
     <div class="flex items-center">
       {[1, 2, 3, 4, 5].map((val) => {
         return (
           <div
             onClick={() => {
-              updateFilter("skill_moves", val);
+              dispatch(
+                setTempFilters({ ...filters, skill_moves: val, page: 1 })
+              );
             }}
           >
             <svg
               className={classNames(
                 "w-4 h-4 ms-1",
-                val <= (filter?.skill_moves ?? 0)
+                val <= (filters?.skill_moves ?? 0)
                   ? " text-fuchsia-400"
                   : "text-white"
               )}

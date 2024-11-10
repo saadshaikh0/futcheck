@@ -1,11 +1,12 @@
 import { Fragment, useState } from "react";
 import { Combobox, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useQuery } from "@tanstack/react-query";
 import { fetchAllRarities } from "../../../api/apiService";
+import { setTempFilters } from "../../../redux/allPlayerSlice";
 
-export default function MobileVersionPopup({ filter, updateFilter }) {
+export default function MobileVersionPopup({}) {
   const [query, setQuery] = useState("");
   const { data: rarities = [] } = useQuery({
     queryKey: ["fetchAllRarities"],
@@ -13,12 +14,15 @@ export default function MobileVersionPopup({ filter, updateFilter }) {
     cacheTime: Infinity,
     staleTime: Infinity,
   });
+  const { tempFilters: filters } = useSelector((state) => state.allPlayers);
+  const dispatch = useDispatch();
+
   return (
     <div className="">
       <Combobox
-        value={filter.rarity}
+        value={filters.rarity}
         onChange={(val) => {
-          updateFilter("rarity", val);
+          dispatch(setTempFilters({ ...filters, rarity: val, page: 1 }));
         }}
       >
         <div className="relative mt-1 ">

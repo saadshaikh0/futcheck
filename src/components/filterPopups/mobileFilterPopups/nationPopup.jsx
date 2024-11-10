@@ -1,18 +1,22 @@
 import { Fragment, useState } from "react";
 import { Combobox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronDownIcon } from "@heroicons/react/20/solid";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setTempFilters } from "../../../redux/allPlayerSlice";
 
-export default function MobileNationPopup({ filter, updateFilter }) {
+export default function MobileNationPopup() {
   const [query, setQuery] = useState("");
   const { app } = useSelector((state) => state);
   const { nations } = app;
+  const { tempFilters: filters } = useSelector((state) => state.allPlayers);
+  const dispatch = useDispatch();
+
   return (
     <div className="">
       <Combobox
-        value={filter.nation}
+        value={filters.nation}
         onChange={(val) => {
-          updateFilter("nation", val);
+          dispatch(setTempFilters({ ...filters, nation: val, page: 1 }));
         }}
       >
         <div className="relative mt-1 ">

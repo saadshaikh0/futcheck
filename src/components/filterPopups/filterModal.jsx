@@ -10,7 +10,11 @@ import MobileSkillMovesPopup from "./mobileFilterPopups/skillMovesPopup";
 import MobileWeakFootPopup from "./mobileFilterPopups/weakfootPopup";
 import MobileWorkRatePopup from "./mobileFilterPopups/workRatePopup";
 import { useDispatch, useSelector } from "react-redux";
-import { setFilters } from "../../redux/allPlayerSlice";
+import {
+  applyTempFilters,
+  clearTempFilters,
+  setFilters,
+} from "../../redux/allPlayerSlice";
 
 const tabs = [
   { name: "Version", value: "rarity", component: <MobileVersionPopup /> },
@@ -29,35 +33,10 @@ const tabs = [
     component: <MobileSkillMovesPopup />,
   },
   { name: "Weak Foot", value: "weak_foot", component: <MobileWeakFootPopup /> },
-  { name: null, component: <MobileWorkRatePopup /> },
 ];
 
-const FilterModal = ({ isModalOpen, setIsModalOpen }) => {
+const FilterModal = ({ isModalOpen, setIsModalOpen, setAllPlayers }) => {
   const dispatch = useDispatch();
-  const globalFilters = useSelector((state) => state.allPlayers.filters);
-
-  const [filters, setMobileFilters] = useState({
-    rarity: null,
-    min_rating: null,
-    max_rating: null,
-    nation: null,
-    leagueid: null,
-    teamid: null,
-    skillMoves: null,
-    weakFoot: null,
-    workRate: null,
-  });
-
-  useEffect(() => {
-    setMobileFilters(globalFilters);
-  }, [globalFilters]);
-  // Update filters function
-  const updateFilters = (filterName, value) => {
-    setMobileFilters((prevFilters) => ({
-      ...prevFilters,
-      [filterName]: value,
-    }));
-  };
 
   return (
     <Dialog
@@ -86,32 +65,8 @@ const FilterModal = ({ isModalOpen, setIsModalOpen }) => {
               {tabs.map((tab) => {
                 return (
                   <div>
-                    {tab.name ? (
-                      <div className="flex gap-3 items-center">
-                        <span className="text-white pl-1">{tab.name}</span>
-                        <div
-                          onClick={() => {
-                            let tempFilters = { ...filters };
-                            if (typeof tab.value == "object") {
-                              tab.value.forEach(
-                                (val) => (tempFilters[val] = null)
-                              );
-                            } else {
-                              tempFilters[tab.value] = null;
-                            }
-                            setMobileFilters({ ...tempFilters });
-                          }}
-                        >
-                          <ArrowPathIcon className="w-4 h-4 text-red-600" />
-                        </div>
-                      </div>
-                    ) : (
-                      ""
-                    )}
-                    {React.cloneElement(tab.component, {
-                      filter: filters,
-                      updateFilter: updateFilters,
-                    })}
+                    <span className="text-white pl-1">{tab.name}</span>
+                    <span>{tab.component}</span>
                   </div>
                 );
               })}
@@ -121,13 +76,22 @@ const FilterModal = ({ isModalOpen, setIsModalOpen }) => {
             <button
               onClick={() => {
                 setIsModalOpen(false);
-                dispatch(setFilters(filters));
+                dispatch(applyTempFilters());
               }}
               className="bg-fuchsia-400 text-white py-2"
             >
               Apply Filter
             </button>
-            <button>Clear Filter</button>
+            <button
+              onClick={() => {
+                setAllPlayers([]);
+                setIsModalOpen(false);
+                dispatch(setFilters({ page: 1 }));
+                dispatch(clearTempFilters());
+              }}
+            >
+              Clear Filter
+            </button>
           </div>
         </div>{" "}
       </Dialog.Panel>
