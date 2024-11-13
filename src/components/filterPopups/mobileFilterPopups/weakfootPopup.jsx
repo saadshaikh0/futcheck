@@ -1,19 +1,27 @@
-import classNames from "classnames";
+// weakFootPopup.jsx
 
-const MobileWeakFootPopup = ({ filter, updateFilter }) => {
+import classNames from "classnames";
+import { useDispatch, useSelector } from "react-redux";
+import { setTempFilters } from "../../../redux/allPlayerSlice";
+
+const MobileWeakFootPopup = () => {
+  const { tempFilters: filters } = useSelector((state) => state.allPlayers);
+  const dispatch = useDispatch();
+
   return (
-    <div class="flex items-center">
+    <div className="flex items-center">
       {[1, 2, 3, 4, 5].map((val) => {
         return (
           <div
+            key={val}
             onClick={() => {
-              updateFilter("weak_foot", val);
+              dispatch(setTempFilters({ ...filters, weak_foot: val, page: 1 }));
             }}
           >
             <svg
               className={classNames(
                 "w-4 h-4 ms-1",
-                val <= filter?.weak_foot ?? 0
+                val <= (filters?.weak_foot ?? 0)
                   ? " text-fuchsia-400"
                   : "text-white"
               )}

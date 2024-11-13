@@ -1,31 +1,16 @@
+// AllPlayers.jsx
+
 import React, { useEffect, useRef, useState } from "react";
 import { fetchAllPlayers } from "../api/apiService";
 import { useQuery } from "@tanstack/react-query";
 import PlayerCard from "./common/PlayerCard";
-import LeaguePopup from "./filterPopups/leaguePopup";
-import NationPopup from "./filterPopups/nationPopup";
 import CoinsImg from "../assets/coins.png";
-import RatingPopup from "./filterPopups/ratingPopup";
-import SkillMovesPopup from "./filterPopups/skillMovesPopup";
-import TeamPopup from "./filterPopups/teamPopup";
-import VersionPopup from "./filterPopups/versionPopup";
-import WeakFootPopup from "./filterPopups/weakfootPopup";
 import { useDispatch, useSelector } from "react-redux";
 import { setFilters, setIsClub } from "../redux/allPlayerSlice";
 import { FILTER_TEXT, WORK_RATE } from "./utils/constants";
 import FilterModal from "./filterPopups/filterModal";
 import { useHandleResize } from "./utils/hooks";
-const tabs = [
-  { name: "Version", component: <VersionPopup /> },
-  { name: "Rating", component: <RatingPopup /> },
-  { name: "Nation", component: <NationPopup /> },
-  { name: "League", component: <LeaguePopup /> },
-  { name: "Team", component: <TeamPopup /> },
-  //   { name: "Playstyles", component: <PlaystylePopup /> },
-  { name: "Skill Moves", component: <SkillMovesPopup /> },
-  { name: "Weak Foot", component: <WeakFootPopup /> },
-  // { name: "Work Rate", component: <WorkRatePopup /> },
-];
+import FilterTabs from "./filterPopups/FilterTabs";
 
 const AllPlayers = () => {
   const filters = useSelector((state) => state.allPlayers.filters);
@@ -52,6 +37,7 @@ const AllPlayers = () => {
     dispatch(setFilters({ page: 1 }));
     setAllPlayers([]);
   };
+
   const filteredObject = Object.entries(filters).filter(
     ([key, value]) =>
       !(
@@ -62,13 +48,12 @@ const AllPlayers = () => {
   );
 
   useEffect(() => {
-    // Append new players only when they arrive
     if (!isLoading && data.players.length) {
       setAllPlayers((prevPlayers) => {
-        const existingPlayerIds = new Set(prevPlayers.map((p) => p.id)); // Set of existing player IDs
+        const existingPlayerIds = new Set(prevPlayers.map((p) => p.id));
         const newPlayers = data.players.filter(
           (player) => !existingPlayerIds.has(player.id)
-        ); // Filter out duplicates
+        );
         return [...prevPlayers, ...newPlayers];
       });
     }
@@ -77,18 +62,17 @@ const AllPlayers = () => {
   useEffect(() => {
     const prevFilters = prevFiltersRef.current;
 
-    // Check if any key other than 'page' has changed
     const hasFilterChanged = Object.keys(filters).some((key) => {
       return key !== "page" && filters[key] !== prevFilters[key];
     });
 
     if (hasFilterChanged) {
-      setAllPlayers([]); // Clear allPlayers when filters change
+      setAllPlayers([]);
     }
 
-    // Update the reference to the current filters
     prevFiltersRef.current = filters;
   }, [filters]);
+
   useEffect(() => {
     const handleScroll = () => {
       const scrollContainer = containerRef.current;
@@ -96,9 +80,7 @@ const AllPlayers = () => {
 
       const { scrollTop, scrollHeight, clientHeight } = scrollContainer;
 
-      // Check if the user has scrolled to the bottom of the div
       if (scrollTop + clientHeight >= scrollHeight - 5) {
-        // Trigger the next page fetch
         let currentPage = filters?.page ?? 1;
         if (!isLoading && currentPage < data.total_pages) {
           dispatch(setFilters({ ...filters, page: currentPage + 1 }));
@@ -106,29 +88,28 @@ const AllPlayers = () => {
       }
     };
 
-    // Add scroll event listener
     const scrollContainer = containerRef.current;
     if (scrollContainer) {
       scrollContainer.addEventListener("scroll", handleScroll);
     }
 
-    // Cleanup the event listener on component unmount
     return () => {
       if (scrollContainer) {
         scrollContainer.removeEventListener("scroll", handleScroll);
       }
     };
   }, [isLoading, data.total_pages, filters]);
+
   useEffect(() => {
     refetch();
   }, [filters, isClub]);
 
-  // Reset filters when the component unmounts
   useEffect(() => {
     return () => {
       clearFilters();
     };
   }, []);
+
   const getValues = (key, value) => {
     if (key == "page") {
       return value;
@@ -142,6 +123,7 @@ const AllPlayers = () => {
       return `${value} - ${filters.max_rating}`;
     }
   };
+
   return (
     <div className="relative w-full md:w-4/5 flex flex-col mx-auto mt-5 md:mt-0 px-5 h-[calc(90vh)] md:h-[calc(100vh-4rem)]">
       <div className="mb-1">
@@ -156,7 +138,6 @@ const AllPlayers = () => {
       <div className="flex flex-col overflow-auto md:grid grid-cols-[1fr_5fr] h-full">
         {filteredObject.length ? (
           <>
-            {" "}
             <div>
               <div className="flex gap-2 justify-between my-2">
                 <button
@@ -171,8 +152,8 @@ const AllPlayers = () => {
               {filteredObject.map(([key, value]) => {
                 return (
                   <div className="text-white">
-                    <div class="flex justify-center items-center m-1 px-2 py-1 rounded-sm bg-fuchsia-400 text-base text-white font-medium">
-                      <div class="flex-initial max-w-full leading-none text-xs font-normal">
+                    <div className="flex justify-center items-center m-1 px-2 py-1 rounded-sm bg-fuchsia-400 text-base text-white font-medium">
+                      <div className="flex-initial max-w-full leading-none text-xs font-normal">
                         {FILTER_TEXT[key]}: {getValues(key, value)}
                       </div>
                       <span
@@ -197,8 +178,7 @@ const AllPlayers = () => {
                           }
                         }}
                       >
-                        {" "}
-                        <i class="fa fa-times ml-2 cursor-pointer"></i>
+                        <i className="fa fa-times ml-2 cursor-pointer"></i>
                       </span>
                     </div>
                   </div>
@@ -211,34 +191,7 @@ const AllPlayers = () => {
         )}
 
         <div className="hidden md:block">
-          <div className="text-white h-full flex flex-col o gap-3 bg-slate-800   px-4 py-2 rounded">
-            {userInfo && (
-              <label class="grid grid-cols-[1fr_1fr] gap-4">
-                <div className="text-white font-bold">My Club</div>
-                <div className="mx-auto">
-                  <input
-                    type="checkbox"
-                    value=""
-                    onChange={(e) => {
-                      dispatch(setFilters({ page: 1 }));
-                      dispatch(setIsClub(e.target.checked));
-                      setAllPlayers([]);
-                    }}
-                    class="sr-only peer"
-                  />
-                  <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                </div>
-              </label>
-            )}
-            {tabs.map((tab) => {
-              return (
-                <div>
-                  <span className="text-white pl-1">{tab.name}</span>
-                  <span>{tab.component}</span>
-                </div>
-              );
-            })}
-          </div>
+          <FilterTabs isMobile={false} />
         </div>
         <div
           ref={containerRef}
@@ -265,8 +218,8 @@ const AllPlayers = () => {
             {isLoading &&
               [...Array(24).keys()].map(() => {
                 return (
-                  <div class="animate-pulse flex justify-center items-center space-x-4">
-                    <div class="rounded bg-slate-200 h-20 w-20 md:h-40 md:w-40"></div>
+                  <div className="animate-pulse flex justify-center items-center space-x-4">
+                    <div className="rounded bg-slate-200 h-20 w-20 md:h-40 md:w-40"></div>
                   </div>
                 );
               })}
@@ -274,7 +227,6 @@ const AllPlayers = () => {
         </div>
         <div></div>
       </div>
-      {/* FAB visible only on smaller screens */}
       {modalOpen ? (
         <></>
       ) : (
@@ -285,7 +237,11 @@ const AllPlayers = () => {
           Filter
         </button>
       )}
-      <FilterModal setAllPlayers={setAllPlayers} isModalOpen={modalOpen} setIsModalOpen={setModalOpen} />
+      <FilterModal
+        setAllPlayers={setAllPlayers}
+        isModalOpen={modalOpen}
+        setIsModalOpen={setModalOpen}
+      />
       {modalOpen ? (
         <div className="bg-black z-10 opacity-50 absolute top-0 left-0 h-full w-full"></div>
       ) : (
@@ -294,4 +250,5 @@ const AllPlayers = () => {
     </div>
   );
 };
+
 export default AllPlayers;
