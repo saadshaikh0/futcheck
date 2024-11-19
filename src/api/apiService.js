@@ -68,6 +68,12 @@ export const fetchTopRatedPlayers = async () => {
 
   return data;
 };
+export const fetchTopEvolvedPlayers = async () => {
+  const response = await instance.get(`/get_top_evolved_players/`);
+  let data = response.data.data;
+
+  return data;
+};
 export const fetchAllRarities = async () => {
   const PROMOS_TO_HIDE = [
     "standard",
@@ -447,6 +453,19 @@ export const fetchEvoChains = async ({ page }) => {
     return data;
   } catch (error) {
     console.error("Error fetching evolution chains:", error);
+    throw error;
+  }
+};
+
+export const fetchMarketTrends = async () => {
+  try {
+    const response = await instance.get(`/market_trends/`, {
+      timeout: 60000,
+    });
+    const data = response.data;
+    return data;
+  } catch (error) {
+    console.error("Error fetching Market Data:", error);
     throw error;
   }
 };

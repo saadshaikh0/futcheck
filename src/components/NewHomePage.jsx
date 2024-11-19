@@ -7,18 +7,18 @@ import {
   fetchLatestPlayers,
   fetchSbcsData,
   fetchTopRatedPlayers,
+  fetchTopEvolvedPlayers,
 } from "../api/apiService";
 
 import PlayerSwiper from "./hometabs/PlayerSwiper";
 import LatestPlayers from "./hometabs/latestPlayers";
-import RatingsSection from "./hometabs/RatingsSection";
-import TabsHeader from "./hometabs/TabsHeader"; // Import TabsHeader
-import SBCSection from "./hometabs/SBCSection"; // Import SBCSection
+import TabsHeader from "./hometabs/TabsHeader";
+import SBCSection from "./hometabs/SBCSection";
 import Footer from "./common/Footer";
 
 import FOOTBALL_STADIUM_IMAGE from "../assets/football_stadium_background.jpg";
 
-const tabs = ["RECENT", "HOT", "RATINGS"];
+const tabs = ["RECENT", "HOT", "EVOS"];
 
 const NewHomePage = () => {
   const { data: topRatedPlayers = [] } = useQuery({
@@ -31,6 +31,13 @@ const NewHomePage = () => {
   const { data: latestPlayers = [] } = useQuery({
     queryKey: ["fetchLatestPlayers"],
     queryFn: fetchLatestPlayers,
+    cacheTime: Infinity,
+    staleTime: Infinity,
+  });
+
+  const { data: topEvolvedPlayers = [] } = useQuery({
+    queryKey: ["fetchTopEvolvedPlayers"],
+    queryFn: fetchTopEvolvedPlayers,
     cacheTime: Infinity,
     staleTime: Infinity,
   });
@@ -50,7 +57,14 @@ const NewHomePage = () => {
     }
   };
 
-  const players = selectedTab === "RECENT" ? latestPlayers : topRatedPlayers;
+  let players = [];
+  if (selectedTab === "RECENT") {
+    players = latestPlayers;
+  } else if (selectedTab === "HOT") {
+    players = topRatedPlayers;
+  } else if (selectedTab === "EVOS") {
+    players = topEvolvedPlayers;
+  }
 
   return (
     <div
@@ -72,17 +86,17 @@ const NewHomePage = () => {
         />
 
         {/* Content Based on Selected Tab */}
-        {selectedTab === "RATINGS" ? (
-          <RatingsSection />
-        ) : (
-          <>
-            <PlayerSwiper ref={playerSwiperRef} players={players} />
-            {/* Show LatestPlayers on Mobile */}
-            <div className="mt-4 px-4 md:hidden">
-              <LatestPlayers players={players} />
-            </div>
-          </>
-        )}
+        <>
+          <PlayerSwiper
+            selectedTab={selectedTab}
+            ref={playerSwiperRef}
+            players={players}
+          />
+          {/* Show LatestPlayers on Mobile */}
+          <div className="mt-4 px-4 md:hidden">
+            <LatestPlayers players={players} selectedTab={selectedTab} />
+          </div>
+        </>
 
         {/* SBC Section */}
         <SBCSection sbcs={sbcs} />

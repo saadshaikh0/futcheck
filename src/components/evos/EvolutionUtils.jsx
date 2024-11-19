@@ -1,6 +1,8 @@
 import React from "react";
 import {
   AcademyStatEnum,
+  EVO_STAT_INDEX_MAP,
+  IN_GAME_STATS,
   playstyleUpgradeToIdMapping,
   roleUpgradeToIdMapping,
   STAT_INDEX_MAP,
@@ -385,7 +387,7 @@ export function applyUpgradesToPlayer(player, upgrades, currentLevel, evoId) {
         updatedPlayer["attributes"][idx] = newValue;
       }
     } else if (attributeType === "subattribute") {
-      const idx = STAT_INDEX_MAP[attributeName];
+      const idx = EVO_STAT_INDEX_MAP[attributeName];
       if (idx !== undefined) {
         let newValue = updatedPlayer["stats"][idx] + count;
         if (maxValue !== undefined && maxValue !== null) {
@@ -435,8 +437,16 @@ export function applyUpgradesToPlayer(player, upgrades, currentLevel, evoId) {
           updatedPlayer["playstyles"].push(traitId);
         }
       } else {
-        if (!updatedPlayer["playstyle_plus"].includes(traitId)) {
-          updatedPlayer["playstyle_plus"].push(traitId);
+        const existing_traits_count = updatedPlayer["playstyle_plus"]?.length;
+        if (
+          maxValue !== null &&
+          maxValue !== undefined &&
+          existing_traits_count >= maxValue
+        ) {
+        } else {
+          if (!updatedPlayer["playstyle_plus"].includes(traitId)) {
+            updatedPlayer["playstyle_plus"].push(traitId);
+          }
         }
       }
     } else if (attributeType === "roles") {
@@ -497,12 +507,13 @@ export const generateIntermediatePlayers = (
     cumulativeUpgrades = cumulativeUpgrades.concat(awards);
 
     // Apply cumulative upgrades
-    const currentPlayer = applyUpgradesToPlayer(
+    let currentPlayer = applyUpgradesToPlayer(
       basePlayer,
       cumulativeUpgrades,
       level,
       evoId
     );
+    currentPlayer = adjustPlayerAttributes(currentPlayer);
 
     const statDifference = calculateStatDifference(
       previousPlayer,
@@ -517,3 +528,63 @@ export const generateIntermediatePlayers = (
 
   return players;
 };
+export function adjustPlayerAttributes(player) {
+  // Copy the player to avoid modifying the original
+  const updatedPlayer = JSON.parse(JSON.stringify(player));
+  updatedPlayer.attributes = [...player.attributes];
+  updatedPlayer.stats = [...player.stats];
+
+  const attributeMap = {
+    pace: 0,
+    shooting: 1,
+    passing: 2,
+    dribbling: 3,
+    defending: 4,
+    physicality: 5,
+  };
+
+  for (const [attributeName, subattributes] of Object.entries(IN_GAME_STATS)) {
+    const idxAttribute = attributeMap[attributeName];
+    const attributeValue = updatedPlayer.attributes[idxAttribute];
+
+    // Calculate weighted sum of subattributes
+    let calculatedValue = 0;
+    for (const [_, idxSubattr, weight] of subattributes) {
+      const subattrValue = updatedPlayer.stats[idxSubattr];
+      calculatedValue += subattrValue * weight;
+    }
+    calculatedValue = Math.round(calculatedValue);
+
+    if (attributeValue > calculatedValue) {
+      // Increase subattributes to match attributeValue
+      const diff = attributeValue - calculatedValue;
+      const totalWeight = subattributes.reduce(
+        (sum, [_, __, weight]) => sum + weight,
+        0
+      );
+      const deltas = subattributes.map(([_, idxSubattr, weight]) => {
+        const delta = (weight / totalWeight) * diff;
+        return { idxSubattr, delta };
+      });
+      let totalDelta = 0;
+      const intDeltas = deltas.map(({ idxSubattr, delta }) => {
+        const intDelta = Math.round(delta);
+        totalDelta += intDelta;
+        return { idxSubattr, intDelta };
+      });
+      const deltaCorrection = diff - totalDelta;
+      const lastIdx = intDeltas.length - 1;
+      intDeltas[lastIdx].intDelta += deltaCorrection;
+      intDeltas.forEach(({ idxSubattr, intDelta }) => {
+        const currentValue = updatedPlayer.stats[idxSubattr];
+        const newValue = Math.min(99, currentValue + intDelta);
+        updatedPlayer.stats[idxSubattr] = newValue;
+      });
+    } else if (calculatedValue > attributeValue) {
+      // Increase main attribute to match calculatedValue
+      updatedPlayer.attributes[idxAttribute] = Math.min(99, calculatedValue);
+    }
+  }
+
+  return updatedPlayer;
+}

@@ -79,6 +79,8 @@ const PlayerCard = ({
     id,
     base_id,
     name,
+    f_name,
+    l_name,
     leagueid,
     rating,
     nation,
@@ -98,7 +100,13 @@ const PlayerCard = ({
   } = player;
 
   const [validGuid, setValidGuid] = useState(!!guid);
-  const player_name = c_name ? c_name : isMini ? name?.split(" ")?.pop() : name;
+  const displayName = name || `${f_name} ${l_name}`;
+
+  const player_name = c_name
+    ? c_name
+    : isMini
+    ? displayName?.split(" ")?.pop()
+    : displayName;
   const selectedChemStyle = useSelector(
     (state) => state.player.selectedChemStyle
   );

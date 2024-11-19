@@ -30,6 +30,7 @@ import ChallengeSolutions from "./components/sbc/ChallengeSolution";
 import SquadWizardWrapper from "./components/squadWizardWrapper";
 import EvolutionsWrapper from "./components/EvolutionsWrapper";
 import EvolutionDetailWrapper from "./components/EvolutionDetailWrapper";
+import MarketWrapper from "./components/MarketWrapper";
 
 ReactGA.initialize("G-RD6LGLC1LD");
 
@@ -61,6 +62,7 @@ function App() {
                       path="/new_homepage"
                       element={<NewHomePage />}
                     /> */}
+                  <Route path="/market" element={<MarketWrapper />} />
                   <Route path="/tos" element={<Tos />} />
                   <Route path="/evolutions" element={<EvolutionsWrapper />} />
                   <Route

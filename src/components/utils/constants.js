@@ -75,6 +75,38 @@ export const IN_GAME_STATS = {
     ["Aggression", 8, 0.2], // 20% weight
   ],
 };
+
+export const EVO_STAT_INDEX_MAP = {
+  ACCELERATION: 0,
+  SPRINT_SPEED: 1,
+  AGILITY: 2,
+  BALANCE: 3,
+  JUMPING: 4,
+  STAMINA: 5,
+  STRENGTH: 6,
+  REACTIONS: 7,
+  AGGRESSION: 8,
+  COMPOSURE: 9,
+  INTERCEPTIONS: 10,
+  POSITIONING: 11,
+  VISION: 12,
+  BALL_CONTROL: 13,
+  CROSSING: 14,
+  DRIBBLING_SUB: 15,
+  FINISHING: 16,
+  FK_ACC: 17,
+  HEADING_ACC: 18,
+  LONG_PASSING: 19,
+  SHORT_PASSING: 20,
+  DEF_AWARENESS: 21,
+  SHOT_POWER: 22,
+  LONG_SHOTS: 23,
+  STANDING_TACKLE: 24,
+  SLIDING_TACKLE: 25,
+  VOLLEYS: 26,
+  CURVE: 27,
+  PENALTIES: 28,
+};
 export const STAT_INDEX_MAP = {
   Acceleration: 0,
   "Sprint Speed": 1,

@@ -15,7 +15,7 @@ import { setPlayer } from "../../redux/playerSlice";
 import PlayerCard from "../common/PlayerCard";
 import CoinsImg from "../../assets/coins.png";
 
-const PlayerSwiper = forwardRef(({ players }, ref) => {
+const PlayerSwiper = forwardRef(({ players, selectedTab }, ref) => {
   const swiperRef = useRef(null);
   const dispatch = useDispatch();
   const [selectedPlayer, setSelectedPlayer] = useState(null);
@@ -45,6 +45,7 @@ const PlayerSwiper = forwardRef(({ players }, ref) => {
   return (
     <>
       <Swiper
+        key={players.map((player) => player.id).join("-")} // Add this key prop
         ref={swiperRef}
         effect={"coverflow"}
         grabCursor={true}
@@ -65,9 +66,24 @@ const PlayerSwiper = forwardRef(({ players }, ref) => {
         {players?.map((player) => (
           <SwiperSlide key={player.id}>
             <PlayerCard isHome={true} player={player} isMini={false} />
+            {player.slotname && (
+              <div className="absolute bg-black w-3/4 text-yellow-600 text-center -bottom-16 rounded left-1/2 transform -translate-x-1/2  text-lg font-semibold">
+                {player.slotname}
+              </div>
+            )}
             <div className="bg-black text-white bg-opacity-80 text-2xl font-bold z-10 flex items-center gap-1 text-center px-5 rounded-lg justify-center absolute top-10 left-1/2 -translate-x-1/2">
               <img src={CoinsImg} className="!w-5 h-5" alt="coins" />
               {player?.latest_price?.toLocaleString("en-us")}
+              {player?.trend && (
+                <span
+                  className={`${
+                    player?.trend < 0 ? "text-red-500" : "text-green-500"
+                  } font-mono text-lg`}
+                >
+                  {player?.trend > 0 ? "+" : ""}
+                  {player?.trend}%
+                </span>
+              )}
             </div>
           </SwiperSlide>
         ))}
