@@ -122,12 +122,12 @@ const SquadBuilder = () => {
 
             <div className="z-10 absolute w-full h-full">
               {" "}
-              {bestSquad && (
+              {/* {bestSquad && (
                 <Formation
                   squad={bestSquad}
                   player_position_index={bestSquadDetails.player_position_index}
                 />
-              )}
+              )} */}
             </div>
           </div>
         </div>

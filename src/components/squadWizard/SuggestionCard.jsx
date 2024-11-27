@@ -19,11 +19,11 @@ const SuggestionCard = ({ player, points, handlePlayerSelect }) => {
 
   return (
     <div
-      className="grid grid-cols-[1fr_2fr] bg-gray-600 bg-opacity-40 px-4 mx-4 mb-2 rounded-md"
+      className="flex flex-col lg:grid lg:grid-cols-[1fr_2fr] bg-gray-600 bg-opacity-40 px-4 mx-4 mb-2 rounded-md"
       onClick={() => handlePlayerSelect(player)}
       key={player.id}
     >
-      <div className="relative ">
+      <div className="relative w-24 lg:w-auto">
         <div className="bg-black bg-opacity-80 text-xs font-bold z-10 flex items-center gap-1 px-1 rounded-sm text-center w-[60%] justify-center  absolute top-2 left-1/2 -translate-x-1/2">
           <img src={CoinsImg} className="w-3 h-3" alt="coins" />
 
@@ -34,11 +34,11 @@ const SuggestionCard = ({ player, points, handlePlayerSelect }) => {
           <ChemistryPoints points={points} />
         </div>
       </div>
-      <div className=" flex-grow text-center pt-1 flex flex-col  text-white rounded-md  bottom-1">
+      <div className="hidden lg:flex flex-grow text-center pt-1  flex-col  text-white rounded-md  bottom-1">
         <div className="text-xl font-medium">
           {player.c_name || player.name}
         </div>
-        <div className="pt-4 ">
+        <div className=" pt-4 ">
           <div className="grid grid-cols-[2fr_1fr]">
             <span>Squad Chemistry</span>{" "}
             <div

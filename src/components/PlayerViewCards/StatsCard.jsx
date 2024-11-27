@@ -67,7 +67,7 @@ const getBackgroundColorClass = (value) => {
 
 const DiamondSvg = ({ isFill, isSelected }) => {
   return (
-    <div className="w-[0.75rem] h-[0.50rem]">
+    <div className="w-[0.50rem] h-[0.30rem] lg:w-[0.75rem] lg:h-[0.50rem]">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 100 125"
@@ -95,11 +95,11 @@ export const ChemistryPoints = ({
     <div onClick={onSelectChemistryPoints} className="cursor-pointer relative">
       <div
         className={classNames(
-          "h-8 w-8 bg-[#151515] top-0 left-0 z-10 rounded-full shadow-lg"
+          "h-4 w-4 lg:h-8 lg:w-8 bg-[#151515] top-0 left-0 z-10 rounded-full shadow-lg"
         )}
       ></div>
 
-      <div className="absolute top-[5px] left-[4px]">
+      <div className="absolute top-[0.1rem]  lg:top-[5px] lg:left-[4px]">
         <div className="flex flex-col justify-center items-center">
           <DiamondSvg isFill={points >= 2} isSelected={isSelected} />
           <div className="flex">

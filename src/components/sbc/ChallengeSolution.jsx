@@ -12,11 +12,7 @@ import { useParams } from "react-router-dom";
 import SolutionsPitch from "../../assets/updated-field.png";
 import { useQuery } from "@tanstack/react-query";
 import PlayerCard from "../common/PlayerCard";
-import {
-  FORMATIONS_POSITIONS,
-  FORMATIONS_POSITIONS_ABBR,
-  FORMATIONS_POSITIONS_SMALL,
-} from "../utils/formations";
+import { getFormationPositions } from "../utils/formations";
 import SolutionCard from "./SolutionCard";
 import { convertFormation } from "../utils/utils";
 import classNames from "classnames";
@@ -41,7 +37,7 @@ const SolutionPitch = ({
         backgroundPosition: "bottom",
       }}
     >
-      <div className={`absolute inset-0 bg-black  opacity-20`}></div>
+      <div className={`absolute inset-0 bg-black opacity-20`}></div>
       {selectedSolution && (
         <div className="flex flex-col absolute top-0 right-4 md:right-9 text-white text-sm md:text-md font-bold text-right">
           <div>Rating: {selectedSolution.details.rating}</div>
@@ -51,37 +47,39 @@ const SolutionPitch = ({
       <div className="flex w-full flex-wrap relative h-full">
         {selectedSolution &&
           selectedSolution.details.squad.map((player, index) => {
-            let left = positions[index]?.[0] ?? 0;
-            let bottom = positions[index]?.[1] ?? 0;
-            console.log(index, left, bottom);
+            const position = positions[index] || {};
+            const { left, top, position: position_abr } = position;
+
             let player_position_index =
               selectedSolution.details.player_position_index;
             let playerIndex = selectedSolution.details.squad.findIndex(
               (d) => d.id === player_position_index[index]
             );
 
-            let position_abr = positionsAbbr?.[index];
             let playerData = selectedSolution.details.squad[playerIndex];
-            position_abr = playerData?.position?.includes(position_abr)
+            const showPositionAbbr = playerData?.position?.includes(
+              position_abr
+            )
               ? position_abr
               : null;
+
             return (
               <div
                 key={playerData.id}
                 className={classNames(
-                  "w-16 md:w-32  absolute ",
+                  "w-16 md:w-32 absolute",
                   playerData.leagueid == solutionLeagueDetails.leagueid ||
                     playerData.nation == solutionLeagueDetails.nationid ||
                     playerData.teamid == solutionLeagueDetails.teamid
-                    ? "bg-gray-300 rounded-lg  z-15 bg-opacity-50  "
+                    ? "bg-gray-300 rounded-lg z-15 bg-opacity-50"
                     : ""
                 )}
-                style={{ left, bottom }}
+                style={{ left, top }}
               >
                 <PlayerCard
                   showPrice={true}
                   shouldOpenInNewTab={true}
-                  position_abr={position_abr}
+                  position_abr={showPositionAbbr}
                   isSuperMini={isSuperMini}
                   player={playerData}
                   isDisabled={isDisabled}
@@ -110,24 +108,19 @@ const ChallengeSolutions = () => {
   const [selectedSolution, setSelectedSolution] = useState();
   const dispatch = useDispatch();
   const isMobile = useHandleResize(768);
-  const formationString = convertFormation(formation);
-  const [positions, setPositions] = useState(
-    FORMATIONS_POSITIONS[formationString]
-  );
+  const [positions, setPositions] = useState([]);
 
-  const [positionsAbbr, setPositionsAbbr] = useState(
-    FORMATIONS_POSITIONS_ABBR[formationString]
-  );
   useEffect(() => {
-    if (isMobile) {
-      let position_arr = FORMATIONS_POSITIONS_SMALL[formationString];
-      setPositions(position_arr);
-    } else {
-      let position_arr = FORMATIONS_POSITIONS[formationString];
-      setPositions(position_arr);
+    try {
+      const formationPositions = getFormationPositions(
+        formation,
+        isMobile ? "small" : "big"
+      );
+      setPositions(formationPositions);
+    } catch (error) {
+      console.error("Error getting formation positions:", error);
     }
-    setPositionsAbbr(FORMATIONS_POSITIONS_ABBR[formationString]);
-  }, [isMobile, formationString]);
+  }, [isMobile, formation]);
   useEffect(() => {
     async function fetchData() {
       if (!challengeid || challengeid != challengeId) {
@@ -172,7 +165,6 @@ const ChallengeSolutions = () => {
             positions={positions}
             solutionLeagueDetails={solutionLeagueDetails}
             isSuperMini={true}
-            positionsAbbr={positionsAbbr}
           />
           {challengeSolutions && (
             <SolutionTable
@@ -209,7 +201,6 @@ const ChallengeSolutions = () => {
               positions={positions}
               solutionLeagueDetails={solutionLeagueDetails}
               isSuperMini={false}
-              positionsAbbr={positionsAbbr}
             />
           </div>
         </div>

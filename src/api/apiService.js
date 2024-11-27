@@ -462,8 +462,26 @@ export const fetchMarketTrends = async () => {
     const response = await instance.get(`/market_trends/`, {
       timeout: 60000,
     });
-    const data = response.data;
-    return data;
+    const data = response.data; // Assume data is an array of trend objects
+
+    // For each trend, fetch player details for top_players IDs
+    const updatedData = await Promise.all(
+      data.map(async (trend) => {
+        if (trend.top_players && trend.top_players.length > 0) {
+          const playerDetails = await fetchPlayersByIds({
+            ids: trend.top_players,
+          });
+          return {
+            ...trend,
+            top_players: playerDetails,
+          };
+        } else {
+          return trend;
+        }
+      })
+    );
+
+    return updatedData;
   } catch (error) {
     console.error("Error fetching Market Data:", error);
     throw error;

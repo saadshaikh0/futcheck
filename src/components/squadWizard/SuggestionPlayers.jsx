@@ -11,6 +11,7 @@ import { convertFormation } from "../utils/utils";
 import { useInView } from "react-intersection-observer";
 import DynamicRangeSlider from "./DynamicRangeSlider"; // Import the custom slider component
 import SuggestionCard from "./SuggestionCard";
+import { useHandleResize } from "../utils/hooks";
 
 const SuggestionPlayers = ({ handlePlayerSelect }) => {
   const [budgetInput, setBudgetInput] = useState(50000);
@@ -88,7 +89,7 @@ const SuggestionPlayers = ({ handlePlayerSelect }) => {
       fetchNextPage();
     }
   }, [inView, hasNextPage, isFetchingNextPage]);
-
+  const isMobile = useHandleResize();
   return (
     <div className="w-full overflow-auto flex flex-col">
       <div className="mb-4 px-4 w-full">
@@ -132,7 +133,11 @@ const SuggestionPlayers = ({ handlePlayerSelect }) => {
         <DynamicRangeSlider value={budgetInput} onChange={handleBudgetChange} />
       </div>
       {error && <p>Error loading suggestions: {error.message}</p>}
-      <div className="grid overflow-auto scrollbar-none grid-cols-1 gap-2 w-full">
+      <div
+        className={`${
+          isMobile ? "flex overflow-x-auto" : "grid grid-cols-1"
+        }  overflow-auto scrollbar-none  gap-2 w-full`}
+      >
         {isLoading ? (
           <p className=" text-center w-full">Loading suggested players...</p>
         ) : (

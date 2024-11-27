@@ -14,9 +14,11 @@ import { useDrag, useDrop } from "react-dnd";
 import { ItemTypes } from "../utils/constants";
 import classNames from "classnames";
 import { ChemistryPoints } from "../PlayerViewCards/StatsCard";
+import { useHandleResize } from "../utils/hooks";
 
 const PlayerCardSlot = ({ left, top, transform, player, index, position }) => {
   const dispatch = useDispatch();
+  const isMobile = useHandleResize();
   const selectedPositionIndex = useSelector(
     (state) => state.squadWizard.selectedPositionIndex
   );
@@ -67,7 +69,7 @@ const PlayerCardSlot = ({ left, top, transform, player, index, position }) => {
     <div
       ref={(node) => drag(drop(node))}
       onClick={handleClick}
-      className="player-card absolute"
+      className="player-card absolute text-white "
       style={{
         left,
         top,
@@ -78,24 +80,34 @@ const PlayerCardSlot = ({ left, top, transform, player, index, position }) => {
       }}
     >
       {player ? (
-        <div key={player.id} className="relative group  w-32 h-44">
-          <PlayerCard player={player} isMini={false} isHover={false} />
-          <div className="bg-black bg-opacity-80 text-xs font-bold z-10 flex items-center gap-1 px-1 rounded-sm text-center w-[60%] justify-center  absolute top-5 left-1/2 -translate-x-1/2">
-            <img src={CoinsImg} className="w-3 h-3" alt="coins" />
+        <div
+          key={player.id}
+          className="relative group w-20 h-24  lg:w-32 lg:h-44"
+        >
+          <PlayerCard
+            player={player}
+            isMini={isMobile}
+            isHover={false}
+            showPrice={isMobile}
+          />
+          {!isMobile && (
+            <div className="bg-black bg-opacity-80 text-[0.5rem] lg:text-xs font-bold z-10 flex items-center gap-1 px-1 rounded-sm text-center w-[60%] justify-center  absolute top-2 lg:top-5 left-1/2 -translate-x-1/2">
+              <img src={CoinsImg} className="w-3 h-3" alt="coins" />
 
-            {player?.latest_price}
-          </div>
-          <div className="absolute bottom-0">
+              {player?.latest_price}
+            </div>
+          )}
+          <div className="absolute -bottom-1 -left-0 lg:bottom-0">
             {canPlayPosition ? (
               <ChemistryPoints points={chemistryPoints[player.id] || 0} />
             ) : (
-              <ExclamationCircleIcon className="w-8 h-8 text-yellow-500 bg-black rounded-full" />
+              <ExclamationCircleIcon className="w-4 h-4 lg:w-8 lg:h-8 text-yellow-500 bg-black rounded-full" />
             )}
           </div>
-          <div className=" absolute top-2 z-50 -right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <div className=" absolute top-0 lg:top-2 z-50 -right-1 lg:-right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             <div
               onClick={handleRemoveClick}
-              className="flex items-center justify-center w-8 h-8 rounded-full bg-black hover:bg-red-600 transition-colors duration-300"
+              className="flex items-center justify-center w-4 h-4 lg:w-8 lg:h-8 rounded-full bg-black hover:bg-red-600 transition-colors duration-300"
             >
               <XMarkIcon className="w-6 h-6 text-white" />
             </div>
@@ -103,7 +115,7 @@ const PlayerCardSlot = ({ left, top, transform, player, index, position }) => {
         </div>
       ) : (
         <div
-          className="w-44 h-44"
+          className="w-24 h-24 md:w-44 md:h-44"
           style={{
             background: `url(${CardSlotImage})`,
             backgroundSize: "100% 100%",
@@ -114,7 +126,7 @@ const PlayerCardSlot = ({ left, top, transform, player, index, position }) => {
       )}
       <div
         className={classNames(
-          "absolute -bottom-3 left-1/2 -translate-x-1/2 bg-black px-2 rounded-full",
+          "absolute -bottom-5 text-xs md:text-lg lg:-bottom-3 left-1/2 -translate-x-1/2 bg-black px-2 rounded-full",
           selectedPositionIndex === index ? "glow" : ""
         )}
       >

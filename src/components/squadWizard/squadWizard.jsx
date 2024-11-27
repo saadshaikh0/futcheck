@@ -12,6 +12,7 @@ import SquadInsights from "./SquadInsights";
 import { Popover } from "@headlessui/react";
 import { allFormations } from "../utils/formations";
 import { convertFormation } from "../utils/utils";
+import FormationButton from "./FormationButton";
 
 const SquadWizard = () => {
   const dispatch = useDispatch();
@@ -60,6 +61,7 @@ const SquadWizard = () => {
             </div>
           </div>
           <div
+            id="Pitch"
             className="w-full md:w-[100%] relative"
             style={{
               background: `url(${SolutionsPitch})`,
@@ -87,48 +89,7 @@ const SquadWizard = () => {
               />
             ))}
 
-            <Popover className="absolute bottom-4 left-[5vw]">
-              {({ open, close }) => (
-                <>
-                  <Popover.Button className="text-white font-bold text-4xl bg-blue-500 hover:bg-blue-700 py-2 px-4 rounded ">
-                    {convertFormation(formation)}
-                  </Popover.Button>
-
-                  <Popover.Panel className="absolute w-full bottom-16 max-h-[20vh] overflow-auto scrollbar-thin left-0 bg-black text-white rounded shadow-lg">
-                    <div className="p-2">
-                      <input
-                        type="text"
-                        placeholder="Search formations..."
-                        value={searchTerm}
-                        onChange={handleSearchChange}
-                        className="w-full p-2 mb-2 text-black rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      />
-                      <div>
-                        {allFormations
-                          .filter((formation) =>
-                            formation
-                              .toLowerCase()
-                              .includes(
-                                searchTerm.replaceAll("-", "").toLowerCase()
-                              )
-                          )
-                          .map((formation) => (
-                            <div
-                              key={formation}
-                              onClick={() =>
-                                handleFormationSelect(formation, close)
-                              }
-                              className="px-4 py-2 hover:bg-gray-800 cursor-pointer"
-                            >
-                              {convertFormation(formation)}
-                            </div>
-                          ))}
-                      </div>
-                    </div>
-                  </Popover.Panel>
-                </>
-              )}
-            </Popover>
+            <FormationButton />
           </div>
         </div>
       </div>
