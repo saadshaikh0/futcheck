@@ -443,7 +443,18 @@ export const fetchEvolvedPlayers = async ({ id, page }) => {
     throw error;
   }
 };
-
+export const fetchTrendingPlayers = async ({ page }) => {
+  try {
+    const response = await instance.get(`/trending_players/?page=${page}`, {
+      timeout: 60000,
+    });
+    const data = response.data;
+    return data;
+  } catch (error) {
+    console.error("Error fetching Trending players:", error);
+    throw error;
+  }
+};
 export const fetchEvoChains = async ({ page }) => {
   try {
     const response = await instance.get(`/get_evo_chains/?page=${page}`, {

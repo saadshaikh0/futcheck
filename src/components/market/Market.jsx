@@ -31,7 +31,7 @@ const Market = () => {
   if (isError) return <div>Error loading market trends</div>;
 
   return (
-    <div className="text-white md:h-[calc(100vh-4rem)] p-4 w-4/5 mx-auto">
+    <div className="text-white h-screen md:h-[calc(100vh-4rem)] p-4 w-full md:w-4/5 mx-auto">
       <div className="flex flex-col h-full ">
         <h1 className="text-2xl font-bold text-center mb-4">Market Trends</h1>
 

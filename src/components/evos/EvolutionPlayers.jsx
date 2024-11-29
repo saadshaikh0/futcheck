@@ -1,13 +1,14 @@
-import React, { useEffect, useRef, useState } from "react";
+// EvolutionPlayers.jsx
+
+import React, { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import PlayerCard from "../common/PlayerCard";
 import { fetchEvolvedPlayers } from "../../api/apiService";
+import InfinitePlayerList from "../common/InfinitePlayerList";
 
 const EvolutionPlayers = ({ id, onPlayerClick }) => {
   const [allPlayers, setAllPlayers] = useState([]);
   const [page, setPage] = useState(1);
-  const containerRef = useRef();
-  const prevPageRef = useRef(page);
   const [hasMore, setHasMore] = useState(true);
   const [showEvolved, setShowEvolved] = useState(false);
 
@@ -42,40 +43,36 @@ const EvolutionPlayers = ({ id, onPlayerClick }) => {
     }
   }, [data]);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollContainer = containerRef.current;
-      if (!scrollContainer) return;
-
-      const { scrollTop, scrollHeight, clientHeight } = scrollContainer;
-
-      // Check if the user has scrolled to the bottom of the div
-      if (
-        scrollTop + clientHeight >= scrollHeight - 5 &&
-        hasMore &&
-        !isFetching
-      ) {
-        // Trigger the next page fetch
-        setPage((prevPage) => prevPage + 1);
-      }
-    };
-
-    // Add scroll event listener
-    const scrollContainer = containerRef.current;
-    if (scrollContainer) {
-      scrollContainer.addEventListener("scroll", handleScroll);
+  const onLoadMore = () => {
+    if (hasMore && !isFetching) {
+      setPage((prevPage) => prevPage + 1);
     }
+  };
 
-    // Cleanup the event listener on component unmount
-    return () => {
-      if (scrollContainer) {
-        scrollContainer.removeEventListener("scroll", handleScroll);
-      }
-    };
-  }, [hasMore, isFetching]);
+  const renderPlayerCard = (playerPair, index) => (
+    <div
+      className="flex flex-col items-center"
+      onClick={() => onPlayerClick(playerPair.evolved)}
+    >
+      <div className="flex">
+        <div className="bg-gray-600 hover:bg-gray-700 relative rounded-lg m-2">
+          <PlayerCard
+            player={showEvolved ? playerPair.evolved : playerPair.base}
+            isMini={false}
+          />
+          <div className="absolute bg-black text-white top-0 left-0">
+            {showEvolved
+              ? playerPair.evolved.expected_price
+              : playerPair.base.latest_price}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <div className="relative w-full flex flex-col mx-auto mt-5 lg:px-5 h-[70vh] lg:h-full ">
+      {/* Header and Button */}
       <div className="flex flex-col gap-2 lg:flex-row justify-between items-center mb-4">
         <h2 className="text-white text-lg lg:text-xl font-medium">
           Evolution Players
@@ -90,54 +87,30 @@ const EvolutionPlayers = ({ id, onPlayerClick }) => {
           {showEvolved ? "Show Base Versions" : "Show Evolved Versions"}
         </button>
       </div>
-      <div
-        ref={containerRef}
-        className="bg-gray-800 rounded-lg pb-2 overflow-auto h-full"
-      >
-        <div className="mt-3 grid grid-cols-2 md:grid-cols-2 lg:grid-cols-6 gap-2 md:gap-4">
-          {allPlayers.map((playerPair, index) => (
-            <div
-              key={`${playerPair.evolved.id}-${index}`}
-              className="flex flex-col items-center"
-              onClick={() => onPlayerClick(playerPair.evolved)}
-            >
-              <div className="flex">
-                <div className="bg-gray-600 hover:bg-gray-700 relative rounded-lg m-2">
-                  <PlayerCard
-                    player={showEvolved ? playerPair.evolved : playerPair.base}
-                    isMini={false}
-                  />
-                  <div className="absolute bg-black text-white top-0 left-0">
-                    {showEvolved
-                      ? playerPair.evolved.expected_price
-                      : playerPair.base.latest_price}
-                  </div>
-                </div>
-              </div>
+
+      {/* Infinite Player List */}
+      <InfinitePlayerList
+        players={allPlayers}
+        renderPlayerCard={renderPlayerCard}
+        onLoadMore={onLoadMore}
+        hasMore={hasMore}
+        isLoading={isFetching}
+        containerClassName="bg-gray-800 rounded-lg pb-2 overflow-auto h-full"
+        loadingComponent={
+          !isLoading && isFetching ? (
+            <div className="flex justify-center my-4">
+              <div className="loader">Loading...</div>
             </div>
-          ))}
-          {isLoading &&
-            [...Array(12).keys()].map((_, idx) => (
-              <div
-                key={idx}
-                className="animate-pulse flex flex-col items-center"
-              >
-                <div className="rounded bg-slate-200 h-40 w-32 m-2"></div>
-                <div className="rounded bg-slate-200 h-40 w-32 m-2"></div>
-              </div>
-            ))}
-        </div>
-        {isFetching && !isLoading && (
-          <div className="flex justify-center my-4">
-            <div className="loader">Loading...</div>
-          </div>
-        )}
-        {!hasMore && (
-          <div className="text-center text-white my-4">
-            No more players to load.
-          </div>
-        )}
-      </div>
+          ) : null
+        }
+        noMoreDataComponent={
+          !hasMore ? (
+            <div className="text-center text-white my-4">
+              No more players to load.
+            </div>
+          ) : null
+        }
+      />
     </div>
   );
 };

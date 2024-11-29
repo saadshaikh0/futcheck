@@ -23,7 +23,7 @@ const FodderCard = ({ trend, isSelected, onClick }) => {
             )}
           >
             {trend.percentage_change > 0 ? "+" : ""}
-            {trend.percentage_change}%
+            {Number(trend.percentage_change).toFixed(2)}%
           </span>
         </div>
         <div>

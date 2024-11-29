@@ -220,7 +220,7 @@ const PlayerPriceGraph = ({ data, isLoading, isSbc }) => {
         <LineChart
           data={formattedData}
           animationDuration={0}
-          className="ml-2 md:ml-5"
+          className="pl-2 md:pl-5"
           margin={{ top: 20, right: 30, bottom: 5 }}
         >
           <XAxis
