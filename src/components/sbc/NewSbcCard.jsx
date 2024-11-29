@@ -25,7 +25,7 @@ const NewSbcCard = ({ data }) => {
   // Check if rewards is an array and contains an object with itemType 'player'
   const playerReward =
     Array.isArray(rewards) &&
-    rewards.find((reward) => reward.itemType === "player");
+    rewards.find((reward) => reward?.itemType === "player");
 
   return (
     <Link to={`/sbc/${setid}`}>
