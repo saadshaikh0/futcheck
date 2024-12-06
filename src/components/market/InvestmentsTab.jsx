@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import PlayerCard from "../common/PlayerCard";
-import { fetchTrendingPlayers } from "../../api/apiService";
+import { fetchInvestmentPlayers } from "../../api/apiService";
 import InfinitePlayerList from "../common/InfinitePlayerList";
 import CoinsImg from "../../assets/coins.png";
 const InvestmentsTab = () => {
@@ -17,8 +17,8 @@ const InvestmentsTab = () => {
     isFetching,
     refetch,
   } = useQuery({
-    queryKey: ["fetchTrendingPlayers", page],
-    queryFn: () => fetchTrendingPlayers({ page }),
+    queryKey: ["fetchInvestmentPlayers", page],
+    queryFn: () => fetchInvestmentPlayers({ page }),
     keepPreviousData: true,
     enabled: false,
   });
@@ -60,7 +60,7 @@ const InvestmentsTab = () => {
           <div className="bg-black text-white bg-opacity-80 text-sm lg:text-2xl font-bold z-10 flex items-center gap-1 text-center px-5 rounded-lg justify-center absolute top-0 left-1/2 -translate-x-1/2">
             <img src={CoinsImg} className="!w-5 h-5" alt="coins" />
             {player?.latest_price?.toLocaleString("en-us")}
-            {player?.trend && (
+            {/* {player?.trend && (
               <span
                 className={`${
                   player?.trend < 0 ? "text-red-500" : "text-green-500"
@@ -68,6 +68,11 @@ const InvestmentsTab = () => {
               >
                 {player?.trend > 0 ? "+" : ""}
                 {player?.trend}%
+              </span>
+            )} */}
+            {player?.investment_score && (
+              <span className="text-yellow-500 font-mono text-xs lg:text-lg">
+                {(player.investment_score * 100).toFixed(2)}%
               </span>
             )}
           </div>
