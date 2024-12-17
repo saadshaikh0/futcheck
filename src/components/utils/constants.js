@@ -2072,3 +2072,61 @@ export const roleUpgradeToIdMapping = {
   ST_FALSE_9: 43,
   ST_TARGET_FORWARD: 44,
 };
+export const CHEMISTRY_PROFILES = [
+  {
+    version: 18,
+    profile_id: 4,
+    full_chemistry_on_preferred_position: false,
+    base_override: true,
+    icon_override: true,
+    hero_override: true,
+    rules: [
+      { value: 2, parameterType: "NATION", calculationType: "NORMAL" },
+      { value: 2, parameterType: "LEAGUE", calculationType: "NORMAL" },
+      { value: 3, parameterType: "CLUB", calculationType: "NORMAL" },
+    ],
+    mappings: [],
+  },
+  {
+    version: 18,
+    profile_id: 5,
+    full_chemistry_on_preferred_position: false,
+    base_override: true,
+    icon_override: false,
+    hero_override: false,
+    rules: [
+      { value: 1, parameterType: "NATION", calculationType: "NORMAL" },
+      { value: 2, parameterType: "LEAGUE", calculationType: "NORMAL" },
+      { value: 1, parameterType: "CLUB", calculationType: "NORMAL" },
+    ],
+    mappings: [87, 129, 130],
+  },
+  {
+    version: 18,
+    profile_id: 6,
+    full_chemistry_on_preferred_position: true,
+    base_override: true,
+    icon_override: false,
+    hero_override: false,
+    rules: [
+      { value: 3, parameterType: "NATION", calculationType: "NORMAL" },
+      { value: 3, parameterType: "LEAGUE", calculationType: "NORMAL" },
+      { value: 3, parameterType: "CLUB", calculationType: "NORMAL" },
+    ],
+    mappings: [44],
+  },
+  {
+    version: 18,
+    profile_id: 9,
+    full_chemistry_on_preferred_position: false,
+    base_override: true,
+    icon_override: false,
+    hero_override: false,
+    rules: [
+      { value: 2, parameterType: "NATION", calculationType: "NORMAL" },
+      { value: 2, parameterType: "LEAGUE", calculationType: "NORMAL" },
+      { value: 2, parameterType: "CLUB", calculationType: "NORMAL" },
+    ],
+    mappings: [28],
+  },
+];
