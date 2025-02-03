@@ -21,6 +21,7 @@ const initialState = {
   chemistry: {},
   squadPrice: 0,
   rating: 0,
+  lockedPlayers: [],
 };
 
 const updateChemistryAndRating = (state) => {
@@ -42,6 +43,10 @@ const squadWizardSlice = createSlice({
       //   state.players = Array(state.positions.length).fill(null);
       updateChemistryAndRating(state);
     },
+    setAllPlayers: (state, action) => {
+      state.players = action.payload;
+      updateChemistryAndRating(state);
+    },
     setPlayerAtPosition: (state, action) => {
       const { index, player } = action.payload;
       state.players[index] = player;
@@ -51,6 +56,20 @@ const squadWizardSlice = createSlice({
       const nextNullIndex = state.players.findIndex((p) => p === null);
       if (nextNullIndex !== -1) {
         state.selectedPositionIndex = nextNullIndex;
+      }
+    },
+    toggleLockAtPosition: (state, action) => {
+      const index = action.payload;
+      const existingLockIndex = state.lockedPlayers.findIndex(
+        (lock) => lock.positionIndex === index
+      );
+      if (existingLockIndex !== -1) {
+        state.lockedPlayers.splice(existingLockIndex, 1);
+      } else if (state.players[index]) {
+        state.lockedPlayers.push({
+          positionIndex: index,
+          player: state.players[index],
+        });
       }
     },
     removePlayerAtPosition: (state, action) => {
@@ -85,6 +104,8 @@ export const {
   swapPlayersAtPositions,
   setLoading,
   setError,
+  setAllPlayers,
+  toggleLockAtPosition,
 } = squadWizardSlice.actions;
 
 export default squadWizardSlice.reducer;

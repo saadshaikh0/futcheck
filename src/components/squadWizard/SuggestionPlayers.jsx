@@ -6,7 +6,7 @@ import { useDebounce } from "@uidotdev/usehooks";
 import { useSelector } from "react-redux";
 import { getFormationPositions } from "../utils/formations";
 import { ChemistryPoints } from "../PlayerViewCards/StatsCard";
-import { getChemistryPoints } from "./squadUtils";
+import { formatNumber, getChemistryPoints } from "./squadUtils";
 import { convertFormation } from "../utils/utils";
 import { useInView } from "react-intersection-observer";
 import DynamicRangeSlider from "./DynamicRangeSlider"; // Import the custom slider component
@@ -113,7 +113,7 @@ const SuggestionPlayers = ({ handlePlayerSelect }) => {
           {isEditing ? (
             <input
               type="number"
-              value={budgetInput}
+              value={parseInt(budgetInput)}
               onChange={handleBudgetChange}
               onBlur={handleBlur}
               min={0}
@@ -126,11 +126,15 @@ const SuggestionPlayers = ({ handlePlayerSelect }) => {
               onClick={() => setIsEditing(true)}
               className="w-full bg-transparent text-white mb-2 cursor-pointer"
             >
-              {parseInt(budgetInput).toLocaleString("en-us")}
+              {formatNumber(parseInt(budgetInput))}
             </span>
           )}
         </label>
-        <DynamicRangeSlider value={budgetInput} onChange={handleBudgetChange} />
+        <DynamicRangeSlider
+          value={budgetInput}
+          onChange={handleBudgetChange}
+          max={15000000}
+        />
       </div>
       {error && <p>Error loading suggestions: {error.message}</p>}
       <div

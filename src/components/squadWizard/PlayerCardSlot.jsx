@@ -15,10 +15,14 @@ import { ItemTypes } from "../utils/constants";
 import classNames from "classnames";
 import { ChemistryPoints } from "../PlayerViewCards/StatsCard";
 import { useHandleResize } from "../utils/hooks";
+import { toggleLockAtPosition } from "../../redux/squadWizardSlice";
 
 const PlayerCardSlot = ({ left, top, transform, player, index, position }) => {
   const dispatch = useDispatch();
   const isMobile = useHandleResize();
+  const lockedPlayers = useSelector((state) => state.squadWizard.lockedPlayers);
+  const isLocked = lockedPlayers.some((lock) => lock.positionIndex === index);
+
   const selectedPositionIndex = useSelector(
     (state) => state.squadWizard.selectedPositionIndex
   );
@@ -64,7 +68,9 @@ const PlayerCardSlot = ({ left, top, transform, player, index, position }) => {
 
   const currentPosition = positions[index]?.position;
   const canPlayPosition = player?.position?.includes(currentPosition);
-
+  const handleLockToggle = () => {
+    dispatch(toggleLockAtPosition(index));
+  };
   return (
     <div
       ref={(node) => drag(drop(node))}
@@ -75,8 +81,14 @@ const PlayerCardSlot = ({ left, top, transform, player, index, position }) => {
         top,
         transform,
         opacity: isDragging ? 0.5 : 1,
-        border: isOver ? "2px dashed #00f" : "none",
+        border: isOver
+          ? "2px dashed #00f"
+          : isLocked
+          ? "2px solid blue"
+          : "none",
         cursor: player ? "move" : "default",
+        touchAction: "none", // <-- Add this
+        userSelect: "none", // <-- Optionally add this
       }}
     >
       {player ? (
@@ -104,13 +116,21 @@ const PlayerCardSlot = ({ left, top, transform, player, index, position }) => {
               <ExclamationCircleIcon className="w-4 h-4 lg:w-8 lg:h-8 text-yellow-500 bg-black rounded-full" />
             )}
           </div>
-          <div className=" absolute top-0 lg:top-2 z-50 -right-1 lg:-right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <div className=" flex flex-col absolute top-0 lg:top-2 z-50 -right-1 lg:-right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             <div
               onClick={handleRemoveClick}
               className="flex items-center justify-center w-4 h-4 lg:w-8 lg:h-8 rounded-full bg-black hover:bg-red-600 transition-colors duration-300"
             >
               <XMarkIcon className="w-6 h-6 text-white" />
             </div>
+            <button
+              onClick={handleLockToggle}
+              className={`px-2 py-1 text-white rounded ${
+                isLocked ? "bg-red-600" : "bg-green-600"
+              }`}
+            >
+              {isLocked ? "Unlock" : "Lock"}
+            </button>
           </div>
         </div>
       ) : (

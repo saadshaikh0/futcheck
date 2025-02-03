@@ -5,6 +5,7 @@ import CoinsImg from "../../assets/coins.png";
 import SolutionsPitch from "../../assets/updated-field.png";
 import FormationButton from "./FormationButton";
 import PlayerSuggestionBox from "./PlayerSuggestionBox";
+import SquadInsights from "./SquadInsights";
 
 const SquadWizardMobile = () => {
   const positions = useSelector((state) => state.squadWizard.positions);
@@ -20,7 +21,9 @@ const SquadWizardMobile = () => {
           and ace the game.
         </p>
       </div>
-
+      <div className="m-4">
+        <SquadInsights />
+      </div>
       <div
         id="Pitch"
         className="relative w-full h-[70vh] "

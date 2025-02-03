@@ -510,3 +510,24 @@ export const fetchMarketTrends = async () => {
     throw error;
   }
 };
+export const generateSquad = async ({ budget, formation, lockedPlayers }) => {
+  try {
+    const response = await instance.post(
+      "https://d9bl9suyr1.execute-api.us-east-1.amazonaws.com/default/squad_generator",
+      {
+        budget,
+        formation,
+        lockedPlayers,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error generating squad:", error);
+    throw error;
+  }
+};

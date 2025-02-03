@@ -28,7 +28,11 @@ const SquadWizardWrapper = () => {
       <div className="block lg:hidden overflow-hidden">
         <DndProvider
           backend={TouchBackend}
-          options={{ enableMouseEvents: true }}
+          options={{
+            enableMouseEvents: true,
+            preventScroll: true,
+            ignoreContextMenu: true,
+          }}
         >
           <SquadWizardMobile />
         </DndProvider>
