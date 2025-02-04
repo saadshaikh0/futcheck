@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { generateSquad, fetchPlayersByIds } from "../../api/apiService";
-import { setAllPlayers } from "../../redux/squadWizardSlice";
+import { setAllPlayers, setLoading } from "../../redux/squadWizardSlice";
 import DynamicRangeSlider from "./DynamicRangeSlider";
 import { formatNumber } from "./squadUtils";
 const SquadInsights = () => {
@@ -14,7 +14,7 @@ const SquadInsights = () => {
   const lockedPlayers = useSelector((state) => state.squadWizard.lockedPlayers);
   const chemistry = useSelector((state) => state.squadWizard.chemistry);
   const rating = useSelector((state) => state.squadWizard.rating);
-
+  const loading = useSelector((state) => state.squadWizard.loading);
   const handleBlur = () => {
     setIsEditing(false);
   };
@@ -24,6 +24,8 @@ const SquadInsights = () => {
   };
 
   const handleGenerate = async () => {
+    dispatch(setLoading(true));
+
     try {
       const data = await generateSquad({
         budget: budgetInput,
@@ -42,6 +44,8 @@ const SquadInsights = () => {
       dispatch(setAllPlayers(mappedPlayers));
     } catch (err) {
       console.error(err);
+    } finally {
+      dispatch(setLoading(false));
     }
   };
 
@@ -93,9 +97,10 @@ const SquadInsights = () => {
           />
           <button
             onClick={handleGenerate}
-            className="mt-4 px-4 py-2 bg-blue-600 text-white"
+            className="mt-4 px-4 py-2 bg-blue-600 text-white disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={loading} // disable if loading
           >
-            Generate
+            {loading ? "Generating..." : "Generate"}
           </button>
         </div>
       ) : (

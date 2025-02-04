@@ -21,7 +21,7 @@ const SquadWizardWrapper = () => {
   return (
     <div>
       <div className="hidden  lg:block">
-        <DndProvider backend={HTML5Backend}>
+        <DndProvider backend={backend}>
           <SquadWizard />
         </DndProvider>
       </div>

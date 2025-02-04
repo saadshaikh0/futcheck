@@ -17,11 +17,37 @@ import { ChemistryPoints } from "../PlayerViewCards/StatsCard";
 import { useHandleResize } from "../utils/hooks";
 import { toggleLockAtPosition } from "../../redux/squadWizardSlice";
 
+const LoaderOverlay = () => (
+  <div className="absolute inset-0 bg-black bg-opacity-10 flex items-center justify-center z-10">
+    <svg
+      className="animate-spin h-6 w-6 text-white"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+    >
+      <circle
+        className="opacity-25"
+        cx="12"
+        cy="12"
+        r="10"
+        stroke="currentColor"
+        strokeWidth="4"
+      />
+      <path
+        className="opacity-75"
+        fill="currentColor"
+        d="M4 12a8 8 0 018-8v8H4z"
+      />
+    </svg>
+  </div>
+);
+
 const PlayerCardSlot = ({ left, top, transform, player, index, position }) => {
   const dispatch = useDispatch();
   const isMobile = useHandleResize();
   const lockedPlayers = useSelector((state) => state.squadWizard.lockedPlayers);
   const isLocked = lockedPlayers.some((lock) => lock.positionIndex === index);
+  const loading = useSelector((state) => state.squadWizard.loading);
 
   const selectedPositionIndex = useSelector(
     (state) => state.squadWizard.selectedPositionIndex
@@ -42,7 +68,7 @@ const PlayerCardSlot = ({ left, top, transform, player, index, position }) => {
   const [{ isDragging }, drag] = useDrag({
     type: ItemTypes.PLAYER_CARD,
     item: { index, player },
-    canDrag: !!player, // Only draggable if a player is present
+    canDrag: !!player && !loading, // Only draggable if a player is present
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
@@ -51,6 +77,7 @@ const PlayerCardSlot = ({ left, top, transform, player, index, position }) => {
   // Drop target setup
   const [{ isOver }, drop] = useDrop({
     accept: ItemTypes.PLAYER_CARD,
+    canDrop: () => !loading,
     drop: (draggedItem) => {
       if (draggedItem.index !== index) {
         dispatch(
@@ -152,6 +179,7 @@ const PlayerCardSlot = ({ left, top, transform, player, index, position }) => {
       >
         {position}
       </div>
+      {loading && <LoaderOverlay />}
     </div>
   );
 };
