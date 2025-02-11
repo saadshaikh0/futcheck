@@ -16,7 +16,7 @@ import TabsHeader from "./hometabs/TabsHeader";
 import SBCSection from "./hometabs/SBCSection";
 import Footer from "./common/Footer";
 
-import FOOTBALL_STADIUM_IMAGE from "../assets/football_stadium_background.jpg";
+import FOOTBALL_STADIUM_IMAGE from "../assets/726adb2420c6698e95b64a931250b0e63ac18633.png";
 
 const tabs = ["RECENT", "HOT", "EVOS"];
 
@@ -73,9 +73,12 @@ const NewHomePage = () => {
         backgroundImage:
           window.innerWidth >= 768 ? `url(${FOOTBALL_STADIUM_IMAGE})` : "none",
         backgroundAttachment: window.innerWidth >= 768 ? "fixed" : "scroll",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "100% 100%",
       }}
     >
-      <div className="absolute inset-0 bg-black bg-fixed h-full opacity-70"></div>
+      <div className="absolute inset-0 bg-purple-950 bg-fixed h-full opacity-25"></div>
 
       <div className="w-full h-full absolute z-10">
         {/* Tabs Header */}
