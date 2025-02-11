@@ -68,7 +68,7 @@ const PlayerCardSlot = ({ left, top, transform, player, index, position }) => {
   const [{ isDragging }, drag] = useDrag({
     type: ItemTypes.PLAYER_CARD,
     item: { index, player },
-    canDrag: !!player && !loading, // Only draggable if a player is present
+    canDrag: !!player && !loading && !isLocked, // Only draggable if a player is present
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
@@ -179,7 +179,7 @@ const PlayerCardSlot = ({ left, top, transform, player, index, position }) => {
       >
         {position}
       </div>
-      {loading && <LoaderOverlay />}
+      {loading && !isLocked && <LoaderOverlay />}
     </div>
   );
 };
