@@ -36,6 +36,8 @@ const Navbar = () => {
   const [referenceElement, setReferenceElement] = useState();
   const [popperElement, setPopperElement] = useState();
   const [mobileReferenceElement, setMobileReferenceElement] = useState();
+  const [menuPopperElement, setMenuPopperElement] = useState();
+
   const dispatch = useDispatch();
   const app = useSelector((state) => state.app);
 
@@ -53,6 +55,19 @@ const Navbar = () => {
   useFetchUserInfo();
 
   useOutsideClick(inputRef, closePanel);
+  const { styles: menuStyles, attributes: menuAttributes } = usePopper(
+    mobileReferenceElement,
+    menuPopperElement,
+    {
+      placement: "bottom-start", // Places it just below the header
+      modifiers: [
+        {
+          name: "offset",
+          options: { offset: [0, 0] }, // Ensures it's flush with the header
+        },
+      ],
+    }
+  );
 
   // Initialize Popper
   const { styles, attributes } = usePopper(referenceElement, popperElement, {
@@ -237,7 +252,18 @@ const Navbar = () => {
                         )}
                       </button>
                     </Popover.Button>
-                    <Popover.Panel className="absolute z-10 top-[5vh] -right-[15px]">
+
+                    {/* Mobile Menu Panel - Full Width and Positioned Below Header */}
+                    <Popover.Panel
+                      ref={setMenuPopperElement} // Attach the popper element
+                      style={{
+                        ...menuStyles.popper,
+                        width: "100vw",
+                        zIndex: 500,
+                      }} // Full width, positioned dynamically
+                      {...menuAttributes.popper}
+                      className="absolute bg-[#28004d] shadow-lg"
+                    >
                       <MobileMenuPopover />
                     </Popover.Panel>
                   </>
