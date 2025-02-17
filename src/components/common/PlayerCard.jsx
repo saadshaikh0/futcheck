@@ -458,9 +458,9 @@ const PlayerCard = ({
             className={classNames(
               "absolute  flex justify-center   gap-[0.4em] ",
               isSuperMini
-                ? "flex-col items-end  bg-white bg-opacity-10 top-[8%] right-[8%] py-2"
+                ? "flex-col items-end   bg-opacity-10 top-[8%] right-[8%] py-2"
                 : isMini
-                ? `flex-col items-end bg-white bg-opacity-10 top-[10.8%] right-[10%] py-4`
+                ? `flex-col items-end  bg-opacity-10 top-[10.8%] right-[10%] py-4`
                 : isAllPlayers
                 ? "top-[82.8%] w-full"
                 : "top-[82.8%] w-full"

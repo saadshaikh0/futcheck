@@ -1,5 +1,3 @@
-// NewHomePage.jsx
-
 import React, { useEffect, useState, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 
@@ -11,16 +9,18 @@ import {
 } from "../api/apiService";
 
 import PlayerSwiper from "./hometabs/PlayerSwiper";
-import LatestPlayers from "./hometabs/latestPlayers";
 import TabsHeader from "./hometabs/TabsHeader";
 import SBCSection from "./hometabs/SBCSection";
 import Footer from "./common/Footer";
 
 import FOOTBALL_STADIUM_IMAGE from "../assets/726adb2420c6698e95b64a931250b0e63ac18633.png";
+import AllPlayersSection from "./hometabs/AllPlayersSection";
+import { useHandleResize } from "./utils/hooks";
 
 const tabs = ["RECENT", "HOT", "EVOS"];
 
 const NewHomePage = () => {
+  const isMobile = useHandleResize();
   const { data: topRatedPlayers = [] } = useQuery({
     queryKey: ["fetchTopRatedPlayers"],
     queryFn: fetchTopRatedPlayers,
@@ -68,41 +68,43 @@ const NewHomePage = () => {
 
   return (
     <div
-      className="home-page relative min-h-[calc(100vh-4rem)] bg-black md:bg-fixed z-10 flex-grow w-full"
+      className="home-page relative min-h-[calc(100vh-4rem)] bg-black z-10 flex-grow w-full bg-no-repeat bg-center md:bg-fixed"
       style={{
-        backgroundImage:
-          window.innerWidth >= 768 ? `url(${FOOTBALL_STADIUM_IMAGE})` : "none",
-        backgroundAttachment: window.innerWidth >= 768 ? "fixed" : "scroll",
-        backgroundPosition: "center",
+        backgroundImage: `url(${FOOTBALL_STADIUM_IMAGE})`,
+        backgroundSize: isMobile ? "220%" : "cover", // Adjust zoom level on mobile
+        backgroundPosition: isMobile ? "top center" : "center center", // Adjust position
         backgroundRepeat: "no-repeat",
-        backgroundSize: "100% 100%",
       }}
     >
-      <div className="absolute inset-0 bg-purple-950 bg-fixed h-full opacity-25"></div>
+      {/* Background Overlay */}
+      <div className="absolute inset-0 bg-[#1E0B20] h-full opacity-60 md:opacity-55"></div>
 
+      {/* Content Wrapper */}
       <div className="w-full h-full absolute z-10">
-        {/* Tabs Header */}
         <TabsHeader
           tabs={tabs}
           selectedTab={selectedTab}
           handleTabChange={handleTabChange}
         />
 
-        {/* Content Based on Selected Tab */}
-        <>
-          <PlayerSwiper
-            selectedTab={selectedTab}
-            ref={playerSwiperRef}
-            players={players}
-          />
-          {/* Show LatestPlayers on Mobile */}
-          <div className="mt-4 px-4 md:hidden">
-            <LatestPlayers players={players} selectedTab={selectedTab} />
-          </div>
-        </>
+        {/* Swiper Section */}
+        <PlayerSwiper
+          selectedTab={selectedTab}
+          ref={playerSwiperRef}
+          players={players}
+        />
 
-        {/* SBC Section */}
-        <SBCSection sbcs={sbcs} />
+        {/* Gradient Section & Additional Content */}
+        <div
+          className="w-full"
+          style={{
+            background:
+              "linear-gradient(168deg, #23083A 43.43%, rgba(49, 10, 82, 0.08) 70.45%)",
+          }}
+        >
+          <AllPlayersSection />
+          <SBCSection sbcs={sbcs} />
+        </div>
 
         {/* Footer */}
         <Footer />

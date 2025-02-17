@@ -11,11 +11,11 @@ const RolesCard = ({ plusplusroles, plusroles }) => {
         >
           <div className="flex items-center gap-1">
             <span className="text-sm font-medium text-white">
-              {roleMapping[role].positionName}
+              {roleMapping[role]?.positionName}
             </span>
             <span className="text-sm text-gray-400">|</span>
             <span className="text-lg font-semibold text-white">
-              {roleMapping[role].cleanName}
+              {roleMapping[role]?.cleanName}
             </span>
           </div>
           <span className="text-green-500 text-lg font-bold">++</span>

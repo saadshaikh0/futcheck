@@ -13,7 +13,7 @@ import { useHandleResize } from "./utils/hooks";
 import FilterTabs from "./filterPopups/FilterTabs";
 import InfinitePlayerList from "./common/InfinitePlayerList";
 
-const AllPlayers = () => {
+const AllPlayers = ({ isHome = false }) => {
   const filters = useSelector((state) => state.allPlayers.filters);
   const isClub = useSelector((state) => state.allPlayers.isClub);
   const userInfo = useSelector((state) => state.app.userInfo);
@@ -126,15 +126,17 @@ const AllPlayers = () => {
   return (
     <div className="relative w-full md:w-4/5 flex flex-col mx-auto mt-5 md:mt-0 px-5 h-[calc(90vh)] md:h-[calc(100vh-4rem)]">
       {/* Header */}
-      <div className="mb-1">
-        <h2 className="text-white text-xl md:text-3xl font-medium">
-          EAFC 25 Players Database
-        </h2>
-        <p className="text-slate-400 text-md md:text-lg">
-          Browse through Eafc 25 players catalog and filter by rating, position,
-          team, etc.
-        </p>
-      </div>
+      {!isHome && (
+        <div className="mb-1">
+          <h2 className="text-white text-xl md:text-3xl font-medium">
+            EAFC 25 Players Database
+          </h2>
+          <p className="text-slate-400 text-md md:text-lg">
+            Browse through Eafc 25 players catalog and filter by rating,
+            position, team, etc.
+          </p>
+        </div>
+      )}
 
       {/* Filters */}
       {filteredObject.length ? (
