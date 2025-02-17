@@ -1,3 +1,4 @@
+/* Base swiper styles */
 .swiper {
   width: 100%;
 }
@@ -6,15 +7,21 @@
   background-position: center;
   background-size: cover;
   width: 17rem;
-  /* height: 300px; */
 }
+
+/* For home-page class */
 .home-page .swiper-slide {
   background-position: center;
   background-size: cover;
   width: 350px !important;
   height: 420px !important;
 }
-/* Adjust width at approximately 125% scale */
+.home-page .swiper-slide.active-slide {
+  transform: scale(1.2) !important;
+  transition-delay: 0.3s;
+  z-index: 1000 !important;
+}
+/* Scale down for high-density screens */
 @media only screen and (min-resolution: 120dpi),
   only screen and (min-device-pixel-ratio: 1.25),
   only screen and (min-resolution: 1.25dppx) {
@@ -22,10 +29,7 @@
     width: 14rem;
   }
   .home-page .swiper-slide {
-    background-position: center;
-    background-size: cover;
     width: 17rem !important;
-    /* height: 350px !important; */
   }
 }
 @media only screen and (min-resolution: 150dpi),
@@ -36,26 +40,37 @@
   }
 }
 
+/* Mobile overrides */
+@media (max-width: 768px) {
+  .swiper-slide {
+    width: 14rem !important;
+    height: auto !important;
+  }
+  .home-page .swiper-slide {
+    width: 8.5rem !important;
+    height: 15rem !important;
+  }
+  .home-page .swiper-slide.active-slide {
+    transform: scale(1.4) !important;
+    transition-delay: 0.3s;
+    z-index: 1000 !important;
+  }
+}
+
+/* Additional styling */
 .home-page .swiper-wrapper {
   margin-top: 10vh;
 }
-/* .home-page .swiper-slide:not(.active-slide) {
-  opacity: 0.8; /* Smaller size for non-active slides */
-/*} */
+
 .home-page .swiper.swiper-coverflow {
   z-index: -1;
 }
-.home-page .swiper-slide.active-slide {
-  transform: scale(1.2) !important;
-  transition-delay: 0.3s;
-}
 
-.swiper-3d .swiper-slide-shadow-left {
-  background-image: none;
-}
+.swiper-3d .swiper-slide-shadow-left,
 .swiper-3d .swiper-slide-shadow-right {
   background-image: none;
 }
+
 .swiper-slide img {
   display: block;
   width: 100%;

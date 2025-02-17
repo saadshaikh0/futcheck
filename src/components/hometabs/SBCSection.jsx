@@ -21,14 +21,17 @@ const SBCSection = ({ sbcs }) => {
 
   return (
     <div
+      // style={{
+      //   background: `url(${MY_CLUB_BG})`,
+      //   backgroundSize: "cover",
+      //   backgroundRepeat: "no-repeat",
+      // }}
       style={{
-        background: `url(${MY_CLUB_BG})`,
-        backgroundSize: "cover",
-        backgroundRepeat: "no-repeat",
+        background: "transparent",
       }}
-      className="w-full relative mt-10 px-10 py-5 text-gray-200"
+      className="w-full relative px-10 py-5 text-gray-200"
     >
-      <div className="absolute inset-0 bg-black opacity-90"></div>
+      {/* <div className="absolute inset-0 bg-black opacity-90"></div> */}
       <div className="relative">
         <h2 className="text-center font-medium text-4xl">LATEST SBCS</h2>
         <div className="mt-5 gap-5 hidden md:block">
