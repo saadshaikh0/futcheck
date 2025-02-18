@@ -20,7 +20,7 @@ const MarqueeSbcCard = ({ data }) => {
   } = data;
   return (
     <Link to={`/sbc/${setid}`}>
-      <div className="bg-[#310A52] h-full w-[600px] rounded-md flex flex-col items-center text-white">
+      <div className="bg-[#310A52] rounded-2xl h-full w-[600px] flex flex-col items-center text-white">
         <div className="grid w-[600px] grid-cols-[2fr_1fr] flex-grow ">
           <div className="flex w-full flex-col py-5 px-4 gap-3">
             <p className="text-white text-lg font-bold text-center">{name}</p>
@@ -58,7 +58,7 @@ const MarqueeSbcCard = ({ data }) => {
             </div>
           </div>
         </div>
-        <div className="bg-purple-900 bg-opacity-70 w-full cursor-pointer py-2 ">
+        <div className="bg-purple-900 rounded-b-2xl bg-opacity-70 w-full cursor-pointer py-2 ">
           <p className="text-center font-bold">Show Challenges</p>
         </div>
       </div>

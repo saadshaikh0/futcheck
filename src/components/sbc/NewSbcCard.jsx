@@ -29,12 +29,12 @@ const NewSbcCard = ({ data }) => {
 
   return (
     <Link to={`/sbc/${setid}`}>
-      <div className="bg-[#13151D] h-full rounded-md flex flex-col items-center text-white">
-        <div className="grid grid-cols-1  md:grid-cols-[2fr_1fr] flex-grow ">
-          <div className="flex flex-col order-2 md:order-1 py-5 px-4 gap-3">
-            <p className="text-white text-lg font-bold text-center">{name}</p>
-            <p className="text-[#B0B0B0] flex-grow">{description}</p>
-            <div className="grid grid-cols-3 text-white font-bold text-center ">
+      <div className="bg-[#310A52] whitespace-pre-wrap w-4/5 rounded-2xl h-[50vh] flex flex-col items-center text-white">
+        <div className="flex flex-col md:grid md:grid-cols-[2fr_1fr] flex-grow ">
+          <div className="flex overflow-y-auto flex-grow flex-col order-2 md:order-1 py-5 px-4 ">
+            <p className="text-white text-lg font-bold text-start">{name}</p>
+            <p className="text-[#B0B0B0] flex-grow text-start">{description}</p>
+            <div className="grid grid-cols-3 text-white text-xs mt-3 font-bold text-center items-end ">
               <div className="flex flex-col">
                 <span>Challenges</span>
                 <span>{challengesCount}</span>
@@ -55,7 +55,7 @@ const NewSbcCard = ({ data }) => {
               </div>
             </div>
           </div>
-          <div className="flex flex-col order-1 md:order-2 items-center justify-center">
+          <div className="flex flex-col h-3/5 md:mt-0 md:h-auto w-2/3 md:w-auto mx-auto order-1 md:order-2 items-center justify-center">
             {playerReward ? (
               <div
                 key={playerReward.id}
@@ -69,7 +69,7 @@ const NewSbcCard = ({ data }) => {
                 </div>
               </div>
             ) : (
-              <>
+              <div className="">
                 <img
                   src={buildDynamicUrl("sbc", setid)}
                   alt="Serie A TOTS Upgrade"
@@ -79,11 +79,11 @@ const NewSbcCard = ({ data }) => {
                   <img src={CoinsImg} className="mt-1" width={20} />
                   {totalCost?.toLocaleString("en-US")}
                 </div>
-              </>
+              </div>
             )}
           </div>
         </div>
-        <div className="bg-gray-800 w-full cursor-pointer py-2 ">
+        <div className="bg-purple-900 rounded-b-2xl w-full cursor-pointer py-2 ">
           <p className="text-center font-bold">Show Challenges</p>
         </div>
       </div>

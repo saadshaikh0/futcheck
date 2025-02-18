@@ -7,9 +7,13 @@ import {
 } from "../../api/apiService";
 import { useQuery } from "@tanstack/react-query";
 import PlayerCard from "../common/PlayerCard";
+import { useHandleResize } from "../utils/hooks";
+import { ChevronDownIcon } from "@heroicons/react/20/solid";
 
 const AllPlayersSection = () => {
   const [activeTab, setActiveTab] = useState("Trending");
+  const [showAll, setShowAll] = useState(false);
+  const isMobile = useHandleResize();
 
   // Fetch top-rated players for "Trending" or "Recent" tabs
   const { data: topRatedPlayers = [] } = useQuery({
@@ -30,12 +34,14 @@ const AllPlayersSection = () => {
     keepPreviousData: true,
     enabled: false, // disable by default
   });
+
   const { data: latestPlayers = [] } = useQuery({
     queryKey: ["fetchLatestPlayers"],
     queryFn: fetchLatestPlayers,
     cacheTime: Infinity,
     staleTime: Infinity,
   });
+
   // When tab changes to "Investment", refetch
   useEffect(() => {
     if (activeTab === "Investment") {
@@ -54,8 +60,19 @@ const AllPlayersSection = () => {
     playersToRender = topRatedPlayers;
   }
 
+  // Limit players to 12 if not showing all
+  const displayedPlayers =
+    isMobile && !showAll ? playersToRender.slice(0, 12) : playersToRender;
+
   return (
-    <div style={{ background: "transparent" }}>
+    <div
+      className="pb-10"
+      style={{
+        background: isMobile
+          ? "linear-gradient(0.41deg, rgba(0, 0, 0, 0.85) 4.22%, #220838 100.61%)"
+          : "transparent",
+      }}
+    >
       <div className="relative w-4/5 mx-auto">
         {/* Transition Blur Effect */}
         <div
@@ -77,7 +94,10 @@ const AllPlayersSection = () => {
                   className={`hover:underline ${
                     activeTab === tab ? "underline" : ""
                   }`}
-                  onClick={() => setActiveTab(tab)}
+                  onClick={() => {
+                    setActiveTab(tab);
+                    setShowAll(false); // Reset showAll when tab changes
+                  }}
                 >
                   {tab}
                 </button>
@@ -87,7 +107,7 @@ const AllPlayersSection = () => {
 
           {/* Render the players for the selected tab */}
           <div className="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-10">
-            {playersToRender.map((player, idx) => (
+            {displayedPlayers.map((player, idx) => (
               <PlayerCard
                 key={idx}
                 player={player}
@@ -97,6 +117,19 @@ const AllPlayersSection = () => {
               />
             ))}
           </div>
+
+          {/* Show More button for mobile */}
+          {isMobile && !showAll && playersToRender.length > 12 && (
+            <div className="flex justify-center mt-4">
+              <button
+                className="flex items-center gap-2 text-white bg-purple-600 hover:bg-purple-700 py-2 px-4 rounded-lg"
+                onClick={() => setShowAll(true)}
+              >
+                Show More
+                <ChevronDownIcon className="w-5 h-5" />
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

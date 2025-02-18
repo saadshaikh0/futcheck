@@ -146,7 +146,7 @@ const Navbar = () => {
         </Link>
 
         <nav
-          className="relative md:w-4/5 mx-4 items-center md:mx-auto sm:flex sm:items-center sm:justify-between"
+          className="relative md:w-4/5 w-full mx-4 items-center md:mx-auto sm:flex sm:items-center sm:justify-between"
           aria-label="Global"
         >
           <div className="flex items-center grow justify-between gap-1 md:gap-4">

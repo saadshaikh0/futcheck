@@ -99,7 +99,7 @@ const NewHomePage = () => {
           className="w-full"
           style={{
             background:
-              "linear-gradient(168deg, #23083A 43.43%, rgba(49, 10, 82, 0.08) 70.45%)",
+              "linear-gradient(168deg,     rgb(35, 8, 58) 40%,     rgba(49, 10, 82, 0.5) 60%,     rgba(0, 0, 0, 0.8) 80%,     black 100%)",
           }}
         >
           <AllPlayersSection />
