@@ -76,31 +76,40 @@ const NewSbcCard = ({ data }) => {
         </div>
 
         {/* Right Section */}
-        <div className="flex flex-col h-3/5 md:mt-0 md:h-auto w-full  md:w-auto mx-auto order-1 md:order-2 items-center justify-center">
-          {playerReward ? (
-            <div
-              key={playerReward.id}
-              className="flex flex-col justify-center items-center w-2/3"
-            >
-              <PlayerRewardWrapper id={playerReward.id} isMini={false} />
-              <div className="flex justify-center items-center gap-2 -mt-3 pb-2">
-                <img src={CoinsImg} className="mt-1" width={20} />
-                {totalCost?.toLocaleString("en-US")}
-              </div>
+        <div className="flex flex-col  h-3/5 max-h-60 md:mt-0 md:h-auto w-full  md:w-auto mx-auto order-1 md:order-2 items-center justify-start md:justify-start pb-1 ">
+          <div className="font-bold hidden md:block">
+            <div className="flex justify-center items-center gap-1   bg-purple-800 my-2 p-1 px-2 rounded-md bg-opacity-70">
+              <img src={CoinsImg} className="mt-1" width={20} />
+              {totalCost}
             </div>
-          ) : (
-            <div className="w-4/5 scale-110">
-              <img
-                src={buildDynamicUrl("sbc", setid)}
-                alt="Serie A TOTS Upgrade"
-                loading="lazy"
-              />
-              <div className="flex justify-center items-center gap-2 -mt-3 pb-2">
-                <img src={CoinsImg} className="mt-1" width={20} />
-                {totalCost?.toLocaleString("en-US")}
+          </div>
+          <div
+            className="flex justify-center mb-2"
+            style={{ transform: isMobile ? "" : "scale(1.2)" }}
+          >
+            {playerReward ? (
+              <div
+                key={playerReward.id}
+                className="flex flex-col justify-center items-center w-2/3"
+              >
+                <PlayerRewardWrapper id={playerReward.id} isMini={false} />
               </div>
+            ) : (
+              <div className="w-4/5 scale-110">
+                <img
+                  src={buildDynamicUrl("sbc", setid)}
+                  alt="Serie A TOTS Upgrade"
+                  loading="lazy"
+                />
+              </div>
+            )}
+          </div>
+          <div className="font-bold block md:hidden">
+            <div className="flex justify-center items-center gap-1   bg-purple-800 my-2 p-1 px-2 rounded-md bg-opacity-70">
+              <img src={CoinsImg} className="mt-1" width={20} />
+              {totalCost}
             </div>
-          )}
+          </div>
         </div>
       </div>
 

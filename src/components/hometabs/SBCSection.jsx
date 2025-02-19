@@ -65,7 +65,7 @@ const SBCSection = ({ sbcs }) => {
           className="flex gap-5 md:hidden no-scrollbar mt-2 overflow-x-auto whitespace-nowrap scroll-smooth scrollbar-hide "
         >
           {filteredSbcs.map((sbc, index) => (
-            <div key={index} className="shrink-0 w-[70vw]">
+            <div key={index} className="shrink-0 min-w-[250px] max-w-[250px]">
               <NewSbcCard data={sbc} />
             </div>
           ))}
