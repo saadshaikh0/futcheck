@@ -4,15 +4,19 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchSbcsData } from "../../api/apiService";
 import NewSbcCard from "./NewSbcCard";
 import SBC_BACKGROUND from "../../assets/sbc_background_field.webp";
+
 const currentTimestamp = Date.now() + new Date().getTimezoneOffset() * 60000;
+
 const SBC = () => {
   const { data: sbcs = [] } = useQuery({
     queryKey: ["fetchSbcs"],
     queryFn: fetchSbcsData,
   });
+
   const oneDayInMilliseconds = 24 * 60 * 60 * 1000;
   const twoDaysInMilliseconds = 2 * oneDayInMilliseconds;
   const [searchTerm, setSearchTerm] = React.useState("");
+
   return (
     <div
       className="min-h-[calc(100vh-4rem)]"
@@ -22,7 +26,7 @@ const SBC = () => {
         backgroundAttachment: "fixed",
       }}
     >
-      <div className={`fixed inset-0 bg-black  opacity-70`}></div>
+      <div className="fixed inset-0 bg-black opacity-70"></div>
 
       <div className="w-4/5 h-full mx-auto pt-10 relative pb-10">
         <div className="flex-col">
@@ -44,9 +48,11 @@ const SBC = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
+
+          {/* Responsive container: Horizontal scroll on mobile, grid on larger screens */}
+          <div className="flex md:grid md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8 overflow-x-auto whitespace-nowrap scrollbar-hide">
             {sbcs
-              .sort((a, b) => b.releaseTime - a.releaseTime) // Sort by releaseTime
+              .sort((a, b) => b.releaseTime - a.releaseTime)
               .filter((sbc) => {
                 const matchesSearchTerm = sbc.name
                   .toLowerCase()
@@ -65,9 +71,13 @@ const SBC = () => {
                   sbc.endTimeStamp &&
                   new Date(sbc.endTimeStamp).getTime() - currentTimestamp <
                     twoDaysInMilliseconds;
+
                 return (
-                  <div key={sbc.id} className="relative">
-                    <div className="flex gap-2 absolute -top-3 right-0">
+                  <div
+                    key={sbc.id}
+                    className="relative inline-block min-w-[250px]"
+                  >
+                    <div className="flex gap-2 absolute -top-0 right-5">
                       {isNew && (
                         <span className="bg-red-500 text-white text-xs px-2 py-1 rounded">
                           New
