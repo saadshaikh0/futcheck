@@ -75,7 +75,7 @@ const SBC = () => {
                 return (
                   <div
                     key={sbc.id}
-                    className="relative inline-block min-w-[250px] max-w-[250px]"
+                    className="relative inline-block min-w-[250px] max-w-[250px] md:min-w-full md:max-w-full"
                   >
                     <div className="flex gap-2 absolute -top- left-0">
                       {isNew && (
