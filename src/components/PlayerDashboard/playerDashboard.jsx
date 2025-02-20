@@ -15,6 +15,8 @@ import { fetchPlayerPriceHistory, fetchVersions } from "../../api/apiService";
 import { useSelector } from "react-redux";
 import RolesCard from "./rolesCard";
 import { useHandleResize } from "../utils/hooks";
+import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/20/solid";
+import PlayerCard from "../common/PlayerCard";
 
 const PlayerDashboard = () => {
   const player = useSelector((state) => state.player.details);
@@ -76,7 +78,22 @@ const PlayerDashboard = () => {
       className="relative min-h-[calc(100vh-4rem)] "
     >
       <div className="absolute inset-0 bg-[#1E0B20] h-full opacity-60 md:opacity-65"></div>
-
+      {/* Left Arrow Button */}
+      <div className="hidden absolute top-1/3 md:flex justify-center items-center  md:top-1/2 md:-translate-y-[100%] left-0 md:left-1 transform -translate-y-1/2 z-10 cursor-pointer">
+        <ArrowLeftIcon className="md:w-10 md:h-10 w-10 h-10 text-white" />
+        <div className="w-32 opacity-50">
+          {" "}
+          <PlayerCard player={player} isMini={true} />
+        </div>
+      </div>
+      {/* Right Arrow Button */}
+      <div className="hidden absolute top-1/3 md:flex justify-center items-center  md:top-1/2 md:-translate-y-[100%] right-0 md:right-1 transform -translate-y-1/2 z-10 cursor-pointer">
+        <div className="w-32 opacity-50">
+          {" "}
+          <PlayerCard player={player} isMini={true} />
+        </div>
+        <ArrowRightIcon className="md:w-10 md:h-10 w-10 h-10 text-white" />
+      </div>
       <div className="w-4/5 relative text-center text-white mx-auto pt-3">
         {/* Mobile Version */}
         <div
@@ -88,10 +105,16 @@ const PlayerDashboard = () => {
             versions={playerVersions}
             onPlayerChange={onPlayerChange}
           />
-          <div className="rounded-md">
+          <div
+            style={{
+              background:
+                "linear-gradient(180deg, rgba(34, 14, 63, 0.7) 0%, rgba(66, 19, 136, 0.72) 100%)",
+            }}
+            className="rounded-md"
+          >
             <RolesCard
-              plusplusroles={player.plusplusroles}
-              plusroles={player.plusroles}
+              plusplusroles={playerDetails.plusplusroles}
+              plusroles={playerDetails.plusroles}
             />
           </div>
           <div className="rounded-md">
@@ -155,7 +178,7 @@ const PlayerDashboard = () => {
           className="hidden md:grid grid-cols-[1fr_2fr_1fr] gap-5 h-full"
         >
           <div className="flex flex-col gap-4">
-            <div
+            {/* <div
               style={{
                 background:
                   "linear-gradient(180deg, rgba(34, 14, 63, 0.7) 0%, rgba(66, 19, 136, 0.72) 100%)",
@@ -166,7 +189,7 @@ const PlayerDashboard = () => {
                 playstyles={playerDetails.playstyles}
                 iconPlaystyles={playerDetails.playstyle_plus}
               />
-            </div>
+            </div> */}
             <div
               style={{
                 background:
@@ -179,6 +202,7 @@ const PlayerDashboard = () => {
           </div>
           <div className="flex flex-col h-full gap-4">
             <PlayerCarousel
+              playerDetails={playerDetails}
               player={player}
               versions={playerVersions}
               onPlayerChange={onPlayerChange}
@@ -204,11 +228,11 @@ const PlayerDashboard = () => {
                   background:
                     "linear-gradient(180deg, rgba(34, 14, 63, 0.7) 0%, rgba(66, 19, 136, 0.72) 100%)",
                 }}
-                className="bg-charcoal rounded-md pb-2"
+                className="bg-charcoal rounded-md py-2 pl-4"
               >
                 <RolesCard
-                  plusplusroles={player.plusplusroles}
-                  plusroles={player.plusroles}
+                  plusplusroles={playerDetails.plusplusroles}
+                  plusroles={playerDetails.plusroles}
                 />
                 {/* <PlayerStatsGraph player={playerDetails} /> */}
               </div>

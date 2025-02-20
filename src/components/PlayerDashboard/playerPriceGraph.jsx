@@ -129,17 +129,18 @@ const PlayerPriceGraph = ({ data, isLoading, isSbc }) => {
     extinct: Number(item.price) === 0 ? extinctLevel : null, // Extinct hours at max level
   }));
 
-  const [containerHeight, setContainerHeight] = useState(250);
+  const [containerHeight, setContainerHeight] = useState(
+    window.innerHeight * 0.35
+  );
 
   useEffect(() => {
     const updateHeight = () => {
       if (window.innerWidth >= 1024) {
-        setContainerHeight(350);
+        setContainerHeight(window.innerHeight * 0.33); // 45vh for larger screens
       } else {
-        setContainerHeight(250);
+        setContainerHeight(window.innerHeight * 0.33); // 35vh for smaller screens
       }
     };
-
     // Set initial height
     updateHeight();
 
