@@ -19,7 +19,8 @@ const PlayerSwiper = forwardRef(({ players, selectedTab }, ref) => {
   const swiperRef = useRef(null);
   const dispatch = useDispatch();
   const [selectedPlayer, setSelectedPlayer] = useState(null);
-
+  const [arrowPosition, setArrowPosition] = useState({ top: "50%" });
+  const isMobile = useHandleResize();
   useImperativeHandle(ref, () => ({
     goToSlide1: () => {
       if (swiperRef.current) {
@@ -27,6 +28,19 @@ const PlayerSwiper = forwardRef(({ players, selectedTab }, ref) => {
       }
     },
   }));
+  // Function to update the arrow position
+  const updateArrowPosition = () => {
+    if (swiperRef.current) {
+      const rect = swiperRef.current.getBoundingClientRect();
+      setArrowPosition({ top: `${rect.top + rect.height / 2}px` });
+    }
+  };
+
+  useEffect(() => {
+    updateArrowPosition();
+    window.addEventListener("resize", updateArrowPosition);
+    return () => window.removeEventListener("resize", updateArrowPosition);
+  }, []);
 
   useEffect(() => {
     if (players && players.length > 0) {
@@ -47,10 +61,14 @@ const PlayerSwiper = forwardRef(({ players, selectedTab }, ref) => {
     setSelectedPlayer(players[newIndex]);
   };
   return (
-    <div className="flex flex-grow md:h-[85vh] flex-col relative">
+    <>
       {/* Left Arrow Button */}
       <div
-        className="absolute top-1/2  md:top-1/2 left-0 md:left-20 transform -translate-y-1/2 md:-translate-y-full z-10 cursor-pointer"
+        style={{
+          top: arrowPosition.top,
+          transform: isMobile ? "translateY(-300%)" : "translateY(-150%)",
+        }}
+        className="absolute top-1/3  md:top-1/2 left-0 md:left-20 transform -translate-y-1/2 z-10 cursor-pointer"
         onClick={() => {
           if (swiperRef.current) {
             swiperRef.current.swiper.slidePrev(100); // Go to the previous slide
@@ -61,7 +79,11 @@ const PlayerSwiper = forwardRef(({ players, selectedTab }, ref) => {
       </div>
       {/* Right Arrow Button */}
       <div
-        className="absolute  top-1/2  md:top-1/2 right-0 md:right-20 transform -translate-y-1/2  md:-translate-y-full z-10 cursor-pointer"
+        style={{
+          top: arrowPosition.top,
+          transform: isMobile ? "translateY(-300%)" : "translateY(-150%)",
+        }}
+        className="absolute  top-1/3  md:top-1/2 right-0 md:right-20 transform -translate-y-1/2 z-10 cursor-pointer"
         onClick={() => {
           if (swiperRef.current) {
             swiperRef.current.swiper.slideNext(100); // Go to the next slide
@@ -164,7 +186,7 @@ const PlayerSwiper = forwardRef(({ players, selectedTab }, ref) => {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 });
 
