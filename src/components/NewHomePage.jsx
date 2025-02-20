@@ -80,7 +80,7 @@ const NewHomePage = () => {
       <div className="absolute inset-0 bg-[#1E0B20] h-full opacity-60 md:opacity-55"></div>
 
       {/* Content Wrapper */}
-      <div className="w-full h-full absolute z-10">
+      <div className="w-full h-full relative z-10 flex flex-col">
         <TabsHeader
           tabs={tabs}
           selectedTab={selectedTab}

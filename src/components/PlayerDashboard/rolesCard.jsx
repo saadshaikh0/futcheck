@@ -3,10 +3,10 @@ import { roleMapping } from "../utils/constants";
 
 const RolesCard = ({ plusplusroles, plusroles }) => {
   return (
-    <div className="flex flex-col justify-center max-h-48 overflow-x-hidden overflow-y-auto scrollbar-thin py-2 ">
+    <div className="flex flex-col  min-h-32 max-h-52 overflow-x-hidden   py-2 ">
       {plusplusroles?.map((role, index) => (
         <div
-          key={index}
+          key={`pps_${index}`}
           className="bg-transparent flex gap-1 items-center  transform transition-transform ml-2 hover:scale-105"
         >
           <div className="flex items-center gap-1">
@@ -26,7 +26,7 @@ const RolesCard = ({ plusplusroles, plusroles }) => {
       ))}
       {plusroles?.map((role, index) => (
         <div
-          key={index}
+          key={`ps_${index}`}
           className="bg-transparent flex gap-1 items-center  transform transition-transform ml-2 hover:scale-105"
         >
           <div className="flex  items-center gap-1">

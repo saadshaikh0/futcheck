@@ -228,7 +228,7 @@ const PlayerDashboard = () => {
                   background:
                     "linear-gradient(180deg, rgba(34, 14, 63, 0.7) 0%, rgba(66, 19, 136, 0.72) 100%)",
                 }}
-                className="bg-charcoal rounded-md py-2 pl-4"
+                className=" flex-grow rounded-md py-2 pl-4"
               >
                 <RolesCard
                   plusplusroles={playerDetails.plusplusroles}
