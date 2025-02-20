@@ -7,14 +7,18 @@ const PriceCard = ({ player, priceChange, percentageChange }) => {
   const isNegative = priceChange < 0;
   return (
     <div
+      style={{
+        background:
+          "linear-gradient(180deg, rgba(34, 14, 63, 0.7) 0%, rgba(66, 19, 136, 0.72) 100%)",
+      }}
       className={classNames(
-        "text-sm md:text-base flex-col rounded-md  h-full  px-4 text-white items-center justify-center py-2",
+        "text-sm md:text-base flex-col rounded-md  h-full  px-4 text-white items-center justify-center bg-transparent py-2"
 
-        priceChange < 0
-          ? "bg-red-700"
-          : priceChange === 0
-          ? "bg-[#151515]"
-          : "bg-green-700"
+        // priceChange < 0
+        //   ? "bg-red-700"
+        //   : priceChange === 0
+        //   ? "bg-[#151515]"
+        //   : "bg-green-700"
       )}
     >
       <h2 className="font-bold pb-4 ">Price Trend</h2>

@@ -13,12 +13,14 @@ import { setPlayer } from "../../redux/playerSlice";
 import PlayerCard from "../common/PlayerCard";
 import CoinsImg from "../../assets/coins.png";
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/20/solid";
+import { useHandleResize } from "../utils/hooks";
 
 const PlayerSwiper = forwardRef(({ players, selectedTab }, ref) => {
   const swiperRef = useRef(null);
   const dispatch = useDispatch();
   const [selectedPlayer, setSelectedPlayer] = useState(null);
-
+  const [arrowPosition, setArrowPosition] = useState({ top: "50%" });
+  const isMobile = useHandleResize();
   useImperativeHandle(ref, () => ({
     goToSlide1: () => {
       if (swiperRef.current) {
@@ -26,6 +28,32 @@ const PlayerSwiper = forwardRef(({ players, selectedTab }, ref) => {
       }
     },
   }));
+  // Function to update the arrow position
+  const updateArrowPosition = () => {
+    if (swiperRef.current) {
+      const rect = swiperRef.current.getBoundingClientRect();
+      setArrowPosition({ top: `${rect.top + rect.height / 2}px` });
+    }
+  };
+
+  useEffect(() => {
+    updateArrowPosition(); // Initial positioning
+
+    const observer = new ResizeObserver(() => {
+      updateArrowPosition();
+    });
+
+    if (swiperRef.current?.el) {
+      observer.observe(swiperRef.current.el);
+    }
+
+    window.addEventListener("resize", updateArrowPosition);
+
+    return () => {
+      window.removeEventListener("resize", updateArrowPosition);
+      observer.disconnect();
+    };
+  }, [players]);
 
   useEffect(() => {
     if (players && players.length > 0) {
@@ -49,6 +77,10 @@ const PlayerSwiper = forwardRef(({ players, selectedTab }, ref) => {
     <>
       {/* Left Arrow Button */}
       <div
+        style={{
+          top: arrowPosition.top,
+          transform: isMobile ? "translateY(-300%)" : "translateY(-150%)",
+        }}
         className="absolute top-1/3  md:top-1/2 left-0 md:left-20 transform -translate-y-1/2 z-10 cursor-pointer"
         onClick={() => {
           if (swiperRef.current) {
@@ -60,6 +92,10 @@ const PlayerSwiper = forwardRef(({ players, selectedTab }, ref) => {
       </div>
       {/* Right Arrow Button */}
       <div
+        style={{
+          top: arrowPosition.top,
+          transform: isMobile ? "translateY(-300%)" : "translateY(-150%)",
+        }}
         className="absolute  top-1/3  md:top-1/2 right-0 md:right-20 transform -translate-y-1/2 z-10 cursor-pointer"
         onClick={() => {
           if (swiperRef.current) {

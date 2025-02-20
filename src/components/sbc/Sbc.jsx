@@ -21,7 +21,9 @@ const SBC = () => {
     <div
       className="min-h-[calc(100vh-4rem)]"
       style={{
-        background: `url(${SBC_BACKGROUND}) no-repeat `,
+        background:
+          "linear-gradient(168deg,     rgb(35, 8, 58) 40%,     rgba(49, 10, 82, 0.5) 60%,     rgba(0, 0, 0, 0.8) 80%,     black 100%)",
+        // background: `url(${SBC_BACKGROUND}) no-repeat `,
         backgroundSize: "cover",
         backgroundAttachment: "fixed",
       }}
@@ -50,7 +52,7 @@ const SBC = () => {
           </div>
 
           {/* Responsive container: Horizontal scroll on mobile, grid on larger screens */}
-          <div className="flex md:grid md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8 overflow-x-auto whitespace-nowrap scrollbar-hide">
+          <div className="flex md:grid md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8 overflow-x-auto md:overflow-x-hidden whitespace-nowrap scrollbar-hide">
             {sbcs
               .sort((a, b) => b.releaseTime - a.releaseTime)
               .filter((sbc) => {
