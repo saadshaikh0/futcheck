@@ -293,8 +293,9 @@ export const timeAgo = (inputDate, isTimeZone) => {
     return seconds === 1 ? "1 second ago" : `${seconds} seconds ago`;
   }
 };
-export const getTextColor = ({ colors, rating, level }) => {
+export const getTextColor = ({ colors, rating, level, indices }) => {
   let level_no = level;
+
   if (level_no > 0) {
     if (rating >= 75) {
       level_no = 3;
@@ -304,15 +305,38 @@ export const getTextColor = ({ colors, rating, level }) => {
       level_no = 1;
     }
   }
-  let color = colors
-    ? level_no == 0
-      ? colors[0]
-      : colors[(level_no - 1) * 3]
-    : "#ffffff";
+
+  let textColorIndex = indices[3] - 1;
+  let color = "#ffffff"; // Default color
+
+  if (colors && colors.length > 0) {
+    if (level_no === 0) {
+      color = colors[textColorIndex];
+    } else {
+      // Divide colors array into `level` equal sections
+      const sectionSize = Math.floor(colors.length / level);
+
+      // Get start and end indices for the section corresponding to `level_no`
+      let sectionStart = (level_no - 1) * sectionSize;
+      let sectionEnd = level_no * sectionSize;
+
+      // Ensure the sectionEnd does not exceed colors.length
+      sectionEnd = Math.min(sectionEnd, colors.length);
+
+      // Ensure textColorIndex is within the section range
+      let sectionColors = colors.slice(sectionStart, sectionEnd);
+      let relativeIndex = textColorIndex % sectionColors.length; // Wrap around if needed
+
+      color = sectionColors[relativeIndex] || "#ffffff"; // Fallback in case of empty section
+    }
+  }
+
   return fillZeros(color);
 };
-export const getBgColor = ({ colors, rating, level }) => {
+
+export const getBgColor = ({ colors, rating, level, indices }) => {
   let level_no = level;
+
   if (level_no > 0) {
     if (rating >= 75) {
       level_no = 3;
@@ -322,11 +346,32 @@ export const getBgColor = ({ colors, rating, level }) => {
       level_no = 1;
     }
   }
-  let color = colors
-    ? level_no == 0
-      ? colors[1]
-      : colors[(level_no - 1) * 3 + 1]
-    : "#ffffff";
+
+  let textColorIndex = indices[6] - 1;
+  let color = "#ffffff"; // Default color
+
+  if (colors && colors.length > 0) {
+    if (level_no === 0) {
+      color = colors[textColorIndex];
+    } else {
+      // Divide colors array into `level` equal sections
+      const sectionSize = Math.floor(colors.length / level);
+
+      // Get start and end indices for the section corresponding to `level_no`
+      let sectionStart = (level_no - 1) * sectionSize;
+      let sectionEnd = level_no * sectionSize;
+
+      // Ensure the sectionEnd does not exceed colors.length
+      sectionEnd = Math.min(sectionEnd, colors.length);
+
+      // Ensure textColorIndex is within the section range
+      let sectionColors = colors.slice(sectionStart, sectionEnd);
+      let relativeIndex = textColorIndex % sectionColors.length; // Wrap around if needed
+
+      color = sectionColors[relativeIndex] || "#ffffff"; // Fallback in case of empty section
+    }
+  }
+
   return fillZeros(color);
 };
 

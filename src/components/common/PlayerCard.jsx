@@ -147,6 +147,7 @@ const PlayerCard = ({
         colors: rarityObject.colors,
         rating: rating,
         level: rarityObject.levels || 0,
+        indices: rarityObject.lg_color_indices || [],
       })
     : "#ffffff";
 
@@ -155,6 +156,7 @@ const PlayerCard = ({
         colors: rarityObject.colors,
         rating: rating,
         level: rarityObject.levels || 0,
+        indices: rarityObject.lg_color_indices || [],
       })
     : "#ffffff";
 

@@ -1,5 +1,13 @@
 import { teamChemLinks, CHEMISTRY_PROFILES } from "../utils/constants";
 
+// Helper functions to identify Icon and Hero players
+export function isIcon(player) {
+  return player.teamid === 12658 || player.leagueid === 2118;
+}
+
+export function isHero(player) {
+  return player.teamid === 114605;
+}
 export const calculateChemistry = (squad, formation, manager = null) => {
   // Build a rarity-to-profile mapping for increments
   const rarityToProfile = {};
@@ -16,15 +24,6 @@ export const calculateChemistry = (squad, formation, manager = null) => {
       rarityToProfile[rarityId] = increments;
     });
   });
-
-  // Helper functions to identify Icon and Hero players
-  function isIcon(player) {
-    return player.teamid === 12658 || player.leagueid === 2118;
-  }
-
-  function isHero(player) {
-    return player.teamid === 114605;
-  }
 
   const chemistryPoints = {};
   const contributingPlayers = [];

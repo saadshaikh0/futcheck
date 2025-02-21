@@ -11,6 +11,7 @@ import {
   getTextColor,
 } from "../utils/utils";
 import { Link } from "react-router-dom";
+import { isHero, isIcon } from "../squadWizard/squadUtils";
 
 const PopoverItems = ({ closePanel, player }) => {
   const dispatch = useDispatch();
@@ -28,6 +29,7 @@ const PopoverItems = ({ closePanel, player }) => {
     c_name,
     teamid,
     rarity,
+    leagueid,
   } = player;
   const otherPos = position.slice(1);
 
@@ -44,6 +46,7 @@ const PopoverItems = ({ closePanel, player }) => {
         colors: rarityObject.colors,
         rating: rating,
         level: rarityObject.levels || 0,
+        indices: rarityObject.lg_color_indices || [],
       })
     : "#ffffff";
 
@@ -52,6 +55,7 @@ const PopoverItems = ({ closePanel, player }) => {
         colors: rarityObject.colors,
         rating: rating,
         level: rarityObject.levels || 0,
+        indices: rarityObject.lg_color_indices || [],
       })
     : "#ffffff";
   const handleClick = () => {
@@ -73,7 +77,11 @@ const PopoverItems = ({ closePanel, player }) => {
         {/* Club & Nation Icons */}
         <div className="flex flex-col items-center gap-1">
           <img
-            src={buildDynamicUrl("club", teamid)}
+            src={
+              isIcon(player) || isHero(player)
+                ? buildDynamicUrl("league", leagueid)
+                : buildDynamicUrl("club", teamid)
+            }
             width={28}
             className="h-6"
           />
