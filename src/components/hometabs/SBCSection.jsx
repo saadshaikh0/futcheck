@@ -42,8 +42,8 @@ const SBCSection = ({ sbcs }) => {
 
         {/* Desktop Marquee Section */}
         <div className="mt-5 gap-5 hidden md:block">
-          <div className="p-5 px-0 overflow-hidden w-full h-[35vh] rounded-md relative">
-            <div className="marquee text-white gap-8">
+          <div className="p-5 px-0 overflow-hidden w-full h-[45vh] rounded-md relative">
+            <div className="relative marquee text-white gap-8">
               {filteredSbcs.map((sbc, index) => (
                 <div key={index}>
                   <MarqueeSbcCard data={sbc} />
