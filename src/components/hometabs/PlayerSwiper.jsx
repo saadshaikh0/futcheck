@@ -183,7 +183,7 @@ const PlayerSwiper = forwardRef(({ players, selectedTab }, ref) => {
       </Swiper>
       {/* Show Details for the Selected Player */}
       {selectedPlayer && (
-        <div className="no-select  md:block">
+        <div className="no-select  md:block md:-mt-4">
           <div className="flex flex-col items-center text-sm md:text-xl ">
             <Link
               to={`/player/${selectedPlayer.id}/${selectedPlayer.name?.replace(
