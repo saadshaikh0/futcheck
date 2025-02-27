@@ -14,7 +14,7 @@
   background-position: center;
   background-size: cover;
   width: 350px !important;
-  height: 420px !important;
+  height: calc(90% - 4rem) !important;
 }
 .home-page .swiper-slide.active-slide {
   transform: scale(1.2) !important;
@@ -55,11 +55,16 @@
     transition-delay: 0.3s;
     z-index: 1000 !important;
   }
+  .home-page .swiper-wrapper {
+    padding-top: 10vh;
+    align-items: end;
+  }
 }
 
 /* Additional styling */
 .home-page .swiper-wrapper {
-  padding-top: 10vh;
+  /* padding-top: 10vh; */
+  align-items: center;
 }
 
 .home-page .swiper.swiper-coverflow {
