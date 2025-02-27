@@ -31,8 +31,9 @@ const PlayerSwiper = forwardRef(({ players, selectedTab }, ref) => {
   // Function to update the arrow position
   const updateArrowPosition = () => {
     if (swiperRef.current) {
-      const rect = swiperRef.current.getBoundingClientRect();
-      setArrowPosition({ top: `${rect.top + rect.height / 2}px` });
+      const parentOffset = swiperRef.current.offsetTop; // Position relative to parent
+      const height = swiperRef.current.clientHeight; // Height of Swiper
+      setArrowPosition({ top: `${parentOffset + height / 2}px` });
     }
   };
 
@@ -80,7 +81,7 @@ const PlayerSwiper = forwardRef(({ players, selectedTab }, ref) => {
       <div
         style={{
           top: arrowPosition.top,
-          transform: isMobile ? "translateY(-300%)" : "translateY(-150%)",
+          transform: isMobile ? "translateY(-100%)" : "translateY(-100%)",
         }}
         className="absolute top-1/3  md:top-1/2 left-0 md:left-20 transform -translate-y-1/2 z-10 cursor-pointer"
         onClick={() => {
@@ -95,7 +96,7 @@ const PlayerSwiper = forwardRef(({ players, selectedTab }, ref) => {
       <div
         style={{
           top: arrowPosition.top,
-          transform: isMobile ? "translateY(-300%)" : "translateY(-150%)",
+          transform: isMobile ? "translateY(-100%)" : "translateY(-100%)",
         }}
         className="absolute  top-1/3  md:top-1/2 right-0 md:right-20 transform -translate-y-1/2 z-10 cursor-pointer"
         onClick={() => {
