@@ -86,13 +86,13 @@ const AllPlayersSection = () => {
         ></div>
 
         <div className="relative z-10 mt-7">
-          <div className="text-white text-2xl font-bold text-center p-5">
-            <div className="flex justify-center space-x-4">
+          <div className="text-white lg:text-2xl font-bold text-center p-5">
+            <div className="flex justify-around">
               {["Trending", "Investment", "Recent"].map((tab) => (
                 <button
                   key={tab}
-                  className={`hover:underline ${
-                    activeTab === tab ? "underline" : ""
+                  className={`uppercase   ${
+                    activeTab === tab ? "opacity-100" : "opacity-60"
                   }`}
                   onClick={() => {
                     setActiveTab(tab);
