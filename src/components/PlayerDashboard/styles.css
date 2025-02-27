@@ -59,7 +59,7 @@
 
 /* Additional styling */
 .home-page .swiper-wrapper {
-  margin-top: 10vh;
+  padding-top: 10vh;
 }
 
 .home-page .swiper.swiper-coverflow {

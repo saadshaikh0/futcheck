@@ -41,7 +41,21 @@ const PlayerSwiper = forwardRef(({ players, selectedTab }, ref) => {
     window.addEventListener("resize", updateArrowPosition);
     return () => window.removeEventListener("resize", updateArrowPosition);
   }, []);
+  // Frequent updates during initial load (every second for 30 seconds)
+  useEffect(() => {
+    updateArrowPosition(); // Initial call
 
+    let count = 0;
+    const intervalId = setInterval(() => {
+      updateArrowPosition();
+      count++;
+      if (count >= 30) {
+        clearInterval(intervalId);
+      }
+    }, 1000);
+
+    return () => clearInterval(intervalId);
+  }, []);
   useEffect(() => {
     if (players && players.length > 0) {
       setSelectedPlayer(players[0]);
