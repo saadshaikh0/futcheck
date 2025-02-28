@@ -65,7 +65,13 @@ export const tabs = [
 
 const FilterTabs = ({ isMobile }) => {
   return (
-    <div className="text-white h-full flex flex-col gap-3 bg-slate-800 px-4 py-2 rounded">
+    <div
+      style={{
+        background:
+          "linear-gradient(180deg, rgba(34, 14, 63, 0.7) 0%, rgba(66, 19, 136, 0.72) 100%)",
+      }}
+      className="text-white h-full flex flex-col gap-3  px-4 py-2 rounded"
+    >
       {tabs.map((tab) => (
         <div key={tab.name}>
           <span className="text-white pl-1">{tab.name}</span>

@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setFilters } from "../../redux/allPlayerSlice";
 import { useEffect, useState } from "react";
 import { CheckIcon } from "@heroicons/react/20/solid";
+import DualRangeSlider from "../common/RangeSlider";
 
 const RatingPopup = () => {
   const [minRating, setMinRating] = useState(30);
@@ -19,8 +20,16 @@ const RatingPopup = () => {
   }, [filters.min_rating, filters.max_rating]);
 
   return (
-    <div className="grid grid-cols-[2fr_2fr_1fr] gap-2 mt-1">
-      <input
+    <div className="flex w-full">
+      <DualRangeSlider
+        min={40}
+        max={100}
+        minPrice={minRating}
+        setMinPrice={setMinRating}
+        maxPrice={maxRating}
+        setMaxPrice={setMaxRating}
+      />
+      {/* <input
         className="bg-slate-700 text-white rounded-lg px-2"
         type="number"
         min={30}
@@ -55,7 +64,7 @@ const RatingPopup = () => {
         }
       >
         <CheckIcon />
-      </button>
+      </button> */}
     </div>
   );
 };
