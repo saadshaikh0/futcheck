@@ -22,8 +22,8 @@ const RatingPopup = () => {
   return (
     <div className="flex w-full">
       <DualRangeSlider
-        min={40}
-        max={100}
+        min={30}
+        max={99}
         minPrice={minRating}
         setMinPrice={setMinRating}
         maxPrice={maxRating}

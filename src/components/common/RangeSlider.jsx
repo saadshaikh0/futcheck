@@ -8,9 +8,12 @@ const DualRangeSlider = ({
   maxPrice,
   setMaxPrice,
 }) => {
-  // Local thumb positions for track fill
-  const [minThumb, setMinThumb] = useState(0);
-  const [maxThumb, setMaxThumb] = useState(0);
+  const [minThumb, setMinThumb] = useState(
+    () => ((minPrice - min) / (max - min)) * 100
+  );
+  const [maxThumb, setMaxThumb] = useState(
+    () => ((max - maxPrice) / (max - min)) * 100
+  );
 
   // State for temporary input values
   const [tempMinPrice, setTempMinPrice] = useState(minPrice);
@@ -20,10 +23,9 @@ const DualRangeSlider = ({
    * Updates the visual slider track position
    */
   const updateThumbPositions = (newMinPrice, newMaxPrice) => {
-    setMinThumb(((newMinPrice - min) / (max - min)) * 100);
-    setMaxThumb(((max - newMaxPrice) / (max - min)) * 100);
+    setMinThumb(Math.max(0, ((newMinPrice - min) / (max - min)) * 100)); // Ensures it never goes negative
+    setMaxThumb(Math.max(0, ((max - newMaxPrice) / (max - min)) * 100));
   };
-
   /**
    * Handles the min slider movement
    */
@@ -83,7 +85,6 @@ const DualRangeSlider = ({
     updateThumbPositions(minPrice, maxPrice);
     setTempMinPrice(minPrice);
     setTempMaxPrice(maxPrice);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [min, max, minPrice, maxPrice]);
 
   return (

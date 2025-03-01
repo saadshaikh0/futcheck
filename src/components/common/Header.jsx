@@ -231,11 +231,11 @@ const Navbar = () => {
                   <AcademicCapIcon className="text-white w-5" /> Squad Wizard
                 </div>
               </Link>
-              <Link to="/evolutions/">
+              {/* <Link to="/evolutions/">
                 <div className="text-white flex gap-2 font-bold">
                   Evolutions
                 </div>
-              </Link>
+              </Link> */}
             </div>
 
             {/* Mobile Menu */}

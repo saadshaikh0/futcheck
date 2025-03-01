@@ -19,12 +19,12 @@ const MobileMenuPopover = () => {
           <div className="text-white flex gap-1 font-bold">Squad Wizard</div>
         </div>
       </Link>
-      <Link to="/evolutions/">
+      {/* <Link to="/evolutions/">
         <div className="text-white flex gap-2  font-bold">
           {" "}
           <div className="text-white flex gap-1 font-bold">Evolutions</div>
         </div>
-      </Link>
+      </Link> */}
     </div>
   );
 };

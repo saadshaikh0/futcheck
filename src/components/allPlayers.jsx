@@ -166,20 +166,20 @@ const AllPlayers = ({ isHome = false }) => {
       className="relative"
     >
       <div className="flex justify-center mt-16 md:mt-0 lg:pb-12">
-        <Link to={"/"}>
+        <Link className="block md:hidden" to={"/"}>
           <div className="text-white items-center absolute font-bold left-3 text-xl top-3 flex gap-2">
             <ArrowLeftIcon className="w-8 h-8" /> BACK
           </div>
         </Link>
         <div className="flex items-center flex-col">
-          <div className="hidden md:relative w-[45vw] lg:w-[10vw] h-[12vh]">
+          <div className="hidden md:block relative lg:w-[12vw] h-[12vh]">
             <img
               src={FUTCHECK_LOGO}
               alt="futcheck logo"
-              className="absolute top-0 left-0 w-[45vw] lg:w-[15vw] h-[15vh]"
+              className="absolute top-0 left-0  lg:w-[15vw] h-[15vh]"
             />
           </div>
-          <div className="grow w-[90vw]  mg:w-[60vw] relative">
+          <div className="grow w-[90vw]  md:w-[60vw] relative">
             <div className="relative grow mr-3 md:mr-0">
               <MagnifyingGlassIcon className="absolute w-4 top-0 lg:w-10 h-10 lg:top-2.5 left-3 text-gray-400" />
               <input
