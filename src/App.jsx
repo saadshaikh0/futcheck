@@ -33,6 +33,7 @@ import EvolutionDetailWrapper from "./components/EvolutionDetailWrapper";
 import MarketWrapper from "./components/MarketWrapper";
 import GamesWrapper from "./components/GamesWrapper";
 import StatClash from "./components/games/StatClash";
+import ProtectedRoute from "./components/ProtectedRoute";
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
 ReactGA.initialize("G-RD6LGLC1LD");
@@ -88,11 +89,11 @@ function App() {
                   <Route path="/sbc/" element={<SbcWrapper />} />
                   <Route
                     path="/squad_wizard/"
-                    element={<SquadWizardWrapper />}
-                  />
-                  <Route
-                    path="/squad_wizard/"
-                    element={<SquadWizardWrapper />}
+                    element={
+                      <ProtectedRoute>
+                        <SquadWizardWrapper />
+                      </ProtectedRoute>
+                    }
                   />
                   <Route path="/games/" element={<GamesWrapper />} />
                   <Route path="/stat_clash/" element={<StatClash />} />

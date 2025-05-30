@@ -24,6 +24,7 @@ import {
 import MobileMenuPopover from "./MobileMenuPopover";
 import { useDispatch, useSelector } from "react-redux";
 import Account from "./Account";
+import LoginModal from "./LoginModal";
 import {
   setLeagues,
   setNations,
@@ -47,6 +48,7 @@ const Navbar = () => {
   const [searchValue, setSearchValue] = useState("");
   const debouncedSearchTerm = useDebounce(searchValue, 400);
   const [showPremium, setShowPremium] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
   const inputRef = useRef(null);
   const [inputWidth, setInputWidth] = useState(0);
 
@@ -127,6 +129,7 @@ const Navbar = () => {
     getData();
   }, []);
 
+  const userInfo = useSelector((state) => state.app.userInfo);
   return (
     <div>
       <header
@@ -237,6 +240,16 @@ const Navbar = () => {
                   <AcademicCapIcon className="text-white w-5" /> Games
                 </div>
               </Link>
+              {userInfo ? (
+                <Account />
+              ) : (
+                <button
+                  onClick={() => setShowLogin(true)}
+                  className="text-white font-bold"
+                >
+                  Login
+                </button>
+              )}
               <button
                 onClick={() => setShowPremium(true)}
                 className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-1.5 px-4 rounded-lg"
@@ -286,6 +299,7 @@ const Navbar = () => {
         </nav>
       </header>
       {showPremium && <PremiumModal onClose={() => setShowPremium(false)} />}
+      {showLogin && <LoginModal onClose={() => setShowLogin(false)} />}
     </div>
   );
 };
