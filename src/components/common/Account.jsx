@@ -22,6 +22,10 @@ const Account = () => {
                   <img
                     src={userInfo.picture_url}
                     className="w-10 md:w-6 rounded-full"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = "/fallback-avatar.png";
+                    }}
                   />
                 ) : (
                   <UserIcon className="w-6 h-6 text-white" />
@@ -40,7 +44,7 @@ const Account = () => {
                     <UserIcon className="w-8 h-8 text-white" />
                   )}
                   <p className="text-white font-bold capitalize">
-                    {capitalizeFirstLetter(userInfo.name || '')}
+                    {capitalizeFirstLetter(userInfo.name || "")}
                   </p>
                   <hr className="text-white  bg-white w-full" />
                   <button
