@@ -32,7 +32,7 @@ const AllPlayers = ({ isHome = false }) => {
   const dispatch = useDispatch();
   const prevFiltersRef = useRef(filters);
   const [allPlayers, setAllPlayers] = useState([]);
-  const debouncedSearchTerm = useDebounce(searchText, 1000);
+  const debouncedSearchTerm = useDebounce(searchText, 400);
 
   const {
     data = { players: [], total_pages: 0 },

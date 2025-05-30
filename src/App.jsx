@@ -31,6 +31,9 @@ import SquadWizardWrapper from "./components/squadWizardWrapper";
 import EvolutionsWrapper from "./components/EvolutionsWrapper";
 import EvolutionDetailWrapper from "./components/EvolutionDetailWrapper";
 import MarketWrapper from "./components/MarketWrapper";
+import GamesWrapper from "./components/GamesWrapper";
+import StatClash from "./components/games/StatClash";
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
 ReactGA.initialize("G-RD6LGLC1LD");
 
@@ -87,7 +90,12 @@ function App() {
                     path="/squad_wizard/"
                     element={<SquadWizardWrapper />}
                   />
-
+                  <Route
+                    path="/squad_wizard/"
+                    element={<SquadWizardWrapper />}
+                  />
+                  <Route path="/games/" element={<GamesWrapper />} />
+                  <Route path="/stat_clash/" element={<StatClash />} />
                   <Route
                     path="/player/:playerId/:playerName"
                     element={<PlayerDashboardWrapper />}
@@ -104,9 +112,19 @@ function App() {
   );
 }
 const Root = () => (
-  <Router>
-    <App />
-  </Router>
+  <PayPalScriptProvider
+    options={{
+      "client-id": process.env.REACT_APP_PAYPAL_CLIENT_ID || "test",
+      currency: "USD",
+      components: "buttons",
+      "enable-funding": "card,venmo", // Optional: if you want card support too
+      "data-sdk-integration-source": "developer-studio",
+    }}
+  >
+    <Router>
+      <App />
+    </Router>
+  </PayPalScriptProvider>
 );
 
 export default Root;

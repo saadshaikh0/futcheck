@@ -9,27 +9,14 @@ import SolutionsPitch from "../../assets/updated-field.png";
 import FOOTBALL_STADIUM_IMAGE from "../../assets/sbc_background_field.webp";
 
 import SquadInsights from "./SquadInsights";
-import { Popover } from "@headlessui/react";
-import { allFormations } from "../utils/formations";
-import { convertFormation } from "../utils/utils";
+
 import FormationButton from "./FormationButton";
 
 const SquadWizard = () => {
   const dispatch = useDispatch();
   const positions = useSelector((state) => state.squadWizard.positions);
   const players = useSelector((state) => state.squadWizard.players);
-  const formation = useSelector((state) => state.squadWizard.formation);
   const squadPrice = useSelector((state) => state.squadWizard.squadPrice);
-  const [searchTerm, setSearchTerm] = useState("");
-
-  const handleFormationSelect = (formation, close) => {
-    dispatch(setFormation(formation));
-    close();
-  };
-
-  const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value);
-  };
 
   useEffect(() => {
     // Set the initial formation
@@ -45,7 +32,7 @@ const SquadWizard = () => {
     >
       <div className={`absolute inset-0 bg-black  opacity-70`}></div>
 
-      <div className="text-white md:h-[calc(100vh-4rem)] relative w-4/6 mx-auto flex gap-5 flex-col mt-4">
+      <div className="text-white md:h-[calc(100vh-4rem)] relative w-5/6 mx-auto flex gap-5 flex-col mt-4">
         <div className="text-center flex flex-col gap-2">
           <h1 className="text-3xl font-medium">Welcome To Squad Wizard</h1>
           <p className="text-xl">
@@ -53,12 +40,9 @@ const SquadWizard = () => {
             algorithm and ace the game.
           </p>
         </div>
-        <div className="grid grid-cols-[1fr_2fr] gap-8 h-[90%] flex-grow pb-4">
+        <div className="grid grid-cols-[1fr_3fr_1fr] gap-8 h-[90%] flex-grow pb-4">
           <div className="flex flex-col gap-4 rounded-md  overflow-auto">
             <SquadInsights />
-            <div className=" flex-grow  overflow-auto">
-              <PlayerSuggestionBox />
-            </div>
           </div>
           <div
             id="Pitch"
@@ -90,6 +74,11 @@ const SquadWizard = () => {
             ))}
 
             <FormationButton />
+          </div>
+          <div className="flex flex-col gap-4 rounded-md  overflow-auto">
+            <div className=" flex-grow  overflow-auto">
+              <PlayerSuggestionBox />
+            </div>
           </div>
         </div>
       </div>

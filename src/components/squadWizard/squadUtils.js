@@ -262,11 +262,10 @@ export const calculateRating = (squad) => {
 
   // Step 4: Apply rounding rules for final squad rating
   const newAvgRounded = Math.round(newAvg * 100) / 100; // Round to 2 decimal places
-  const decimalPart = newAvgRounded - Math.round(newAvgRounded);
-  const finalRating =
-    decimalPart < 0.96
-      ? Math.round(newAvgRounded)
-      : Math.round(newAvgRounded) + 1;
+  const wholePart = Math.floor(newAvgRounded);
+  const decimalPart = newAvgRounded - wholePart;
+
+  const finalRating = decimalPart < 0.96 ? wholePart : wholePart + 1;
 
   return finalRating;
 };

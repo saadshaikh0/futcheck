@@ -510,7 +510,14 @@ export const fetchMarketTrends = async () => {
     throw error;
   }
 };
-export const generateSquad = async ({ budget, formation, lockedPlayers }) => {
+export const generateSquad = async ({
+  budget,
+  formation,
+  lockedPlayers,
+  target_rating,
+  target_chemistry,
+  other_constraints,
+}) => {
   try {
     const response = await instance.post(
       "https://d9bl9suyr1.execute-api.us-east-1.amazonaws.com/default/squad_generator",
@@ -518,11 +525,15 @@ export const generateSquad = async ({ budget, formation, lockedPlayers }) => {
         budget,
         formation,
         lockedPlayers,
+        target_rating,
+        target_chemistry,
+        other_constraints,
       },
       {
         headers: {
           "Content-Type": "application/json",
         },
+        timeout: 180000,
       }
     );
     return response.data;
@@ -531,3 +542,21 @@ export const generateSquad = async ({ budget, formation, lockedPlayers }) => {
     throw error;
   }
 };
+
+export const fetchStatClashCards = async () => {
+  try {
+    const response = await instance.get("/stat_clash_cards/", {
+      timeout: 60000,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching Stat Clash cards:", error);
+    throw error;
+  }
+};
+
+export const createPremiumOrder = async ({ amount }) =>
+  (await instance.post("/api/orders", { amount })).data; // => { id: "ORDER_ID" }
+
+export const captureOrder = async (orderID) =>
+  (await instance.post(`/api/orders/${orderID}/capture`)).data; // => full PayPal capture payload

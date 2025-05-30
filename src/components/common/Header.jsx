@@ -31,6 +31,7 @@ import {
   setTeams,
 } from "../../redux/appSlice";
 import { Popover } from "@headlessui/react";
+import PremiumModal from "./PremiumModal";
 
 const Navbar = () => {
   const [referenceElement, setReferenceElement] = useState();
@@ -44,8 +45,8 @@ const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [searchMode, setSearchMode] = useState(false);
   const [searchValue, setSearchValue] = useState("");
-  const debouncedSearchTerm = useDebounce(searchValue, 1000);
-
+  const debouncedSearchTerm = useDebounce(searchValue, 400);
+  const [showPremium, setShowPremium] = useState(false);
   const inputRef = useRef(null);
   const [inputWidth, setInputWidth] = useState(0);
 
@@ -231,6 +232,17 @@ const Navbar = () => {
                   <AcademicCapIcon className="text-white w-5" /> Squad Wizard
                 </div>
               </Link>
+              <Link to="/games/">
+                <div className="text-white flex gap-2 font-bold">
+                  <AcademicCapIcon className="text-white w-5" /> Games
+                </div>
+              </Link>
+              <button
+                onClick={() => setShowPremium(true)}
+                className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-1.5 px-4 rounded-lg"
+              >
+                Go Premium
+              </button>
               {/* <Link to="/evolutions/">
                 <div className="text-white flex gap-2 font-bold">
                   Evolutions
@@ -273,6 +285,7 @@ const Navbar = () => {
           </div>
         </nav>
       </header>
+      {showPremium && <PremiumModal onClose={() => setShowPremium(false)} />}
     </div>
   );
 };
