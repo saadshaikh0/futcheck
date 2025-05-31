@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { setUserInfo } from "../../redux/appSlice";
 import { verifyToken } from "../../api/apiService";
+import { setCookie, getCookie } from "./cookies";
 
 // utils.js
 import store from "../../redux/store";
@@ -183,8 +184,9 @@ export const useFetchUserInfo = () => {
           token: token,
         });
         const { access, refresh } = userInfo.tokens;
-        localStorage.setItem("google_token", token);
-        localStorage.setItem("access_token", access);
+        setCookie("google_token", token);
+        setCookie("access_token", access);
+        setCookie("refresh_token", refresh);
         dispatch(setUserInfo(userInfo));
       } catch (error) {
         console.error("Failed to fetch user info", error);
@@ -192,7 +194,7 @@ export const useFetchUserInfo = () => {
       }
     };
 
-    const token = localStorage.getItem("google_token");
+    const token = getCookie("google_token");
     if (token) {
       fetchUserInfo(token);
     }
