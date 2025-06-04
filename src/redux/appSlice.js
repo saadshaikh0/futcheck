@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { deleteCookie } from "../components/utils/cookies";
 
 const initialState = {
   rarities: [],
@@ -23,6 +24,9 @@ export const appSlice = createSlice({
     },
     removeUserInfo: (state, action) => {
       state.userInfo = null;
+      ["google_token", "access_token", "refresh_token", "fc_user"].forEach(
+        deleteCookie
+      );
     },
     setUserInfo: (state, action) => {
       state.userInfo = { ...action.payload };

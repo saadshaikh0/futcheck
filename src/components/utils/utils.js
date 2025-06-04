@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
-import { setUserInfo } from "../../redux/appSlice";
+import { removeUserInfo, setUserInfo } from "../../redux/appSlice";
 import { verifyToken } from "../../api/apiService";
 import { setCookie, getCookie } from "./cookies";
 
@@ -19,6 +19,11 @@ import {
   TraitMapping,
 } from "./constants";
 import { mapAttributeIdToLocString } from "../evos/EvolutionUtils";
+import {
+  fetchUserInfoBearer,
+  refreshAccessToken,
+  verifyGoogleToken,
+} from "../../api/authService";
 
 export const getNationName = (id) => {
   const state = store.getState();
@@ -178,28 +183,53 @@ export const useFetchUserInfo = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const fetchUserInfo = async (token) => {
-      try {
-        const userInfo = await verifyToken({
-          token: token,
-        });
-        const { access, refresh } = userInfo.tokens;
-        setCookie("google_token", token);
-        setCookie("access_token", access);
-        setCookie("refresh_token", refresh);
-        setCookie("fc_user", userInfo.name || "");
+    (async () => {
+      /* ───────────────────────── try JWT path first ───────────────────────── */
+      let access = getCookie("access_token");
+      const refresh = getCookie("refresh_token");
 
-        dispatch(setUserInfo(userInfo));
-      } catch (error) {
-        console.error("Failed to fetch user info", error);
-        // Optionally clear user info or handle error
+      if (access) {
+        try {
+          const user = await fetchUserInfoBearer(access);
+          dispatch(setUserInfo(user));
+          return; // ✅ done
+        } catch {
+          /* access token invalid/expired – try to refresh */
+          if (refresh) {
+            try {
+              const { access: newAccess } = await refreshAccessToken(refresh);
+              setCookie("access_token", newAccess);
+              access = newAccess;
+              const user = await fetchUserInfoBearer(access);
+              dispatch(setUserInfo(user));
+              return; // ✅ done
+            } catch {
+              /* fall through to Google path */
+            }
+          }
+        }
       }
-    };
 
-    const token = getCookie("google_token");
-    if (token) {
-      fetchUserInfo(token);
-    }
+      const gToken = getCookie("google_token");
+      if (gToken) {
+        try {
+          const user = await verifyGoogleToken({ google_token: gToken });
+
+          /* the Google verify endpoint returns .tokens with fresh JWT pair */
+          const { access, refresh } = user.tokens || {};
+          if (access) setCookie("access_token", access);
+          if (refresh) setCookie("refresh_token", refresh);
+
+          dispatch(setUserInfo(user));
+          return; // ✅ done
+        } catch {
+          /* ignore – will drop to “not logged in” */
+        }
+      }
+
+      /* ───────────────────────── no valid auth ──────────────────────────── */
+      dispatch(removeUserInfo());
+    })();
   }, [dispatch]);
 };
 
