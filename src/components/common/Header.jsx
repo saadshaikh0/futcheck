@@ -235,11 +235,11 @@ const Navbar = () => {
                   <AcademicCapIcon className="text-white w-5" /> Squad Wizard
                 </div>
               </Link>
-              <Link to="/games/">
+              {/* <Link to="/games/">
                 <div className="text-white flex gap-2 font-bold">
                   <AcademicCapIcon className="text-white w-5" /> Games
                 </div>
-              </Link>
+              </Link> */}
               {userInfo ? (
                 <Account />
               ) : (

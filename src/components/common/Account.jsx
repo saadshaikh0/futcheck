@@ -22,10 +22,10 @@ const Account = () => {
                   <img
                     src={userInfo.picture_url}
                     className="w-10 md:w-6 rounded-full"
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = "/fallback-avatar.png";
-                    }}
+                    // onError={(e) => {
+                    //   e.target.onerror = null;
+                    //   e.target.src = "/fallback-avatar.png";
+                    // }}
                   />
                 ) : (
                   <UserIcon className="w-6 h-6 text-white" />
