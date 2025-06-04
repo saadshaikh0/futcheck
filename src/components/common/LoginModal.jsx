@@ -15,6 +15,8 @@ const LoginModal = ({ onClose }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [error, setError] = useState("");
   const [isRegistering, setIsRegistering] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -27,6 +29,7 @@ const LoginModal = ({ onClose }) => {
       const { access, refresh } = data;
       setCookie("access_token", access);
       setCookie("refresh_token", refresh);
+      setCookie("fc_user", data.name || "");
       dispatch(setUserInfo(data));
       onClose();
     } catch (err) {
@@ -52,10 +55,16 @@ const LoginModal = ({ onClose }) => {
         return;
       }
 
-      const data = await registerUser({ email, password });
+      const data = await registerUser({
+        email,
+        password,
+        given_name: firstName,
+        family_name: lastName,
+      });
       const { access, refresh } = data;
       setCookie("access_token", access);
       setCookie("refresh_token", refresh);
+      setCookie("fc_user", data.name || "");
       dispatch(setUserInfo(data));
       onClose();
     } catch (err) {
@@ -78,12 +87,13 @@ const LoginModal = ({ onClose }) => {
       setIsLoading(true);
       setError("");
       const userInfo = await verifyGoogleToken({
-        token: credentialResponse.credential,
+        google_token: credentialResponse.credential,
       });
-      const { access, refresh } = userInfo.tokens;
+      const { access, refresh } = userInfo;
       setCookie("access_token", access);
       setCookie("refresh_token", refresh);
       setCookie("google_token", credentialResponse.credential);
+      setCookie("fc_user", userInfo.name || "");
       dispatch(setUserInfo(userInfo));
       onClose();
     } catch (err) {
@@ -98,6 +108,8 @@ const LoginModal = ({ onClose }) => {
     setIsRegistering(!isRegistering);
     setError("");
     setConfirmPassword("");
+    setFirstName("");
+    setLastName("");
   };
 
   return (
@@ -111,6 +123,26 @@ const LoginModal = ({ onClose }) => {
           {isRegistering ? "Register" : "Login"}
         </Dialog.Title>
         <div className="flex flex-col gap-2">
+          {isRegistering && (
+            <>
+              <input
+                className="border p-2 rounded"
+                type="text"
+                placeholder="First Name"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                disabled={isLoading}
+              />
+              <input
+                className="border p-2 rounded"
+                type="text"
+                placeholder="Last Name"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                disabled={isLoading}
+              />
+            </>
+          )}
           <input
             className="border p-2 rounded"
             type="email"

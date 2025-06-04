@@ -11,6 +11,6 @@ export const registerUser = async (payload) => {
 };
 
 export const verifyGoogleToken = async (payload) => {
-  const response = await instance.post("/verify_token/", payload);
-  return response.data.user_info;
+  const response = await instance.post("/api/token/google/", payload);
+  return response.data;
 };
