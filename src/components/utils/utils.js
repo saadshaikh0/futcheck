@@ -187,6 +187,8 @@ export const useFetchUserInfo = () => {
         setCookie("google_token", token);
         setCookie("access_token", access);
         setCookie("refresh_token", refresh);
+        setCookie("fc_user", userInfo.name || "");
+
         dispatch(setUserInfo(userInfo));
       } catch (error) {
         console.error("Failed to fetch user info", error);
