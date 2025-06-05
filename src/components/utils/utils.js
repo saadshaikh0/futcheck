@@ -179,58 +179,48 @@ export function useOutsideClick(ref, onClickOutside) {
   }, [ref]);
 }
 
-export const useFetchUserInfo = () => {
+export const useUserInfo = () => {
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    (async () => {
-      /* ───────────────────────── try JWT path first ───────────────────────── */
-      let access = getCookie("access_token");
-      const refresh = getCookie("refresh_token");
+  const fetchUser = async () => {
+    let access = getCookie("access_token");
+    const refresh = getCookie("refresh_token");
 
-      if (access) {
-        try {
-          const user = await fetchUserInfoBearer(access);
-          dispatch(setUserInfo(user));
-          return; // ✅ done
-        } catch {
-          /* access token invalid/expired – try to refresh */
-          if (refresh) {
-            try {
-              const { access: newAccess } = await refreshAccessToken(refresh);
-              setCookie("access_token", newAccess);
-              access = newAccess;
-              const user = await fetchUserInfoBearer(access);
-              dispatch(setUserInfo(user));
-              return; // ✅ done
-            } catch {
-              /* fall through to Google path */
-            }
-          }
+    if (access) {
+      try {
+        const user = await fetchUserInfoBearer(access);
+        dispatch(setUserInfo(user));
+        return;
+      } catch {
+        if (refresh) {
+          try {
+            const { access: newAccess } = await refreshAccessToken(refresh);
+            setCookie("access_token", newAccess);
+            access = newAccess;
+            const user = await fetchUserInfoBearer(access);
+            dispatch(setUserInfo(user));
+            return;
+          } catch {}
         }
       }
+    }
 
-      const gToken = getCookie("google_token");
-      if (gToken) {
-        try {
-          const user = await verifyGoogleToken({ google_token: gToken });
+    const gToken = getCookie("google_token");
+    if (gToken) {
+      try {
+        const user = await verifyGoogleToken({ google_token: gToken });
+        const { access, refresh } = user.tokens || {};
+        if (access) setCookie("access_token", access);
+        if (refresh) setCookie("refresh_token", refresh);
+        dispatch(setUserInfo(user));
+        return;
+      } catch {}
+    }
 
-          /* the Google verify endpoint returns .tokens with fresh JWT pair */
-          const { access, refresh } = user.tokens || {};
-          if (access) setCookie("access_token", access);
-          if (refresh) setCookie("refresh_token", refresh);
+    dispatch(removeUserInfo());
+  };
 
-          dispatch(setUserInfo(user));
-          return; // ✅ done
-        } catch {
-          /* ignore – will drop to “not logged in” */
-        }
-      }
-
-      /* ───────────────────────── no valid auth ──────────────────────────── */
-      dispatch(removeUserInfo());
-    })();
-  }, [dispatch]);
+  return { fetchUser };
 };
 
 export const addRarityUrl = (data, type = "s") => {
@@ -255,7 +245,6 @@ export const addRarityUrl = (data, type = "s") => {
   });
   return updatedData;
 };
-export default useFetchUserInfo;
 export const updateRarity = (data) => {
   data.forEach((player) => {
     if (player.rarity == 0 || player.rarity == 1)

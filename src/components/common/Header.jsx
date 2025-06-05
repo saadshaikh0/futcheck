@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import useFetchUserInfo, { decodeJWT, useOutsideClick } from "../utils/utils";
+import { useUserInfo, useOutsideClick } from "../utils/utils";
 import CustomPopover from "./CustomPopover";
 import { usePopper } from "react-popper";
 import { useQuery } from "@tanstack/react-query";
@@ -55,7 +55,7 @@ const Navbar = () => {
   const closePanel = () => {
     setOpen(false);
   };
-  useFetchUserInfo();
+  const { fetchUser } = useUserInfo();
 
   useOutsideClick(inputRef, closePanel);
   const { styles: menuStyles, attributes: menuAttributes } = usePopper(
@@ -129,6 +129,23 @@ const Navbar = () => {
     getData();
   }, []);
 
+  useEffect(() => {
+    fetchUser();
+    const handleFocus = () => {
+      fetchUser();
+    };
+
+    window.addEventListener("focus", handleFocus);
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible") {
+        fetchUser();
+      }
+    });
+
+    return () => {
+      window.removeEventListener("focus", handleFocus);
+    };
+  }, []);
   const userInfo = useSelector((state) => state.app.userInfo);
   return (
     <div>
