@@ -36,7 +36,7 @@ const SBC = () => {
             <img
               alt="sbc"
               className="w-7"
-              src="https://cdn.futcheck.com/assets/img/fc25/misc/sbc.webp"
+              src={`${process.env.REACT_APP_CDN_BASE_URL}/misc/sbc.webp`}
             />
             <h2 className="text-white text-2xl font-bold">
               FC 25 Squad Building Challenges

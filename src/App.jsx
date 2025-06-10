@@ -36,7 +36,7 @@ import StatClash from "./components/games/StatClash";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
-ReactGA.initialize("G-RD6LGLC1LD");
+ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
 
 const queryClient = new QueryClient();
 
@@ -53,11 +53,13 @@ function App() {
       </Helmet>
       <ErrorBoundary>
         <Provider store={store}>
-          <GoogleOAuthProvider clientId="55917895097-n505fctm2fkegjjfc66bhcrq4vtsvol3.apps.googleusercontent.com">
+          <GoogleOAuthProvider
+            clientId={process.env.REACT_APP_GOOGLE_OAUTH_CLIENT_ID}
+          >
             <QueryClientProvider client={queryClient}>
               <div className="App scrollbar-thin">
                 <Header />
-                {/* <Ads adClient="ca-pub-4560319877250034" adSlot="1044013921" /> */}
+                {/* <Ads adClient={process.env.REACT_APP_GOOGLE_ADSENSE_ACCOUNT} adSlot={process.env.REACT_APP_GOOGLE_ADSENSE_SLOT} /> */}
                 <Routes>
                   {/* <Route exact path="/" element={<HomePage />} /> */}
                   <Route exact path="/" element={<NewHomePage />} />

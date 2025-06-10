@@ -90,10 +90,11 @@ export const fillZeros = (hexcode) => {
   return hexcode;
 };
 
-const BASE_URL = "https://cdn.futcheck.com/assets/img/fc25";
+const BASE_URL = process.env.REACT_APP_CDN_BASE_URL;
+const EA_BASE_URL = process.env.REACT_APP_EA_BASE_URL;
+
 export const buildChallengeImageUrl = (challengeImageId) => {
-  return `https://www.ea.com/ea-sports-fc/ultimate-team/web-app/content/24B23FDE-7835-41C2-87A2-F453DFDB2E82/2024/fut/sbc/companion/challenges/images/sbc_challenge_image_${challengeImageId}.png
-`;
+  return `${EA_BASE_URL}/sbc/companion/challenges/images/sbc_challenge_image_${challengeImageId}.png`;
 };
 
 export const buildPlayerUrl = (guId, eaId, baseId) => {

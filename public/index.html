@@ -5,7 +5,10 @@
     <link rel="icon" href="favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
-    <meta name="google-adsense-account" content="ca-pub-4560319877250034" />
+    <meta
+      name="google-adsense-account"
+      content="%REACT_APP_GOOGLE_ADSENSE_ACCOUNT%"
+    />
 
     <meta name="author" content="Futcheck" />
     <!--
@@ -30,12 +33,12 @@
     <!-- Google tag (gtag.js) -->
     <script
       async
-      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4560319877250034"
+      src="%REACT_APP_GOOGLE_ADSENSE_URL%?client=%REACT_APP_GOOGLE_ADSENSE_ACCOUNT%"
       crossorigin="anonymous"
     ></script>
     <script
       async
-      src="https://www.googletagmanager.com/gtag/js?id=G-RD6LGLC1LD"
+      src="%REACT_APP_GOOGLE_TAG_MANAGER_URL%?id=%REACT_APP_GOOGLE_ANALYTICS_ID%"
     ></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -44,7 +47,7 @@
       }
       gtag("js", new Date());
 
-      gtag("config", "G-RD6LGLC1LD");
+      gtag("config", "%REACT_APP_GOOGLE_ANALYTICS_ID%");
     </script>
   </head>
 

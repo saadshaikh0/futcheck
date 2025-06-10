@@ -33,7 +33,7 @@ const PlayerRow = ({ player }) => {
         >
           <img
             className="absolute top-1/2 -translate-y-1/2"
-            src={`https://www.ea.com/ea-sports-fc/ultimate-team/web-app/content/24B23FDE-7835-41C2-87A2-F453DFDB2E82/2024/fut/items/images/mobile/portraits/${base_id}.png`}
+            src={`${process.env.REACT_APP_EA_BASE_URL}/items/images/mobile/portraits/${base_id}.png`}
             width={40}
           />
         </div>
@@ -48,7 +48,7 @@ const PlayerRow = ({ player }) => {
               <img src={league_url} className="w-3 h-3" />
               <img
                 className="w-3 h-3"
-                src={`https://www.ea.com/ea-sports-fc/ultimate-team/web-app/content/24B23FDE-7835-41C2-87A2-F453DFDB2E82/2024/fut/items/images/mobile/clubs/dark/${teamid}.png`}
+                src={`${process.env.REACT_APP_EA_BASE_URL}/items/images/mobile/clubs/dark/${teamid}.png`}
               />
             </div>
           </div>

@@ -8,7 +8,7 @@ import {
 } from "../components/utils/utils";
 import instance from "./axiosclient";
 import ReactGA from "react-ga4";
-ReactGA.initialize("G-RD6LGLC1LD");
+ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
 
 export const fetchPlayers = async (value, searchMode) => {
   if (!value || value.length == 0) return [];

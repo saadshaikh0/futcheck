@@ -17,8 +17,7 @@ import { buildDynamicUrl } from "../utils/utils";
 const data = [
   {
     league: "P",
-    image:
-      "https://www.ea.com/ea-sports-fc/ultimate-team/web-app/content/24B23FDE-7835-41C2-87A2-F453DFDB2E82/2024/fut/items/images/mobile/leagueLogos/dark/13.png",
+    image: `${process.env.REACT_APP_EA_BASE_URL}/items/images/mobile/leagueLogos/dark/13.png`,
     leagueid: 13,
     England: 40,
     France: 30,
@@ -27,8 +26,7 @@ const data = [
   },
   {
     league: "La Liga",
-    image:
-      "https://www.ea.com/ea-sports-fc/ultimate-team/web-app/content/24B23FDE-7835-41C2-87A2-F453DFDB2E82/2024/fut/items/images/mobile/leagueLogos/dark/53.png",
+    image: `${process.env.REACT_APP_EA_BASE_URL}/items/images/mobile/leagueLogos/dark/53.png`,
     leagueid: 53,
     Spain: 35,
     Argentina: 25,
@@ -37,8 +35,7 @@ const data = [
   },
   {
     league: "Serie A",
-    image:
-      "https://www.ea.com/ea-sports-fc/ultimate-team/web-app/content/24B23FDE-7835-41C2-87A2-F453DFDB2E82/2024/fut/items/images/mobile/leagueLogos/dark/54.png",
+    image: `${process.env.REACT_APP_EA_BASE_URL}/items/images/mobile/leagueLogos/dark/54.png`,
     leagueid: 54,
     Italy: 30,
     Brazil: 25,
@@ -47,8 +44,7 @@ const data = [
   },
   {
     league: "B",
-    image:
-      "https://www.ea.com/ea-sports-fc/ultimate-team/web-app/content/24B23FDE-7835-41C2-87A2-F453DFDB2E82/2024/fut/items/images/mobile/leagueLogos/dark/19.png",
+    image: `${process.env.REACT_APP_EA_BASE_URL}/items/images/mobile/leagueLogos/dark/19.png`,
     leagueid: 19,
     Germany: 50,
     Poland: 20,
@@ -57,8 +53,7 @@ const data = [
   },
   {
     league: "Ligue 1",
-    image:
-      "https://www.ea.com/ea-sports-fc/ultimate-team/web-app/content/24B23FDE-7835-41C2-87A2-F453DFDB2E82/2024/fut/items/images/mobile/leagueLogos/dark/31.png",
+    image: `${process.env.REACT_APP_EA_BASE_URL}/items/images/mobile/leagueLogos/dark/31.png`,
     leagueid: 31,
     France: 45,
     Brazil: 20,

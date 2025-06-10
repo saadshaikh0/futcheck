@@ -242,7 +242,7 @@ const Navbar = () => {
                   <img
                     alt=""
                     className="w-5"
-                    src="https://cdn.futcheck.com/assets/img/fc25/misc/sbc.webp"
+                    src={`${process.env.REACT_APP_CDN_BASE_URL}/misc/sbc.webp`}
                   />
                   <div className="text-white font-bold">SBCs</div>
                 </div>

@@ -1,70 +1,316 @@
-# Getting Started with Create React App
+# FutCheck - EA FC 25 Ultimate Team Companion
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A comprehensive web application for EA FC 25 Ultimate Team players, providing player statistics, prices, squad building tools, SBC solutions, and more.
 
-## Available Scripts
+## 🌟 Features
 
-In the project directory, you can run:
+### 🔍 Player Database
+- Search and browse 15,000+ EA FC 25 players
+- Detailed player statistics and attributes
+- Real-time price tracking and market trends
+- Player comparison tools
+- Evolution tracking system
 
-### `npm start`
+### ⚽ Squad Building Tools
+- Interactive drag-and-drop squad builder
+- Chemistry calculation and optimization
+- Formation customization (35+ formations)
+- AI-powered squad recommendations
+- Custom tactics and player roles
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### 🏆 SBC (Squad Building Challenges)
+- Complete SBC database with requirements
+- Community-shared solutions
+- Cost calculation and optimization
+- Challenge difficulty ratings
+- Reward tracking
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### 📈 Market Analysis
+- Price history and trend analysis
+- Investment recommendations
+- Market momentum indicators
+- Player value predictions
+- Portfolio tracking
 
-### `npm test`
+### 🎮 Interactive Features
+- StatClash mini-game
+- Player evolution simulator
+- Squad chemistry calculator
+- Formation analyzer
+- Team building wizard
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 👤 User Features
+- Google OAuth authentication
+- Personal club management
+- Saved squads and lineups
+- Premium subscription features
+- Cross-device synchronization
 
-### `npm run build`
+## 🚀 Quick Start
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Prerequisites
+- Node.js 16+ and npm
+- Modern web browser
+- Backend API server (optional for development)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Installation
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd futcheck
+   ```
 
-### `npm run eject`
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+3. **Configure environment variables**
+   ```bash
+   cp .env.example .env
+   # Edit .env with your configuration
+   ```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+4. **Start development server**
+   ```bash
+   npm start
+   ```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+   Open [http://localhost:3000](http://localhost:3000) to view the app.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## 🛠️ Tech Stack
 
-## Learn More
+### Frontend
+- **React 18** - Modern React with hooks and context
+- **Redux Toolkit** - Predictable state management
+- **React Router v6** - Client-side routing
+- **Tailwind CSS** - Utility-first CSS framework
+- **React Query** - Server state management and caching
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Key Libraries
+- **React DnD** - Drag and drop functionality
+- **Recharts** - Data visualization
+- **React Helmet** - SEO optimization
+- **PayPal SDK** - Payment processing
+- **Google OAuth** - Authentication
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Development Tools
+- **Create React App** - Build tooling
+- **ESLint** - Code linting
+- **Jest** - Testing framework
+- **React Testing Library** - Component testing
 
-### Code Splitting
+## 📁 Project Structure
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```
+src/
+├── api/                    # API services and configuration
+│   ├── apiService.js      # Main API endpoints
+│   ├── authService.js     # Authentication services
+│   └── axiosclient.js     # Axios configuration
+├── components/            # React components
+│   ├── common/           # Shared components
+│   ├── club/             # User club management
+│   ├── evos/             # Evolution system
+│   ├── games/            # Mini-games
+│   ├── market/           # Market analysis
+│   ├── sbc/              # SBC tools
+│   ├── squadBuilder/     # Squad building
+│   ├── squadWizard/      # AI recommendations
+│   └── utils/            # Utilities and constants
+├── redux/                # State management
+│   ├── store.js          # Redux store configuration
+│   └── *Slice.js         # Feature-specific slices
+└── assets/               # Static assets
+```
 
-### Analyzing the Bundle Size
+## ⚙️ Configuration
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### Environment Variables
 
-### Making a Progressive Web App
+Create a `.env` file in the root directory:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+```env
+# API Configuration
+REACT_APP_API_URL=http://localhost:8000/
 
-### Advanced Configuration
+# Analytics
+REACT_APP_GOOGLE_ANALYTICS_ID=your-ga-id
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+# Authentication
+REACT_APP_GOOGLE_OAUTH_CLIENT_ID=your-oauth-client-id
 
-### Deployment
+# CDN & Assets
+REACT_APP_CDN_BASE_URL=https://cdn.futcheck.com/assets/img/fc25
+REACT_APP_EA_BASE_URL=https://www.ea.com/ea-sports-fc/ultimate-team/web-app/content/...
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+# Payment (Premium features)
+REACT_APP_PAYPAL_CLIENT_ID=your-paypal-client-id
 
-### `npm run build` fails to minify
+# External Services
+REACT_APP_GOOGLE_ADSENSE_ACCOUNT=your-adsense-account
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+**Important**: Never commit the `.env` file to version control. Use `.env.example` for documentation.
+
+## 🔌 API Integration
+
+The app integrates with a Django REST API backend. Key endpoints:
+
+- **Players**: `/search/`, `/get_players/`, `/versions/`
+- **Prices**: `/price/`, `/get_player_price_history/`
+- **SBCs**: `/fetch_sbc_data/`, `/fetch_sbc_details/`
+- **Evolution**: `/fetch_evo_data/`, `/get_evolved_players/`
+- **Squad Building**: `/get_best_squad/`, `/get_best_club_squad/`
+
+## 🧪 Testing
+
+```bash
+# Run test suite
+npm test
+
+# Run tests with coverage
+npm test -- --coverage
+
+# Run tests in watch mode
+npm test -- --watch
+```
+
+## 🏗️ Building for Production
+
+```bash
+# Create production build
+npm run build
+
+# Serve build locally (for testing)
+npx serve -s build
+```
+
+The build folder contains optimized static files ready for deployment.
+
+## 🚀 Deployment
+
+### Build Optimization
+- Code splitting by routes
+- Image optimization (WebP format)
+- Bundle analysis and optimization
+- CDN integration for assets
+
+### Environment Setup
+- Configure environment variables for production
+- Set up HTTPS
+- Configure CORS on backend
+- Set up monitoring and analytics
+
+## 🤝 Contributing
+
+1. **Fork the repository**
+2. **Create a feature branch**: `git checkout -b feature/amazing-feature`
+3. **Commit changes**: `git commit -m 'Add amazing feature'`
+4. **Push to branch**: `git push origin feature/amazing-feature`
+5. **Open a Pull Request**
+
+### Development Guidelines
+- Follow React best practices
+- Use functional components with hooks
+- Implement proper error handling
+- Add tests for new features
+- Follow the existing code style
+
+## 📊 Performance
+
+### Optimization Techniques
+- React.memo for expensive components
+- useCallback/useMemo for expensive calculations
+- Code splitting for large components
+- Image lazy loading
+- API response caching with React Query
+
+### Monitoring
+- Google Analytics for user behavior
+- Web Vitals for performance metrics
+- Error tracking for debugging
+- API response time monitoring
+
+## 🔒 Security
+
+- Environment variables for sensitive data
+- JWT authentication with httpOnly cookies
+- Input validation and sanitization
+- CORS configuration
+- Content Security Policy headers
+
+## 🌐 Browser Support
+
+- Chrome (last 2 versions)
+- Firefox (last 2 versions)
+- Safari (last 2 versions)
+- Edge (last 2 versions)
+- Mobile browsers (iOS Safari, Chrome Mobile)
+
+## 📱 Mobile Support
+
+- Responsive design with Tailwind CSS
+- Touch-friendly interface
+- Mobile-optimized navigation
+- Swipe gestures for card interactions
+- Progressive Web App features
+
+## 🎨 Design System
+
+### Color Palette
+- Primary: Dark theme with blue accents
+- Secondary: EA FC brand colors
+- Success/Error: Standard green/red indicators
+
+### Typography
+- System fonts for performance
+- Consistent sizing scale
+- Proper contrast ratios
+
+### Components
+- Consistent button styles
+- Form input patterns
+- Loading state indicators
+- Error message formatting
+
+## 🆘 Troubleshooting
+
+### Common Issues
+
+**Build fails to minify**
+- Check for ES6+ syntax in dependencies
+- Update babel configuration if needed
+
+**API connection issues**
+- Verify API URL in environment variables
+- Check CORS configuration
+- Ensure backend server is running
+
+**Authentication problems**
+- Verify OAuth client ID
+- Check cookie settings
+- Ensure HTTPS in production
+
+### Getting Help
+
+- Check existing GitHub issues
+- Create detailed bug reports
+- Include environment information
+- Provide steps to reproduce
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 🙏 Acknowledgments
+
+- EA Sports for FC 25 game data
+- React community for excellent libraries
+- Contributors and beta testers
+- Ultimate Team community for feedback
+
+---
+
+**Built with ❤️ for the EA FC 25 Ultimate Team community**
