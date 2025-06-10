@@ -5,6 +5,7 @@ A comprehensive web application for EA FC 25 Ultimate Team players, providing pl
 ## 🌟 Features
 
 ### 🔍 Player Database
+
 - Search and browse 15,000+ EA FC 25 players
 - Detailed player statistics and attributes
 - Real-time price tracking and market trends
@@ -12,6 +13,7 @@ A comprehensive web application for EA FC 25 Ultimate Team players, providing pl
 - Evolution tracking system
 
 ### ⚽ Squad Building Tools
+
 - Interactive drag-and-drop squad builder
 - Chemistry calculation and optimization
 - Formation customization (35+ formations)
@@ -19,6 +21,7 @@ A comprehensive web application for EA FC 25 Ultimate Team players, providing pl
 - Custom tactics and player roles
 
 ### 🏆 SBC (Squad Building Challenges)
+
 - Complete SBC database with requirements
 - Community-shared solutions
 - Cost calculation and optimization
@@ -26,6 +29,7 @@ A comprehensive web application for EA FC 25 Ultimate Team players, providing pl
 - Reward tracking
 
 ### 📈 Market Analysis
+
 - Price history and trend analysis
 - Investment recommendations
 - Market momentum indicators
@@ -33,6 +37,7 @@ A comprehensive web application for EA FC 25 Ultimate Team players, providing pl
 - Portfolio tracking
 
 ### 🎮 Interactive Features
+
 - StatClash mini-game
 - Player evolution simulator
 - Squad chemistry calculator
@@ -40,6 +45,7 @@ A comprehensive web application for EA FC 25 Ultimate Team players, providing pl
 - Team building wizard
 
 ### 👤 User Features
+
 - Google OAuth authentication
 - Personal club management
 - Saved squads and lineups
@@ -49,6 +55,7 @@ A comprehensive web application for EA FC 25 Ultimate Team players, providing pl
 ## 🚀 Quick Start
 
 ### Prerequisites
+
 - Node.js 16+ and npm
 - Modern web browser
 - Backend API server (optional for development)
@@ -56,23 +63,27 @@ A comprehensive web application for EA FC 25 Ultimate Team players, providing pl
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone <repository-url>
    cd futcheck
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm install
    ```
 
 3. **Configure environment variables**
+
    ```bash
    cp .env.example .env
    # Edit .env with your configuration
    ```
 
 4. **Start development server**
+
    ```bash
    npm start
    ```
@@ -82,6 +93,7 @@ A comprehensive web application for EA FC 25 Ultimate Team players, providing pl
 ## 🛠️ Tech Stack
 
 ### Frontend
+
 - **React 18** - Modern React with hooks and context
 - **Redux Toolkit** - Predictable state management
 - **React Router v6** - Client-side routing
@@ -89,6 +101,7 @@ A comprehensive web application for EA FC 25 Ultimate Team players, providing pl
 - **React Query** - Server state management and caching
 
 ### Key Libraries
+
 - **React DnD** - Drag and drop functionality
 - **Recharts** - Data visualization
 - **React Helmet** - SEO optimization
@@ -96,6 +109,7 @@ A comprehensive web application for EA FC 25 Ultimate Team players, providing pl
 - **Google OAuth** - Authentication
 
 ### Development Tools
+
 - **Create React App** - Build tooling
 - **ESLint** - Code linting
 - **Jest** - Testing framework
@@ -192,12 +206,14 @@ The build folder contains optimized static files ready for deployment.
 ## 🚀 Deployment
 
 ### Build Optimization
+
 - Code splitting by routes
 - Image optimization (WebP format)
 - Bundle analysis and optimization
 - CDN integration for assets
 
 ### Environment Setup
+
 - Configure environment variables for production
 - Set up HTTPS
 - Configure CORS on backend
@@ -212,6 +228,7 @@ The build folder contains optimized static files ready for deployment.
 5. **Open a Pull Request**
 
 ### Development Guidelines
+
 - Follow React best practices
 - Use functional components with hooks
 - Implement proper error handling
@@ -221,6 +238,7 @@ The build folder contains optimized static files ready for deployment.
 ## 📊 Performance
 
 ### Optimization Techniques
+
 - React.memo for expensive components
 - useCallback/useMemo for expensive calculations
 - Code splitting for large components
@@ -228,6 +246,7 @@ The build folder contains optimized static files ready for deployment.
 - API response caching with React Query
 
 ### Monitoring
+
 - Google Analytics for user behavior
 - Web Vitals for performance metrics
 - Error tracking for debugging
@@ -260,16 +279,19 @@ The build folder contains optimized static files ready for deployment.
 ## 🎨 Design System
 
 ### Color Palette
+
 - Primary: Dark theme with blue accents
 - Secondary: EA FC brand colors
 - Success/Error: Standard green/red indicators
 
 ### Typography
+
 - System fonts for performance
 - Consistent sizing scale
 - Proper contrast ratios
 
 ### Components
+
 - Consistent button styles
 - Form input patterns
 - Loading state indicators
@@ -280,15 +302,18 @@ The build folder contains optimized static files ready for deployment.
 ### Common Issues
 
 **Build fails to minify**
+
 - Check for ES6+ syntax in dependencies
 - Update babel configuration if needed
 
 **API connection issues**
+
 - Verify API URL in environment variables
 - Check CORS configuration
 - Ensure backend server is running
 
 **Authentication problems**
+
 - Verify OAuth client ID
 - Check cookie settings
 - Ensure HTTPS in production
