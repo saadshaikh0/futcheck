@@ -35,6 +35,7 @@ import GamesWrapper from "./components/GamesWrapper";
 import StatClash from "./components/games/StatClash";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
+import GoogleAnalytics from "./GoogleAnalytics";
 
 ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS_ID);
 
@@ -45,12 +46,14 @@ function App() {
 
   return (
     <>
-      <Helmet>
-        <meta
-          name="description"
-          content="Discover the latest EAFC 25 players along with their up-to-date stats and prices on our website"
-        />
-      </Helmet>
+      <GoogleAnalytics>
+        <Helmet>
+          <meta
+            name="description"
+            content="Discover the latest EAFC 25 players along with their up-to-date stats and prices on our website"
+          />
+        </Helmet>
+      </GoogleAnalytics>
       <ErrorBoundary>
         <Provider store={store}>
           <GoogleOAuthProvider
