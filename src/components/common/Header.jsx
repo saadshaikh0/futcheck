@@ -147,6 +147,16 @@ const Navbar = () => {
     };
   }, []);
   const userInfo = useSelector((state) => state.app.userInfo);
+
+  // Handle Go Premium click: require login first
+  const handleGoPremium = () => {
+    if (!userInfo) {
+      setShowLogin(true);
+      return;
+    }
+    setShowPremium(true);
+  };
+
   return (
     <div>
       <header
@@ -267,12 +277,27 @@ const Navbar = () => {
                   Login
                 </button>
               )}
-              <button
-                onClick={() => setShowPremium(true)}
-                className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-1.5 px-4 rounded-lg"
-              >
-                Go Premium
-              </button>
+
+              {/* Premium CTA or GOLD badge */}
+              {userInfo?.is_premium ||
+              (userInfo?.membership_level || "").toLowerCase() === "gold" ? (
+                <span className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-yellow-400 text-black font-extrabold tracking-wide shadow-md">
+                  <img
+                    src={`${process.env.REACT_APP_CDN_BASE_URL}/misc/crown.webp`}
+                    alt=""
+                    className="w-4 h-4"
+                    onError={(e) => (e.currentTarget.style.display = "none")}
+                  />
+                  GOLD
+                </span>
+              ) : (
+                <button
+                  onClick={handleGoPremium}
+                  className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-1.5 px-4 rounded-lg"
+                >
+                  Go Premium
+                </button>
+              )}
               {/* <Link to="/evolutions/">
                 <div className="text-white flex gap-2 font-bold">
                   Evolutions
@@ -306,7 +331,11 @@ const Navbar = () => {
                       {...menuAttributes.popper}
                       className="absolute bg-[#28004d] shadow-lg"
                     >
-                      <MobileMenuPopover />
+                      <MobileMenuPopover
+                        userInfo={userInfo}
+                        onOpenLogin={() => setShowLogin(true)}
+                        onOpenPremium={handleGoPremium}
+                      />
                     </Popover.Panel>
                   </>
                 )}

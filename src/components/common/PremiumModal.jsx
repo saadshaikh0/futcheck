@@ -3,10 +3,14 @@ import React, { useCallback, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { PayPalButtons } from "@paypal/react-paypal-js";
 import { createPremiumOrder, captureOrder } from "../../api/apiService";
+import { toHaveStyle } from "@testing-library/jest-dom/matchers";
+import { toast } from "react-toastify";
+import { useUserInfo } from "../utils/utils";
 
 const PRICE_USD = "4.99"; // single-payment price
 
 export default function PremiumModal({ onClose }) {
+  const { fetchUser } = useUserInfo();
   // close on ESC
   useEffect(() => {
     const onKey = (e) => e.key === "Escape" && onClose();
@@ -27,7 +31,11 @@ export default function PremiumModal({ onClose }) {
         const order = await captureOrder(data.orderID);
 
         if (order.status === "COMPLETED") {
-          //   alert("✅ Premium unlocked! Thank you.");
+          toast.success("Premium unlocked! Enjoy for 1 month.");
+          // refresh user info so UI updates immediately
+          try {
+            await fetchUser();
+          } catch {}
           setTimeout(() => {
             onClose();
           }, 300);
@@ -42,7 +50,7 @@ export default function PremiumModal({ onClose }) {
       // ✅ Explicitly return a resolved promise
       return Promise.resolve();
     },
-    [onClose]
+    [onClose, fetchUser]
   );
 
   /** Basic error handler */
