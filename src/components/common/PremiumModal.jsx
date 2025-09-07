@@ -93,7 +93,7 @@ export default function PremiumModal({ onClose }) {
         </div>
 
         {/* PayPal Smart Button (shows card + wallet) */}
-        <div className="flex justify-center">
+        <div className="flex justify-center max-h-[50vh] overflow-auto">
           <PayPalButtons
             style={{ layout: "vertical", color: "gold", shape: "rect" }}
             createOrder={createOrder}

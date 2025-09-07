@@ -120,10 +120,10 @@ function App() {
 const Root = () => (
   <PayPalScriptProvider
     options={{
-      "client-id": process.env.REACT_APP_PAYPAL_CLIENT_ID || "test",
+      "client-id": process.env.REACT_APP_PAYPAL_CLIENT_ID,
       currency: "USD",
       components: "buttons",
-      "enable-funding": "card,venmo", // Optional: if you want card support too
+      "enable-funding": "card,venmo",
       "data-sdk-integration-source": "developer-studio",
     }}
   >
