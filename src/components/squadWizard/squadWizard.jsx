@@ -11,16 +11,28 @@ import FOOTBALL_STADIUM_IMAGE from "../../assets/sbc_background_field.webp";
 import SquadInsights from "./SquadInsights";
 
 import FormationButton from "./FormationButton";
+import playerCache from "../utils/playerCache";
 
 const SquadWizard = () => {
   const dispatch = useDispatch();
   const positions = useSelector((state) => state.squadWizard.positions);
   const players = useSelector((state) => state.squadWizard.players);
   const squadPrice = useSelector((state) => state.squadWizard.squadPrice);
+  const [playersReady, setPlayersReady] = useState(false);
 
   useEffect(() => {
-    // Set the initial formation
     dispatch(setFormation("f442"));
+
+    const initPlayers = async () => {
+      try {
+        await playerCache.ensurePlayersLoaded();
+        setPlayersReady(true);
+      } catch (error) {
+        console.error("Failed to load player database:", error);
+      }
+    };
+
+    initPlayers();
   }, [dispatch]);
 
   return (
@@ -31,7 +43,11 @@ const SquadWizard = () => {
       }}
     >
       <div className={`absolute inset-0 bg-black  opacity-70`}></div>
-
+      {!playersReady && (
+        <div className="absolute inset-0 flex items-center justify-center z-50">
+          <div className="text-white text-2xl">Loading player database...</div>
+        </div>
+      )}
       <div className="text-white md:h-[calc(100vh-4rem)] relative w-5/6 mx-auto flex gap-5 flex-col mt-4">
         <div className="text-center flex flex-col gap-2">
           <h1 className="text-3xl font-medium">Welcome To Squad Wizard</h1>

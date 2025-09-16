@@ -560,3 +560,15 @@ export const createPremiumOrder = async ({ amount }) =>
 
 export const captureOrder = async (orderID) =>
   (await instance.post(`/api/orders/${orderID}/capture`)).data; // => full PayPal capture payload
+
+export const fetchFullPlayersDatabase = async () => {
+  try {
+    const response = await instance.get("/all_players/", {
+      timeout: 300000,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching full players database:", error);
+    throw error;
+  }
+};

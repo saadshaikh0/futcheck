@@ -12,6 +12,8 @@ import SquadRequirements, {
   ConstraintTypes,
   OperationTypes,
 } from "./SquadRequirements";
+import playerCache from "../utils/playerCache";
+import wasmSquadBuilder from "../utils/wasmSquadBuilder";
 
 const SquadInsights = () => {
   const [activeTab, setActiveTab] = useState("wizard");
@@ -37,116 +39,55 @@ const SquadInsights = () => {
   const isMultiConstraint = (type) => type === ConstraintTypes.HIGH_RATING;
 
   /**
-   * Build the final payload and call `generateSquad`.
+   * Build the final payload and call WASM genetic algorithm.
    */
   const handleGenerate = async () => {
     dispatch(setLoading(true));
+
     try {
-      let target_rating = null;
-      let target_chemistry = null;
-      let other_constraints = {};
+      const playerPool = await playerCache.fetchAndCachePlayers();
 
-      constraints.forEach((c) => {
-        if (isMultiConstraint(c.type)) {
-          // Handle high_rating
-          const constraintType =
-            c.operation === OperationTypes.MIN
-              ? "min_high_rating"
-              : "max_high_rating";
+      if (!playerPool || playerPool.length === 0) {
+        throw new Error("No players available");
+      }
 
-          if (!other_constraints[constraintType]) {
-            other_constraints[constraintType] = [];
-          }
-
-          other_constraints[constraintType].push({
-            key: c.key, // rating threshold
-            value: c.value, // max or min # allowed
-          });
-        } else if (c.type === ConstraintTypes.NATIONS) {
-          // Handle nations based on operation
-          const nationKey =
-            c.operation === OperationTypes.MIN ? "min_nations" : "max_nations";
-
-          other_constraints[nationKey] = {
-            key: -1, // Using -1 as key as per the requirement
-            value: c.value,
-          };
-        } else if (c.type === ConstraintTypes.LEAGUES) {
-          // Handle leagues based on operation
-          const leagueKey =
-            c.operation === OperationTypes.MIN ? "min_leagues" : "max_leagues";
-
-          other_constraints[leagueKey] = {
-            key: -1,
-            value: c.value,
-          };
-        } else if (c.type === ConstraintTypes.CLUBS) {
-          // Handle clubs based on operation
-          const clubKey =
-            c.operation === OperationTypes.MIN ? "min_clubs" : "max_clubs";
-
-          if (!other_constraints[clubKey]) {
-            other_constraints[clubKey] = [];
-          }
-
-          other_constraints[clubKey].push({
-            key: -1,
-            value: c.value,
-          });
-        } else {
-          // Handle basic constraints
-          if (c.type === ConstraintTypes.RATING) {
-            target_rating = {
-              value: c.value,
-              type: c.operation,
-            };
-          } else if (c.type === ConstraintTypes.CHEMISTRY) {
-            target_chemistry = {
-              value: c.value,
-              type: c.operation,
-            };
-          } else if (c.type === ConstraintTypes.Quality) {
-            const qualityKey =
-              c.operation === OperationTypes.MIN
-                ? "min_quality"
-                : c.operation === OperationTypes.EXACTLY
-                ? "exactly_quality"
-                : "max_quality";
-
-            other_constraints[qualityKey] = {
-              key: c.value,
-              value: 11,
-            };
-          }
-        }
-      });
-
-      // Build final request object
-      const requestPayload = {
-        budget: budgetInput,
+      const wasmConstraints = wasmSquadBuilder.transformConstraints(
         formation,
-        lockedPlayers: lockedPlayers.map((lp) => ({
-          positionIndex: lp.positionIndex,
-          ...lp.player,
-          latest_price: lp.player.latest_price || 200,
-        })),
-        target_rating,
-        target_chemistry,
-        other_constraints,
-      };
-
-      const data = await generateSquad(requestPayload);
-      const positionIndex = data.position_index || {};
-      const playerIds = Object.values(positionIndex);
-
-      // Map returned player IDs to actual player objects
-      const fetchedPlayers = await fetchPlayersByIds({ ids: playerIds });
-      const mappedPlayers = Object.keys(positionIndex).map(
-        (pos) => fetchedPlayers.find((p) => p.id === positionIndex[pos]) || null
+        budgetInput,
+        lockedPlayers,
+        constraints
       );
-      dispatch(setAllPlayers(mappedPlayers));
+
+      const result = await wasmSquadBuilder.findBestSquad(
+        playerPool,
+        wasmConstraints
+      );
+
+      console.log("WASM Squad Result:", result);
+
+      if (result.players && result.players.length > 0) {
+        const playerIds = result.players.map((player) => player.id);
+
+        const completePlayerData = await fetchPlayersByIds({ ids: playerIds });
+
+        const orderedPlayers = result.position_mapping.map((playerId) => {
+          return completePlayerData.find((player) => player.id === playerId);
+        });
+
+        const validPlayers = orderedPlayers.filter(
+          (player) => player !== undefined
+        );
+
+        if (validPlayers.length > 0) {
+          dispatch(setAllPlayers(validPlayers));
+        } else {
+          console.error("No valid players found after fetching complete data");
+        }
+      } else {
+        console.error("No valid squad found");
+      }
     } catch (err) {
-      console.error(err);
+      console.error("Squad generation error:", err);
     } finally {
       dispatch(setLoading(false));
     }

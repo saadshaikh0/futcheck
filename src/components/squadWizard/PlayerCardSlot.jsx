@@ -114,10 +114,11 @@ const PlayerCardSlot = ({ left, top, transform, player, index, position }) => {
           ? "2px solid blue"
           : "none",
         cursor: player ? "move" : "default",
-        touchAction: "none", // <-- Add this
-        userSelect: "none", // <-- Optionally add this
+        touchAction: "none",
+        userSelect: "none",
       }}
     >
+      {loading && !isLocked && <LoaderOverlay />}
       {player ? (
         <div
           key={player.id}
@@ -179,7 +180,6 @@ const PlayerCardSlot = ({ left, top, transform, player, index, position }) => {
       >
         {position}
       </div>
-      {loading && !isLocked && <LoaderOverlay />}
     </div>
   );
 };

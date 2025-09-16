@@ -1,0 +1,15 @@
+{
+  "name": "squad_builder",
+  "type": "module",
+  "version": "0.1.0",
+  "files": [
+    "squad_builder_bg.wasm",
+    "squad_builder.js",
+    "squad_builder.d.ts"
+  ],
+  "main": "squad_builder.js",
+  "types": "squad_builder.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}
