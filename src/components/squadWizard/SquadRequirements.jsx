@@ -11,60 +11,73 @@ import {
   ChevronDownIcon,
 } from "@heroicons/react/24/outline";
 
-// Constants for constraint types and operations
+// Constants for constraint types - matching Rust structure
 export const ConstraintTypes = {
-  // Optional core constraints
-  RATING: "rating",
+  // Primary constraints
   CHEMISTRY: "chemistry",
-  PLAYER_CHEMISTRY: "player_chemistry",
+  RATING: "rating",
 
-  // Nation constraints
+  // Player quality constraints
+  PLAYER_OVERALL_RATING_MIN: "player_overall_rating_min",
+  PLAYER_OVERALL_RATING_MAX: "player_overall_rating_max",
+  MIN_QUALITY: "min_quality",
+  MAX_QUALITY: "max_quality",
+  EXACTLY_QUALITY: "exactly_quality",
+
+  // Rarity constraints
+  RARITY: "rarity",
+  RARITY_GROUP: "rarity_group",
+
+  // Nationality constraints
+  NATIONALITY: "nationality",
   NATIONS: "nations",
-  MIN_SAME_NATIONS: "min_same_nations",
-  MAX_SAME_NATIONS: "max_same_nations",
-  MIN_NATIONALITY: "min_nationality",
+  SAME_NATIONS: "same_nations",
 
   // League constraints
+  LEAGUE: "league",
   LEAGUES: "leagues",
-  MIN_SAME_LEAGUES: "min_same_leagues",
-  MAX_SAME_LEAGUES: "max_same_leagues",
-  MIN_LEAGUE: "min_league",
+  SAME_LEAGUES: "same_leagues",
 
   // Club constraints
+  TEAMID: "teamid",
   CLUBS: "clubs",
-  MIN_SAME_CLUBS: "min_same_clubs",
-  MAX_SAME_CLUBS: "max_same_clubs",
-  MIN_TEAMID: "min_teamid",
+  SAME_CLUBS: "same_clubs",
 
-  // Quality/Rarity constraints
-  QUALITY: "quality",
+  // Chemistry constraints
+  PLAYER_CHEMISTRY: "player_chemistry",
+
+  // Special constraints
   EXACTLY_SILVER: "exactly_silver",
-  MIN_RARITY: "min_rarity",
-
-  // Rating constraints
-  HIGH_RATING: "high_rating",
 };
 
-export const OperationTypes = {
-  MIN: "min",
-  MAX: "max",
-  EXACTLY: "exactly",
+// Matching Rust's ConstraintOperation enum
+export const ConstraintOperation = {
+  Min: "Min",
+  Max: "Max",
+  Exactly: "Exactly",
 };
 
 // Helper to determine which constraints allow multiple entries
 const isMultiConstraint = (type) =>
   [
-    ConstraintTypes.HIGH_RATING,
-    ConstraintTypes.MIN_NATIONALITY,
-    ConstraintTypes.MIN_LEAGUE,
-    ConstraintTypes.MIN_TEAMID,
+    ConstraintTypes.NATIONALITY,
+    ConstraintTypes.LEAGUE,
+    ConstraintTypes.TEAMID,
+    ConstraintTypes.RARITY,
+    ConstraintTypes.RARITY_GROUP,
+    ConstraintTypes.PLAYER_OVERALL_RATING_MIN,
+    ConstraintTypes.PLAYER_OVERALL_RATING_MAX,
   ].includes(type);
 
 // Operation Pills Component
 const OperationPills = ({
   value,
   onChange,
-  operations = [OperationTypes.MIN, OperationTypes.MAX, OperationTypes.EXACTLY],
+  operations = [
+    ConstraintOperation.Min,
+    ConstraintOperation.Max,
+    ConstraintOperation.Exactly,
+  ],
 }) => {
   return (
     <div className="flex justify-between gap-1 mt-2">
@@ -78,7 +91,7 @@ const OperationPills = ({
               : "bg-gray-700 hover:bg-gray-600 text-gray-300"
           }`}
         >
-          {op}
+          {op.toLowerCase()}
         </button>
       ))}
     </div>
@@ -177,14 +190,19 @@ const RangeConstraintRow = ({ constraint, onUpdate, onRemove }) => {
   );
 };
 
-// Component for a high rating constraint row
-const HighRatingConstraintRow = ({ constraint, onUpdate, onRemove }) => {
-  const { id, operation, key, value } = constraint;
+// Component for player overall rating constraints
+const PlayerRatingConstraintRow = ({ constraint, onUpdate, onRemove }) => {
+  const { id, type, operation, key, value } = constraint;
+
+  const label =
+    type === ConstraintTypes.PLAYER_OVERALL_RATING_MIN
+      ? "Minimum Player Rating"
+      : "Maximum Player Rating";
 
   return (
     <div className="flex flex-col gap-2 p-3 rounded bg-gray-800 my-1">
       <div className="flex items-center justify-between">
-        <span className="font-semibold">High Rating Players</span>
+        <span className="font-semibold">{label}</span>
         <button
           onClick={() => onRemove(id)}
           className="text-gray-400 hover:text-red-400"
@@ -195,11 +213,11 @@ const HighRatingConstraintRow = ({ constraint, onUpdate, onRemove }) => {
 
       <div className="flex items-center gap-3 mt-2">
         <label className="flex items-center gap-1">
-          <span className="text-sm">Rating ≥</span>
+          <span className="text-sm">Rating</span>
           <input
             type="number"
-            value={key || 85}
-            min={75}
+            value={key || 75}
+            min={40}
             max={99}
             onChange={(e) => onUpdate(id, "key", Number(e.target.value))}
             className="w-16 bg-transparent border border-gray-600 rounded p-1"
@@ -251,12 +269,16 @@ const SpecificRequirementRow = ({ constraint, onUpdate, onRemove }) => {
   // Determine label based on type
   const getLabel = () => {
     switch (type) {
-      case ConstraintTypes.MIN_NATIONALITY:
+      case ConstraintTypes.NATIONALITY:
         return "Players from specific nations";
-      case ConstraintTypes.MIN_LEAGUE:
+      case ConstraintTypes.LEAGUE:
         return "Players from specific league";
-      case ConstraintTypes.MIN_TEAMID:
+      case ConstraintTypes.TEAMID:
         return "Players from specific club";
+      case ConstraintTypes.RARITY:
+        return "Players with specific rarity";
+      case ConstraintTypes.RARITY_GROUP:
+        return "Players from rarity group";
       default:
         return type;
     }
@@ -264,12 +286,15 @@ const SpecificRequirementRow = ({ constraint, onUpdate, onRemove }) => {
 
   const getPlaceholder = () => {
     switch (type) {
-      case ConstraintTypes.MIN_NATIONALITY:
+      case ConstraintTypes.NATIONALITY:
         return "Nation IDs (comma separated)";
-      case ConstraintTypes.MIN_LEAGUE:
+      case ConstraintTypes.LEAGUE:
         return "League ID";
-      case ConstraintTypes.MIN_TEAMID:
+      case ConstraintTypes.TEAMID:
         return "Team ID";
+      case ConstraintTypes.RARITY:
+      case ConstraintTypes.RARITY_GROUP:
+        return "Rarity IDs (comma separated)";
       default:
         return "ID";
     }
@@ -297,7 +322,7 @@ const SpecificRequirementRow = ({ constraint, onUpdate, onRemove }) => {
         />
 
         <label className="flex items-center gap-2">
-          <span className="text-sm">Min Players:</span>
+          <span className="text-sm">Count:</span>
           <input
             type="number"
             value={value || 1}
@@ -318,48 +343,53 @@ const StandardConstraintRow = ({ constraint, onUpdate, onRemove }) => {
   // Pretty label with proper capitalization
   const getLabelForType = (type) => {
     const labelMap = {
-      [ConstraintTypes.NATIONS]: "Nations",
-      [ConstraintTypes.LEAGUES]: "Leagues",
-      [ConstraintTypes.CLUBS]: "Clubs",
-      [ConstraintTypes.QUALITY]: "Quality (Min Rating)",
-      [ConstraintTypes.MIN_SAME_NATIONS]: "Players from Same Nation",
-      [ConstraintTypes.MAX_SAME_NATIONS]: "Players from Same Nation",
-      [ConstraintTypes.MIN_SAME_LEAGUES]: "Players from Same League",
-      [ConstraintTypes.MAX_SAME_LEAGUES]: "Players from Same League",
-      [ConstraintTypes.MIN_SAME_CLUBS]: "Players from Same Club",
-      [ConstraintTypes.MAX_SAME_CLUBS]: "Players from Same Club",
+      [ConstraintTypes.NATIONS]: "Number of Nations",
+      [ConstraintTypes.LEAGUES]: "Number of Leagues",
+      [ConstraintTypes.CLUBS]: "Number of Clubs",
+      [ConstraintTypes.MIN_QUALITY]: "Minimum Quality (Bronze/Silver/Gold)",
+      [ConstraintTypes.MAX_QUALITY]: "Maximum Quality",
+      [ConstraintTypes.EXACTLY_QUALITY]: "Exactly Quality",
+      [ConstraintTypes.SAME_NATIONS]: "Players from Same Nation",
+      [ConstraintTypes.SAME_LEAGUES]: "Players from Same League",
+      [ConstraintTypes.SAME_CLUBS]: "Players from Same Club",
     };
     return labelMap[type] || type.charAt(0).toUpperCase() + type.slice(1);
   };
 
   // Get operations based on constraint type
   const getOperations = () => {
-    if (
-      [
-        ConstraintTypes.MIN_SAME_NATIONS,
-        ConstraintTypes.MIN_SAME_LEAGUES,
-        ConstraintTypes.MIN_SAME_CLUBS,
-      ].includes(type)
-    ) {
-      return [OperationTypes.MIN];
-    }
-    if (
-      [
-        ConstraintTypes.MAX_SAME_NATIONS,
-        ConstraintTypes.MAX_SAME_LEAGUES,
-        ConstraintTypes.MAX_SAME_CLUBS,
-      ].includes(type)
-    ) {
-      return [OperationTypes.MAX];
-    }
-    return [OperationTypes.MIN, OperationTypes.MAX, OperationTypes.EXACTLY];
+    return [
+      ConstraintOperation.Min,
+      ConstraintOperation.Max,
+      ConstraintOperation.Exactly,
+    ];
   };
 
   const handleOperationChange = (op) => onUpdate(id, "operation", op);
   const handleValueChange = (val) => onUpdate(id, "value", val);
 
-  const maxValue = type === ConstraintTypes.QUALITY ? 99 : 11;
-  const minValue = type === ConstraintTypes.QUALITY ? 65 : 1;
+  const isQuality = [
+    ConstraintTypes.MIN_QUALITY,
+    ConstraintTypes.MAX_QUALITY,
+    ConstraintTypes.EXACTLY_QUALITY,
+  ].includes(type);
+  const maxValue = isQuality ? 3 : 11;
+  const minValue = isQuality ? 1 : 1;
+
+  // For quality constraints, show the quality type
+  const getQualityLabel = (value) => {
+    if (!isQuality) return value;
+    switch (value) {
+      case 1:
+        return "Bronze";
+      case 2:
+        return "Silver";
+      case 3:
+        return "Gold";
+      default:
+        return value;
+    }
+  };
 
   return (
     <div className="flex flex-col gap-2 p-3 rounded bg-gray-800 my-1">
@@ -383,9 +413,11 @@ const StandardConstraintRow = ({ constraint, onUpdate, onRemove }) => {
       {/* Value + Slider */}
       <div className="flex flex-col gap-2 mt-1">
         <div className="flex justify-between text-xs text-gray-400">
-          <span>{minValue}</span>
-          <span className="text-sm font-medium text-white">{value}</span>
-          <span>{maxValue}</span>
+          <span>{isQuality ? "Bronze" : minValue}</span>
+          <span className="text-sm font-medium text-white">
+            {isQuality ? getQualityLabel(value) : value}
+          </span>
+          <span>{isQuality ? "Gold" : maxValue}</span>
         </div>
         <input
           type="range"
@@ -445,35 +477,49 @@ const SquadRequirements = () => {
 
   // Define all possible constraint options
   const constraintOptions = [
-    // Core optional constraints
+    // Primary constraints
     { type: ConstraintTypes.RATING, label: "Team Rating" },
     { type: ConstraintTypes.CHEMISTRY, label: "Team Chemistry" },
-    { type: ConstraintTypes.PLAYER_CHEMISTRY, label: "Min Player Chemistry" },
 
-    // Nation constraints
-    { type: ConstraintTypes.NATIONS, label: "Number of Nations" },
-    { type: ConstraintTypes.MIN_SAME_NATIONS, label: "Min from Same Nation" },
-    { type: ConstraintTypes.MAX_SAME_NATIONS, label: "Max from Same Nation" },
+    // Player quality constraints
     {
-      type: ConstraintTypes.MIN_NATIONALITY,
-      label: "Specific Nations Required",
+      type: ConstraintTypes.PLAYER_OVERALL_RATING_MIN,
+      label: "Minimum Player Rating",
     },
+    {
+      type: ConstraintTypes.PLAYER_OVERALL_RATING_MAX,
+      label: "Maximum Player Rating",
+    },
+    {
+      type: ConstraintTypes.MIN_QUALITY,
+      label: "Minimum Quality (Bronze/Silver/Gold)",
+    },
+    { type: ConstraintTypes.MAX_QUALITY, label: "Maximum Quality" },
+    { type: ConstraintTypes.EXACTLY_QUALITY, label: "Exactly Quality" },
+
+    // Rarity constraints
+    { type: ConstraintTypes.RARITY, label: "Specific Rarity Required" },
+    { type: ConstraintTypes.RARITY_GROUP, label: "Rarity Group Required" },
+
+    // Nationality constraints
+    { type: ConstraintTypes.NATIONALITY, label: "Specific Nations Required" },
+    { type: ConstraintTypes.NATIONS, label: "Number of Nations" },
+    { type: ConstraintTypes.SAME_NATIONS, label: "Players from Same Nation" },
 
     // League constraints
+    { type: ConstraintTypes.LEAGUE, label: "Specific League Required" },
     { type: ConstraintTypes.LEAGUES, label: "Number of Leagues" },
-    { type: ConstraintTypes.MIN_SAME_LEAGUES, label: "Min from Same League" },
-    { type: ConstraintTypes.MAX_SAME_LEAGUES, label: "Max from Same League" },
-    { type: ConstraintTypes.MIN_LEAGUE, label: "Specific League Required" },
+    { type: ConstraintTypes.SAME_LEAGUES, label: "Players from Same League" },
 
     // Club constraints
+    { type: ConstraintTypes.TEAMID, label: "Specific Club Required" },
     { type: ConstraintTypes.CLUBS, label: "Number of Clubs" },
-    { type: ConstraintTypes.MIN_SAME_CLUBS, label: "Min from Same Club" },
-    { type: ConstraintTypes.MAX_SAME_CLUBS, label: "Max from Same Club" },
-    { type: ConstraintTypes.MIN_TEAMID, label: "Specific Club Required" },
+    { type: ConstraintTypes.SAME_CLUBS, label: "Players from Same Club" },
 
-    // Quality/Rating constraints
-    { type: ConstraintTypes.QUALITY, label: "Minimum Player Quality" },
-    { type: ConstraintTypes.HIGH_RATING, label: "High Rated Players" },
+    // Chemistry constraints
+    { type: ConstraintTypes.PLAYER_CHEMISTRY, label: "Min Player Chemistry" },
+
+    // Special constraints
     { type: ConstraintTypes.EXACTLY_SILVER, label: "Silver Squad (All 11)" },
   ];
 
@@ -487,51 +533,100 @@ const SquadRequirements = () => {
   // --- Action Handlers ---
   const handleAddConstraint = (type) => {
     const defaultValues = {
-      [ConstraintTypes.RATING]: { operation: OperationTypes.MIN, value: 70 },
-      [ConstraintTypes.CHEMISTRY]: { operation: OperationTypes.MIN, value: 20 },
+      [ConstraintTypes.RATING]: {
+        operation: ConstraintOperation.Min,
+        value: 70,
+      },
+      [ConstraintTypes.CHEMISTRY]: {
+        operation: ConstraintOperation.Min,
+        value: 20,
+      },
       [ConstraintTypes.PLAYER_CHEMISTRY]: {
-        operation: OperationTypes.MIN,
+        operation: ConstraintOperation.Min,
         value: 2,
       },
 
-      [ConstraintTypes.HIGH_RATING]: {
-        operation: OperationTypes.MIN,
+      [ConstraintTypes.PLAYER_OVERALL_RATING_MIN]: {
+        operation: ConstraintOperation.Min,
         key: 85,
         value: 1,
       },
-      [ConstraintTypes.EXACTLY_SILVER]: { value: true },
-      [ConstraintTypes.MIN_NATIONALITY]: { key: "", value: 1 },
-      [ConstraintTypes.MIN_LEAGUE]: { key: "", value: 1 },
-      [ConstraintTypes.MIN_TEAMID]: { key: "", value: 1 },
-      [ConstraintTypes.QUALITY]: { operation: OperationTypes.MIN, value: 75 },
-      [ConstraintTypes.MIN_SAME_NATIONS]: {
-        operation: OperationTypes.MIN,
-        value: 3,
+      [ConstraintTypes.PLAYER_OVERALL_RATING_MAX]: {
+        operation: ConstraintOperation.Max,
+        key: 75,
+        value: 11,
       },
-      [ConstraintTypes.MAX_SAME_NATIONS]: {
-        operation: OperationTypes.MAX,
+      [ConstraintTypes.MIN_QUALITY]: {
+        operation: ConstraintOperation.Min,
+        key: 2,
+        value: 11,
+      },
+      [ConstraintTypes.MAX_QUALITY]: {
+        operation: ConstraintOperation.Max,
+        key: 2,
+        value: 11,
+      },
+      [ConstraintTypes.EXACTLY_QUALITY]: {
+        operation: ConstraintOperation.Exactly,
+        key: 2,
+        value: 11,
+      },
+
+      [ConstraintTypes.RARITY]: {
+        key: "",
+        value: 1,
+        operation: ConstraintOperation.Min,
+      },
+      [ConstraintTypes.RARITY_GROUP]: {
+        key: "",
+        value: 1,
+        operation: ConstraintOperation.Min,
+      },
+
+      [ConstraintTypes.NATIONALITY]: {
+        key: "",
+        value: 1,
+        operation: ConstraintOperation.Min,
+      },
+      [ConstraintTypes.NATIONS]: {
+        operation: ConstraintOperation.Min,
         value: 5,
       },
-      [ConstraintTypes.MIN_SAME_LEAGUES]: {
-        operation: OperationTypes.MIN,
+      [ConstraintTypes.SAME_NATIONS]: {
+        operation: ConstraintOperation.Min,
         value: 3,
       },
-      [ConstraintTypes.MAX_SAME_LEAGUES]: {
-        operation: OperationTypes.MAX,
-        value: 5,
+
+      [ConstraintTypes.LEAGUE]: {
+        key: "",
+        value: 1,
+        operation: ConstraintOperation.Min,
       },
-      [ConstraintTypes.MIN_SAME_CLUBS]: {
-        operation: OperationTypes.MIN,
+      [ConstraintTypes.LEAGUES]: {
+        operation: ConstraintOperation.Min,
+        value: 3,
+      },
+      [ConstraintTypes.SAME_LEAGUES]: {
+        operation: ConstraintOperation.Min,
+        value: 3,
+      },
+
+      [ConstraintTypes.TEAMID]: {
+        key: "",
+        value: 1,
+        operation: ConstraintOperation.Min,
+      },
+      [ConstraintTypes.CLUBS]: { operation: ConstraintOperation.Min, value: 5 },
+      [ConstraintTypes.SAME_CLUBS]: {
+        operation: ConstraintOperation.Min,
         value: 2,
       },
-      [ConstraintTypes.MAX_SAME_CLUBS]: {
-        operation: OperationTypes.MAX,
-        value: 3,
-      },
+
+      [ConstraintTypes.EXACTLY_SILVER]: { value: true },
     };
 
     const defaults = defaultValues[type] || {
-      operation: OperationTypes.MIN,
+      operation: ConstraintOperation.Min,
       value: 5,
     };
 
@@ -578,10 +673,13 @@ const SquadRequirements = () => {
       );
     }
 
-    // High rating constraint
-    if (type === ConstraintTypes.HIGH_RATING) {
+    // Player overall rating constraints
+    if (
+      type === ConstraintTypes.PLAYER_OVERALL_RATING_MIN ||
+      type === ConstraintTypes.PLAYER_OVERALL_RATING_MAX
+    ) {
       return (
-        <HighRatingConstraintRow
+        <PlayerRatingConstraintRow
           key={id}
           constraint={constraint}
           onUpdate={handleUpdateConstraint}
@@ -604,9 +702,11 @@ const SquadRequirements = () => {
     // Specific requirement constraints
     if (
       [
-        ConstraintTypes.MIN_NATIONALITY,
-        ConstraintTypes.MIN_LEAGUE,
-        ConstraintTypes.MIN_TEAMID,
+        ConstraintTypes.NATIONALITY,
+        ConstraintTypes.LEAGUE,
+        ConstraintTypes.TEAMID,
+        ConstraintTypes.RARITY,
+        ConstraintTypes.RARITY_GROUP,
       ].includes(type)
     ) {
       return (
