@@ -179,146 +179,174 @@ class WasmSquadBuilder {
       club_players: [],
       locked_players: [],
 
-      // Initialize all possible constraint fields as null
+      // Initialize single constraints (Option<ConstraintValue>)
       chemistry: null,
       rating: null,
-      player_overall_rating_min: null,
-      player_overall_rating_max: null,
-      min_quality: null,
-      max_quality: null,
-      exactly_quality: null,
-      rarity: null,
-      rarity_group: null,
-      nationality: null,
-      nations: null,
-      same_nations: null,
-      league: null,
-      leagues: null,
-      same_leagues: null,
-      teamid: null,
-      clubs: null,
-      same_clubs: null,
-      player_chemistry: null,
       exactly_silver: null,
+
+      // Initialize array constraints (Vec<ConstraintValue>)
+      player_overall_rating_min: [],
+      player_overall_rating_max: [],
+      min_quality: [],
+      max_quality: [],
+      exactly_quality: [],
+      rarity: [],
+      rarity_group: [],
+      nationality: [],
+      nations: [],
+      same_nations: [],
+      league: [],
+      leagues: [],
+      same_leagues: [],
+      teamid: [],
+      clubs: [],
+      same_clubs: [],
+      player_chemistry: [],
     };
 
-    // Process constraints array and map to named properties
+    // Helper function to create ConstraintValue object
+    const createConstraintValue = (key, value, operation) => {
+      return {
+        key: key
+          ? Array.isArray(key)
+            ? { Multiple: key.map((k) => parseInt(k)) }
+            : { Single: parseInt(key) }
+          : { Single: parseInt(value) },
+        value: parseInt(value),
+        operation: operation, // Should be "Min", "Max", or "Exactly"
+      };
+    };
+
+    // Process constraints array
     if (constraints && Array.isArray(constraints)) {
       constraints.forEach((constraint) => {
         const { type, operation, value, key } = constraint;
 
-        // Create ConstraintValue object in Rust format
-        const constraintValue = {
-          key: key
-            ? Array.isArray(key)
-              ? { Multiple: key }
-              : { Single: parseInt(key) }
-            : { Single: value },
-          value: parseInt(value),
-          operation: operation, // Should be "Min", "Max", or "Exactly"
-        };
+        // Create ConstraintValue object
+        const constraintValue = createConstraintValue(key, value, operation);
 
         // Map constraint types to the correct property names
         switch (type) {
+          // Single constraints (remain as Option)
           case "chemistry":
             wasmConstraints.chemistry = constraintValue;
             break;
           case "rating":
             wasmConstraints.rating = constraintValue;
             break;
+          case "exactly_silver":
+            wasmConstraints.exactly_silver = true;
+            break;
+
+          // Array constraints (push to Vec)
           case "player_overall_rating_min":
-            wasmConstraints.player_overall_rating_min = constraintValue;
+            wasmConstraints.player_overall_rating_min.push(constraintValue);
             break;
           case "player_overall_rating_max":
-            wasmConstraints.player_overall_rating_max = constraintValue;
+            wasmConstraints.player_overall_rating_max.push(constraintValue);
             break;
           case "min_quality":
-            wasmConstraints.min_quality = constraintValue;
+            wasmConstraints.min_quality.push(constraintValue);
             break;
           case "max_quality":
-            wasmConstraints.max_quality = constraintValue;
+            wasmConstraints.max_quality.push(constraintValue);
             break;
           case "exactly_quality":
-            wasmConstraints.exactly_quality = constraintValue;
+            wasmConstraints.exactly_quality.push(constraintValue);
             break;
           case "rarity":
-            wasmConstraints.rarity = constraintValue;
+            wasmConstraints.rarity.push(constraintValue);
             break;
           case "rarity_group":
             // Handle multiple rarity IDs
             if (key) {
               const rarityIds = Array.isArray(key)
-                ? key
+                ? key.map((k) => parseInt(k))
                 : typeof key === "string"
                 ? key.split(",").map((id) => parseInt(id.trim()))
                 : [parseInt(key)];
-              wasmConstraints.rarity_group = {
+              wasmConstraints.rarity_group.push({
                 key: { Multiple: rarityIds },
                 value: parseInt(value),
                 operation,
-              };
+              });
             }
             break;
           case "nationality":
             // Handle multiple nation IDs
             if (key) {
               const nationIds = Array.isArray(key)
-                ? key
+                ? key.map((k) => parseInt(k))
                 : typeof key === "string"
                 ? key.split(",").map((id) => parseInt(id.trim()))
                 : [parseInt(key)];
-              wasmConstraints.nationality = {
+              wasmConstraints.nationality.push({
                 key:
                   nationIds.length === 1
                     ? { Single: nationIds[0] }
                     : { Multiple: nationIds },
                 value: parseInt(value),
                 operation,
-              };
+              });
             }
             break;
           case "nations":
-            wasmConstraints.nations = constraintValue;
+            wasmConstraints.nations.push(constraintValue);
             break;
           case "same_nations":
-            wasmConstraints.same_nations = constraintValue;
+            wasmConstraints.same_nations.push(constraintValue);
             break;
           case "league":
             if (key) {
-              wasmConstraints.league = {
-                key: { Single: parseInt(key) },
+              const leagueIds = Array.isArray(key)
+                ? key.map((k) => parseInt(k))
+                : typeof key === "string"
+                ? key.split(",").map((id) => parseInt(id.trim()))
+                : [parseInt(key)];
+              wasmConstraints.league.push({
+                key:
+                  leagueIds.length === 1
+                    ? { Single: leagueIds[0] }
+                    : { Multiple: leagueIds },
                 value: parseInt(value),
                 operation,
-              };
+              });
             }
             break;
           case "leagues":
-            wasmConstraints.leagues = constraintValue;
+            wasmConstraints.leagues.push(constraintValue);
             break;
           case "same_leagues":
-            wasmConstraints.same_leagues = constraintValue;
+            wasmConstraints.same_leagues.push(constraintValue);
             break;
           case "teamid":
             if (key) {
-              wasmConstraints.teamid = {
-                key: { Single: parseInt(key) },
+              const teamIds = Array.isArray(key)
+                ? key.map((k) => parseInt(k))
+                : typeof key === "string"
+                ? key.split(",").map((id) => parseInt(id.trim()))
+                : [parseInt(key)];
+              wasmConstraints.teamid.push({
+                key:
+                  teamIds.length === 1
+                    ? { Single: teamIds[0] }
+                    : { Multiple: teamIds },
                 value: parseInt(value),
                 operation,
-              };
+              });
             }
             break;
           case "clubs":
-            wasmConstraints.clubs = constraintValue;
+            wasmConstraints.clubs.push(constraintValue);
             break;
           case "same_clubs":
-            wasmConstraints.same_clubs = constraintValue;
+            wasmConstraints.same_clubs.push(constraintValue);
             break;
           case "player_chemistry":
-            wasmConstraints.player_chemistry = constraintValue;
+            wasmConstraints.player_chemistry.push(constraintValue);
             break;
-          case "exactly_silver":
-            wasmConstraints.exactly_silver = true;
-            break;
+          default:
+            console.warn("Unknown constraint type:", type);
         }
       });
     }
@@ -343,7 +371,7 @@ class WasmSquadBuilder {
       }));
     }
 
-    // Remove null values to clean up the constraints object
+    // Clean up: Remove empty arrays and null values
     Object.keys(wasmConstraints).forEach((key) => {
       if (wasmConstraints[key] === null) {
         delete wasmConstraints[key];

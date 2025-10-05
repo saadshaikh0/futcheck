@@ -156,7 +156,7 @@ REACT_APP_GOOGLE_ANALYTICS_ID=your-ga-id
 REACT_APP_GOOGLE_OAUTH_CLIENT_ID=your-oauth-client-id
 
 # CDN & Assets
-REACT_APP_CDN_BASE_URL=https://cdn.futcheck.com/assets/img/fc25
+REACT_APP_CDN_BASE_URL=https://cdn.futcheck.com/assets/img/fc26
 REACT_APP_EA_BASE_URL=https://www.ea.com/ea-sports-fc/ultimate-team/web-app/content/...
 
 # Payment (Premium features)
